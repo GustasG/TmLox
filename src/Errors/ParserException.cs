@@ -11,8 +11,13 @@
         {
         }
 
-        public ParserException(Token token, string expected)
-            : this($"({token.Line}:{token.Column}): Expected: \"{expected}\"")
+        public ParserException(int line, int column, string text)
+            : this($"({line}:{column}): Expected: \"{text}\"")
+        {
+        }
+
+        public ParserException(Token token, string text)
+            : this(token.Line, token.Column, text)
         {
         }
     }

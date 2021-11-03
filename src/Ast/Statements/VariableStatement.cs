@@ -6,11 +6,15 @@
 
         public Expression? Value { get; }
 
-
         public VariableStatement(string name, Expression? value)
         {
             Name = name;
             Value = value;
+        }
+
+        public VariableStatement(string name)
+            : this(name, null)
+        {
         }
 
         public VariableStatement(Token name, Expression? value)

@@ -7,32 +7,31 @@ using TmLox.Ast.Expressions.Literal;
 
 namespace TmLox
 {
-    public class Parser
+    public class LoxParser
     {
         private readonly IEnumerator<Token> _tokenStream;
 
-
-        public Parser(IEnumerator<Token> tokenStream)
+        public LoxParser(IEnumerator<Token> tokenStream)
         {
             _tokenStream = tokenStream;
             _tokenStream.MoveNext();
         }
 
-        public List<Statement> Run()
+        public Program Run()
         {
             var statements = new List<Statement>();
 
-            while (!Accept(Lexeme.Eof))
+            while (!Accept(TokenType.Eof))
             {
                 statements.Add(ParseDeclaration());
             }
 
-            return statements;
+            return new Program(statements);
         }
 
         private Statement ParseDeclaration()
         {
-            if (Accept(Lexeme.KwVar))
+            if (Accept(TokenType.KwVar))
                 return ParseVariableDeclaration();
 
             return ParseStatement();
@@ -45,13 +44,13 @@ namespace TmLox
 
         private Statement ParseVariableDeclaration()
         {
-            var name = Expect(Lexeme.Identifier, "Identifier");
+            var name = Expect(TokenType.Identifier, "Identifier");
             Expression? value = null;
 
-            if (Accept(Lexeme.OpAssign))
+            if (Accept(TokenType.OpAssign))
                 value = ParseExpression();
 
-            Expect(Lexeme.OpSemicolon, ";");
+            Expect(TokenType.OpSemicolon, ";");
             return new VariableStatement(name, value);
         }
 
@@ -121,47 +120,47 @@ namespace TmLox
 
         private Expression ParsePrimary()
         {
-            if (Accept(Lexeme.KwNil))
+            if (Accept(TokenType.KwNil))
                 return new NullLiteralExpression();
-            else if (Accept(Lexeme.KwFalse))
+            else if (Accept(TokenType.KwFalse))
                 return new BoolLiteralExpression(false);
-            else if (Accept(Lexeme.KwTrue))
+            else if (Accept(TokenType.KwTrue))
                 return new BoolLiteralExpression(true);
-            else if (Accept(Lexeme.LitInt, out var intToken))
+            else if (Accept(TokenType.LitInt, out var intToken))
                 return new IntLiteralExpression(intToken);
-            else if (Accept(Lexeme.LitFloat, out var floatToken))
+            else if (Accept(TokenType.LitFloat, out var floatToken))
                 return new FloatLiteralExpression(floatToken);
-            else if (Accept(Lexeme.LitString, out var stringToken))
+            else if (Accept(TokenType.LitString, out var stringToken))
                 return new StringLiteralExpression(stringToken);
-            else if (Accept(Lexeme.Identifier, out var identifierToken))
+            else if (Accept(TokenType.Identifier, out var identifierToken))
                 return new VariableExpression(identifierToken);
 
             throw new ParserException("Expected expression");
         }
 
-        private bool Accept(Lexeme lexeme, out Token value)
+        private bool Accept(TokenType tokenType, out Token value)
         {
             var current = Current();
 
-            if (current.Lexeme == lexeme)
+            if (current.TokenType == tokenType)
             {
                 Advance();
                 value = current;
                 return true;
             }
 
-            value = null;
+            value = default;
             return false;
         }
 
-        private bool Accept(Lexeme lexeme)
+        private bool Accept(TokenType tokenType)
         {
-            return Accept(lexeme, out var _);
+            return Accept(tokenType, out var _);
         }
 
-        private Token Expect(Lexeme lexeme, string expected)
+        private Token Expect(TokenType tokenType, string expected)
         {
-            return Accept(lexeme, out var token) ? token : throw new ParserException(Current(), expected);
+            return Accept(tokenType, out var token) ? token : throw new ParserException(Current(), expected);
         }
 
         private Token Current()
@@ -176,7 +175,7 @@ namespace TmLox
 
         private bool IsEnd()
         {
-            return _tokenStream.Current.Lexeme == Lexeme.Eof;
+            return _tokenStream.Current.TokenType == TokenType.Eof;
         }
     }
 }

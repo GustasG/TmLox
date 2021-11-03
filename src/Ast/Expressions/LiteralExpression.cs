@@ -2,7 +2,7 @@
 {
     public abstract class LiteralExpression <T> : Expression
     {
-        T Value { get; }
+        public T Value { get; }
 
         public LiteralExpression(T value)
         {

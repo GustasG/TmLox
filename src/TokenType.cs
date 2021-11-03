@@ -1,6 +1,6 @@
 ﻿namespace TmLox
 {
-    public enum Lexeme
+    public enum TokenType
     {
         OpComma, // ,
         OpDot, // .

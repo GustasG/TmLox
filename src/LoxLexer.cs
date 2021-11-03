@@ -5,26 +5,26 @@ using System.Collections.Generic;
 
 namespace TmLox
 {
-    public class Lexer : IEnumerator<Token>, IEnumerable<Token>
+    public class LoxLexer : IEnumerator<Token>, IEnumerable<Token>
     {
-        private static readonly Dictionary<string, Lexeme> _keywords = new()
+        private static readonly Dictionary<string, TokenType> _keywords = new()
         {
-            { "and", Lexeme.KwAnd },
-            { "break", Lexeme.KwBreak },
-            { "class", Lexeme.KwClass },
-            { "else", Lexeme.KwElse },
-            { "false", Lexeme.KwFalse },
-            { "true", Lexeme.KwTrue },
-            { "for", Lexeme.KwFor },
-            { "fun", Lexeme.KwFun },
-            { "if", Lexeme.KwIf },
-            { "nil", Lexeme.KwNil },
-            { "or", Lexeme.KwOr },
-            { "return", Lexeme.KwReturn },
-            { "super", Lexeme.KwSuper },
-            { "this", Lexeme.KwThis },
-            { "var", Lexeme.KwVar },
-            { "while", Lexeme.KwWhile }
+            { "and", TokenType.KwAnd },
+            { "break", TokenType.KwBreak },
+            { "class", TokenType.KwClass },
+            { "else", TokenType.KwElse },
+            { "false", TokenType.KwFalse },
+            { "true", TokenType.KwTrue },
+            { "for", TokenType.KwFor },
+            { "fun", TokenType.KwFun },
+            { "if", TokenType.KwIf },
+            { "nil", TokenType.KwNil },
+            { "or", TokenType.KwOr },
+            { "return", TokenType.KwReturn },
+            { "super", TokenType.KwSuper },
+            { "this", TokenType.KwThis },
+            { "var", TokenType.KwVar },
+            { "while", TokenType.KwWhile }
         };
 
         private readonly string _source;
@@ -35,7 +35,7 @@ namespace TmLox
 
         public Token Current { get; private set; }
 
-        public Lexer(string source)
+        public LoxLexer(string source)
         {
             _source = source;
             Reset();
@@ -59,7 +59,7 @@ namespace TmLox
             if (!_finished)
             {
                 Current = FetchToken();
-                _finished = Current.Lexeme == Lexeme.Eof;
+                _finished = Current.TokenType == TokenType.Eof;
 
                 return true;
             }
@@ -105,7 +105,7 @@ namespace TmLox
                 }
             }
 
-            return new Token(_line, _column, Lexeme.Eof);
+            return new Token(_line, _column + 1, TokenType.Eof);
         }
 
         private Token CreateToken(char startingChar)
@@ -113,19 +113,19 @@ namespace TmLox
             switch (startingChar)
             {
                 // Syntax
-                case ',': return new Token(_line, _column, Lexeme.OpComma);
-                case '.': return new Token(_line, _column, Lexeme.OpDot);
-                case '?': return new Token(_line, _column, Lexeme.OpQuestion);
-                case ':': return new Token(_line, _column, Lexeme.OpColon);
-                case ';': return new Token(_line, _column, Lexeme.OpSemicolon);
+                case ',': return new Token(_line, _column, TokenType.OpComma);
+                case '.': return new Token(_line, _column, TokenType.OpDot);
+                case '?': return new Token(_line, _column, TokenType.OpQuestion);
+                case ':': return new Token(_line, _column, TokenType.OpColon);
+                case ';': return new Token(_line, _column, TokenType.OpSemicolon);
 
                 // Braces
-                case '(': return new Token(_line, _column, Lexeme.OPLParen);
-                case ')': return new Token(_line, _column, Lexeme.OpRParen);
-                case '{': return new Token(_line, _column, Lexeme.OpLBrace);
-                case '}': return new Token(_line, _column, Lexeme.OPRBrace);
-                case '[': return new Token(_line, _column, Lexeme.OpLBracket);
-                case ']': return new Token(_line, _column, Lexeme.OpRBracket);
+                case '(': return new Token(_line, _column, TokenType.OPLParen);
+                case ')': return new Token(_line, _column, TokenType.OpRParen);
+                case '{': return new Token(_line, _column, TokenType.OpLBrace);
+                case '}': return new Token(_line, _column, TokenType.OPRBrace);
+                case '[': return new Token(_line, _column, TokenType.OpLBracket);
+                case ']': return new Token(_line, _column, TokenType.OpRBracket);
 
                 // Math
                 case '+': return CreatePlusToken();
@@ -156,73 +156,73 @@ namespace TmLox
         private Token CreatePlusToken()
         {
             if (TryConsume('='))
-                return new Token(_line, _column - 1, Lexeme.OpPlusEq);
+                return new Token(_line, _column - 1, TokenType.OpPlusEq);
             else
-                return new Token(_line, _column, Lexeme.OpPlus);
+                return new Token(_line, _column, TokenType.OpPlus);
         }
 
         private Token CreateMinusToken()
         {
             if (TryConsume('='))
-                return new Token(_line, _column - 1, Lexeme.OpMinusEq);
+                return new Token(_line, _column - 1, TokenType.OpMinusEq);
             else
-                return new Token(_line, _column, Lexeme.OpMinus);
+                return new Token(_line, _column, TokenType.OpMinus);
         }
 
         private Token CreateMulToken()
         {
             if (TryConsume('='))
-                return new Token(_line, _column - 1, Lexeme.OpMulEq);
+                return new Token(_line, _column - 1, TokenType.OpMulEq);
             else
-                return new Token(_line, _column, Lexeme.OpMul);
+                return new Token(_line, _column, TokenType.OpMul);
         }
 
         private Token CreateDivToken()
         {
             if (TryConsume('='))
-                return new Token(_line, _column - 1, Lexeme.OpDiv);
+                return new Token(_line, _column - 1, TokenType.OpDiv);
             else
-                return new Token(_line, _column, Lexeme.OpDivEq);
+                return new Token(_line, _column, TokenType.OpDivEq);
         }
 
         private Token CreateModToken()
         {
             if (TryConsume('='))
-                return new Token(_line, _column - 1, Lexeme.OpModEq);
+                return new Token(_line, _column - 1, TokenType.OpModEq);
             else
-                return new Token(_line, _column, Lexeme.OpMod);
+                return new Token(_line, _column, TokenType.OpMod);
         }
 
         private Token CreateEqualToken()
         {
             if (TryConsume('='))
-                return new Token(_line, _column - 1, Lexeme.OpEq);
+                return new Token(_line, _column - 1, TokenType.OpEq);
             else
-                return new Token(_line, _column, Lexeme.OpAssign);
+                return new Token(_line, _column, TokenType.OpAssign);
         }
 
         private Token CreateExclamationToken()
         {
             if (TryConsume('='))
-                return new Token(_line, _column - 1, Lexeme.OpExclamationEq);
+                return new Token(_line, _column - 1, TokenType.OpExclamationEq);
             else
-                return new Token(_line, _column, Lexeme.OpExclamation);
+                return new Token(_line, _column, TokenType.OpExclamation);
         }
 
         private Token CreateLessToken()
         {
             if (TryConsume('='))
-                return new Token(_line, _column - 1, Lexeme.OpLessEq);
+                return new Token(_line, _column - 1, TokenType.OpLessEq);
             else
-                return new Token(_line, _column, Lexeme.OpLess);
+                return new Token(_line, _column, TokenType.OpLess);
         }
 
         private Token CreateMoreToken()
         {
             if (TryConsume('='))
-                return new Token(_line, _column - 1, Lexeme.OpMoreEq);
+                return new Token(_line, _column - 1, TokenType.OpMoreEq);
             else
-                return new Token(_line, _column, Lexeme.OpMore);
+                return new Token(_line, _column, TokenType.OpMore);
         }
 
         private Token CreateStringToken()
@@ -254,7 +254,7 @@ namespace TmLox
                 }
             }
 
-            return new Token(startingLine, startingColumn, Lexeme.LitString, sb.ToString());
+            return new Token(startingLine, startingColumn, TokenType.LitString, sb.ToString());
         }
 
         private char CreateEscapeSymbol(char symbol)
@@ -283,9 +283,9 @@ namespace TmLox
             value = value.Replace('.', ',');
 
             if (long.TryParse(value, out var integer))
-                return new Token(_line, startingColumn, Lexeme.LitInt, integer);
+                return new Token(_line, startingColumn, TokenType.LitInt, integer);
             else if (double.TryParse(value, out var floatingPoint))
-                return new Token(_line, startingColumn, Lexeme.LitFloat, floatingPoint);
+                return new Token(_line, startingColumn, TokenType.LitFloat, floatingPoint);
             else
                 throw new LexerException(_line, startingColumn, "Invalid number");
         }
@@ -314,7 +314,7 @@ namespace TmLox
 
             return _keywords.TryGetValue(value, out var lexeme)
                 ? new Token(_line, startingColumn, lexeme)
-                : new Token(_line, startingColumn, Lexeme.Identifier, value);
+                : new Token(_line, startingColumn, TokenType.Identifier, value);
         }
 
         private string CreateIdentifier()
