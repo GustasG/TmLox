@@ -1,9 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
+
+using Newtonsoft.Json;
+
 using TmLox.Ast;
 using TmLox.Errors;
-using Newtonsoft.Json;
-using System.Collections.Generic;
 
 namespace TmLox
 {

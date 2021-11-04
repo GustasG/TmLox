@@ -1,7 +1,8 @@
 ﻿using System.Text;
-using TmLox.Errors;
 using System.Collections;
 using System.Collections.Generic;
+
+using TmLox.Errors;
 
 namespace TmLox
 {

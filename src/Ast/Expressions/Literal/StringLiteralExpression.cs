@@ -8,7 +8,7 @@
         }
 
         public StringLiteralExpression(Token token)
-            : this((string)token.Value)
+            : this(token.Value as string)
         {
         }
     }

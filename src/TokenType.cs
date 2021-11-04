@@ -37,7 +37,7 @@
 
         KwAnd, // and
         KwBreak, // break
-        KwClass, // class 
+        KwClass, // class
         KwElse, // else
         KwFalse, // false
         KwTrue, // true
