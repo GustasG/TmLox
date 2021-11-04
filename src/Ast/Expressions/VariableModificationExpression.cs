@@ -13,8 +13,8 @@
             Value = value;
         }
 
-        public VariableModificationExpression(VariableExpression variable, Expression value)
-            : this(variable.Name, value)
+        public VariableModificationExpression(Token variable, Expression value)
+            : this(variable.Value as string, value)
         {
         }
     }

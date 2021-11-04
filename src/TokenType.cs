@@ -28,7 +28,7 @@
         OpAssign, // =
         OpEq, // ==
         OpExclamation, // !
-        OpExclamationEq, // !=
+        OpNotEqual, // !=
 
         OpLess, // <
         OpLessEq, // <=

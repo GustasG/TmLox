@@ -205,7 +205,7 @@ namespace TmLox
         private Token CreateExclamationToken()
         {
             if (TryConsume('='))
-                return new Token(_line, _column - 1, TokenType.OpExclamationEq);
+                return new Token(_line, _column - 1, TokenType.OpNotEqual);
             else
                 return new Token(_line, _column, TokenType.OpExclamation);
         }

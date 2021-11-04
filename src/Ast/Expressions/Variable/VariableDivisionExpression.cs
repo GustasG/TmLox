@@ -7,7 +7,7 @@
         {
         }
 
-        public VariableDivisionExpression(VariableExpression variable, Expression value)
+        public VariableDivisionExpression(Token variable, Expression value)
             : base(variable, value)
         {
         }

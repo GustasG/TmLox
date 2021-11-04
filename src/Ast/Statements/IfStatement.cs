@@ -6,13 +6,13 @@ namespace TmLox.Ast.Statements
     {
         public Expression Condition { get; }
 
-        public IList<Statement> Statements { get; }
+        public IList<Statement> Body { get; }
 
 
-        public ElseIfStatement(Expression condition, IList<Statement> statements)
+        public ElseIfStatement(Expression condition, IList<Statement> body)
         {
             Condition = condition;
-            Statements = statements;
+            Body = body;
         }
     }
 
@@ -21,35 +21,35 @@ namespace TmLox.Ast.Statements
     {
         public Expression Condition { get; }
 
-        public IList<Statement> Statements { get; }
+        public IList<Statement> Body { get; }
 
         public IList<ElseIfStatement> ElseIfStatements { get; }
 
-        public IList<Statement> ElseStatements { get; }
+        public IList<Statement> ElseBody { get; }
 
 
         public IfStatement(Expression condition, IList<Statement> statements)
         {
             Condition = condition;
-            Statements = statements;
+            Body = statements;
             ElseIfStatements = new List<ElseIfStatement>();
-            ElseStatements = new List<Statement>();
+            ElseBody = new List<Statement>();
         }
 
-        public IfStatement(Expression condition, IList<Statement> statements, IList<ElseIfStatement> elseIfStatements)
+        public IfStatement(Expression condition, IList<Statement> body, IList<ElseIfStatement> elseIfStatements)
         {
             Condition = condition;
-            Statements = statements;
+            Body = body;
             ElseIfStatements = elseIfStatements;
-            ElseStatements = new List<Statement>();
+            ElseBody = new List<Statement>();
         }
 
-        public IfStatement(Expression condition, IList<Statement> statements, IList<ElseIfStatement> elseIfStatements, IList<Statement> elseStatements)
+        public IfStatement(Expression condition, IList<Statement> body, IList<ElseIfStatement> elseIfStatements, IList<Statement> elseBody)
         {
             Condition = condition;
-            Statements = statements;
+            Body = body;
             ElseIfStatements = elseIfStatements;
-            ElseStatements = elseStatements;
+            ElseBody = elseBody;
         }
     }
 }

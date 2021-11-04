@@ -7,7 +7,7 @@
         {
         }
 
-        public VariableModulusExpression(VariableExpression variable, Expression value)
+        public VariableModulusExpression(Token variable, Expression value)
             : base(variable, value)
         {
         }

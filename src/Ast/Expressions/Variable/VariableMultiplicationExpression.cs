@@ -7,7 +7,7 @@
         {
         }
 
-        public VariableMultiplicationExpression(VariableExpression variable, Expression value)
+        public VariableMultiplicationExpression(Token variable, Expression value)
             : base(variable, value)
         {
         }

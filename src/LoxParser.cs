@@ -50,10 +50,10 @@ namespace TmLox
             else if (Accept(TokenType.KwClass))
                 return ParseClassDeclaration();
 
-            return ParseExpression();
+            return ParseExpressionStatement();
         }
 
-        private VariableStatement ParseVariableStatement()
+        private VariableDeclarationStatement ParseVariableStatement()
         {
             var name = Expect(TokenType.Identifier, "Identifier");
             Expression? value = null;
@@ -62,7 +62,7 @@ namespace TmLox
                 value = ParseExpression();
 
             Expect(TokenType.OpSemicolon, ";");
-            return new VariableStatement(name, value);
+            return new VariableDeclarationStatement(name, value);
         }
 
         private IfStatement ParseIfStatement()
@@ -72,13 +72,13 @@ namespace TmLox
             Expect(TokenType.OpRParen, ")");
 
             Expect(TokenType.OpLBrace, "{");
-            var statements = ParseBlock();
+            var body = ParseBlock();
             Expect(TokenType.OPRBrace, "}");
 
-            return new IfStatement(condition, statements);
+            return new IfStatement(condition, body);
         }
 
-        private FunctionStatement ParseFunctionStatement()
+        private FunctionDeclarationStatement ParseFunctionStatement()
         {
             var name = Expect(TokenType.Identifier, "Identifier");
 
@@ -90,7 +90,7 @@ namespace TmLox
             var body = ParseBlock();
             Expect(TokenType.OPRBrace, "}");
 
-            return new FunctionStatement(name, parameters, body);
+            return new FunctionDeclarationStatement(name, parameters, body);
         }
 
         private IList<string> ParseFunctionParameters()
@@ -140,7 +140,7 @@ namespace TmLox
             {
                 do
                 {
-                    var className = Expect(TokenType.Identifier, "Inherited class name");
+                    var className = Expect(TokenType.Identifier, "Class name for inheritance");
                     Accept(TokenType.OpComma);
 
                     inherited.Add(className.Value as string);
@@ -155,35 +155,17 @@ namespace TmLox
             return new ClassStatement(name, inherited);
         }
 
-        private Expression ParseExpression()
+        private Statement ParseExpressionStatement()
         {
-            return ParseAssigmentExpression();
+            var expression = ParseExpression();
+            Expect(TokenType.OpSemicolon, ";");
+
+            return expression;
         }
 
-        private Expression ParseAssigmentExpression()
+        private Expression ParseExpression()
         {
             var expression = ParseOrExpression();
-
-            if (Match(TokenType.OpAssign, TokenType.OpPlusEq, TokenType.OpMinusEq, TokenType.OpMulEq, TokenType.OpDivEq, TokenType.OpModEq))
-            {
-                var variableName = expression as VariableExpression;
-
-                if (Accept(TokenType.OpAssign))
-                    expression = new VariableAssigmentExpression(variableName, ParseOrExpression());
-                else if (Accept(TokenType.OpPlusEq))
-                    expression = new VariableAdditionExpression(variableName, ParseOrExpression());
-                else if (Accept(TokenType.OpMinusEq))
-                    expression = new VariableSubtractionExpression(variableName, ParseOrExpression());
-               else if (Accept(TokenType.OpMulEq))
-                    expression = new VariableMultiplicationExpression(variableName, ParseOrExpression());
-                else if (Accept(TokenType.OpDivEq))
-                    expression = new VariableDivisionExpression(variableName, ParseOrExpression());
-                else if (Accept(TokenType.OpModEq))
-                    expression = new VariableModulusExpression(variableName, ParseOrExpression());
-
-                Expect(TokenType.OpSemicolon, ";");
-            }
-
             return expression;
         }
 
@@ -211,11 +193,11 @@ namespace TmLox
         {
             var expression = ParseComparisonExpression();
 
-            while (Match(TokenType.OpEq, TokenType.OpExclamationEq))
+            while (Match(TokenType.OpEq, TokenType.OpNotEqual))
             {
                 if (Accept(TokenType.OpEq))
                     expression = new EqualExpression(expression, ParseComparisonExpression());
-                else if (Accept(TokenType.OpExclamationEq))
+                else if (Accept(TokenType.OpNotEqual))
                     expression = new NotEqualExpression(expression, ParseComparisonExpression());
             }
 
@@ -282,6 +264,14 @@ namespace TmLox
 
         private Expression ParsePrimaryExpression()
         {
+            if (Accept(TokenType.OPLParen))
+            {
+                var expression = ParseExpression();
+                Expect(TokenType.OpRParen, ")");
+
+                return expression;
+            }
+
             if (Accept(TokenType.KwNil))
                 return new NullLiteralExpression();
             else if (Accept(TokenType.KwFalse))
@@ -295,9 +285,41 @@ namespace TmLox
             else if (Accept(TokenType.LitString, out var stringToken))
                 return new StringLiteralExpression(stringToken);
             else if (Accept(TokenType.Identifier, out var identifierToken))
-                return new VariableExpression(identifierToken);
+            {
+                Expression expression = new VariableExpression(identifierToken);
+
+                if (Accept(TokenType.OpAssign))
+                    expression = new VariableAssigmentExpression(identifierToken, ParseExpression());
+                else if (Accept(TokenType.OpPlusEq))
+                    expression = new VariableAdditionExpression(identifierToken, ParseExpression());
+                else if (Accept(TokenType.OpMinusEq))
+                    expression = new VariableSubtractionExpression(identifierToken, ParseExpression());
+                else if (Accept(TokenType.OpMulEq))
+                    expression = new VariableMultiplicationExpression(identifierToken, ParseExpression());
+                else if (Accept(TokenType.OpDivEq))
+                    expression = new VariableDivisionExpression(identifierToken, ParseExpression());
+                else if (Accept(TokenType.OpModEq))
+                    expression = new VariableModulusExpression(identifierToken, ParseExpression());
+                else if (Accept(TokenType.OPLParen))
+                    expression = new FunctionCallExpression(identifierToken, ParseFunctionArguments());
+
+                return expression;
+            }
 
             throw new ParserException(Current(), "Expected expression");
+        }
+
+        private IList<Expression> ParseFunctionArguments()
+        {
+            var arguments = new List<Expression>();
+
+            while (!Accept(TokenType.OpRParen))
+            {
+                arguments.Add(ParseExpression());
+                Accept(TokenType.OpComma);
+            }
+
+            return arguments;
         }
 
         private bool Accept(TokenType tokenType, out Token value)

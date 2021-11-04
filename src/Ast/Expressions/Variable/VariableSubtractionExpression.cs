@@ -7,7 +7,7 @@
         {
         }
 
-        public VariableSubtractionExpression(VariableExpression variable, Expression value)
+        public VariableSubtractionExpression(Token variable, Expression value)
             : base(variable, value)
         {
         }

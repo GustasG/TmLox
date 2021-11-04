@@ -2,7 +2,7 @@
 
 namespace TmLox.Ast.Statements
 {
-    public class FunctionStatement : Statement
+    public class FunctionDeclarationStatement : Statement
     {
         public string Name { get; }
 
@@ -11,21 +11,21 @@ namespace TmLox.Ast.Statements
         public IList<Statement> Body { get; }
 
 
-        public FunctionStatement(string name)
+        public FunctionDeclarationStatement(string name)
         {
             Name = name;
             Parameters = new List<string>();
             Body = new List<Statement>();
         }
 
-        public FunctionStatement(string name, IList<string> parameters, IList<Statement> body)
+        public FunctionDeclarationStatement(string name, IList<string> parameters, IList<Statement> body)
         {
             Name = name;
             Parameters = parameters;
             Body = body;
         }
 
-        public FunctionStatement(Token name, IList<string> parameters, IList<Statement> body)
+        public FunctionDeclarationStatement(Token name, IList<string> parameters, IList<Statement> body)
             : this(name.Value as string, parameters, body)
         {
         }
