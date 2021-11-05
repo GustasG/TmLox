@@ -3,17 +3,12 @@
     public enum TokenType
     {
         OpComma, // ,
-        OpDot, // .
-        OpQuestion, // ?
-        OpColon, // :
         OpSemicolon, // ;
 
         OPLParen, // (
         OpRParen, // )
         OpLBrace, // {
         OPRBrace, // }
-        OpLBracket, // [
-        OpRBracket, // ]
 
         OpPlus, // +
         OpPlusEq, // +=
@@ -37,6 +32,7 @@
 
         KwAnd, // and
         KwBreak, // break
+        KwElif, // elif
         KwElse, // else
         KwFalse, // false
         KwTrue, // true

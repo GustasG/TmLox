@@ -12,14 +12,13 @@ using TmLox.Ast.Expressions.Binary.Arithmetic;
 
 namespace TmLox
 {
-    public class LoxParser
+    public class Parser
     {
         private readonly IEnumerator<Token> _tokenStream;
 
-        public LoxParser(IEnumerator<Token> tokenStream)
+        public Parser(IEnumerator<Token> tokenStream)
         {
             _tokenStream = tokenStream;
-            _tokenStream.MoveNext();
         }
 
         public LoxProgram Run()
@@ -76,7 +75,31 @@ namespace TmLox
             var body = ParseBlock();
             Expect(TokenType.OPRBrace, "}");
 
-            return new IfStatement(condition, body);
+            var elseIfStatements = new List<ElseIfStatement>();
+
+            while (Accept(TokenType.KwElif))
+            {
+                Expect(TokenType.OPLParen, "(");
+                var elseIfCondition = ParseExpression();
+                Expect(TokenType.OpRParen, ")");
+
+                Expect(TokenType.OpLBrace, "{");
+                var elseIfBody = ParseBlock();
+                Expect(TokenType.OPRBrace, "}");
+
+                elseIfStatements.Add(new ElseIfStatement(elseIfCondition, elseIfBody));
+            }
+
+            IList<Statement>? elseBody = null;
+
+            if (Accept(TokenType.KwElse))
+            {
+                Expect(TokenType.OpLBrace, "{");
+                elseBody = ParseBlock();
+                Expect(TokenType.OPRBrace, "}");
+            }
+
+            return new IfStatement(condition, body, elseIfStatements, elseBody);
         }
 
         private FunctionDeclarationStatement ParseFunctionStatement()

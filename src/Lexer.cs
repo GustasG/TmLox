@@ -6,12 +6,13 @@ using TmLox.Errors;
 
 namespace TmLox
 {
-    public class LoxLexer : IEnumerator<Token>, IEnumerable<Token>
+    public class Lexer : IEnumerator<Token>, IEnumerable<Token>
     {
         private static readonly Dictionary<string, TokenType> _keywords = new()
         {
             { "and", TokenType.KwAnd },
             { "break", TokenType.KwBreak },
+            { "elif", TokenType.KwElif },
             { "else", TokenType.KwElse },
             { "false", TokenType.KwFalse },
             { "true", TokenType.KwTrue },
@@ -33,10 +34,11 @@ namespace TmLox
 
         public Token Current { get; private set; }
 
-        public LoxLexer(string source)
+        public Lexer(string source)
         {
             _source = source;
             Reset();
+            MoveNext();
         }
 
         public void Reset()
@@ -112,9 +114,6 @@ namespace TmLox
             {
                 // Syntax
                 case ',': return new Token(_line, _column, TokenType.OpComma);
-                case '.': return new Token(_line, _column, TokenType.OpDot);
-                case '?': return new Token(_line, _column, TokenType.OpQuestion);
-                case ':': return new Token(_line, _column, TokenType.OpColon);
                 case ';': return new Token(_line, _column, TokenType.OpSemicolon);
 
                 // Braces
@@ -122,8 +121,6 @@ namespace TmLox
                 case ')': return new Token(_line, _column, TokenType.OpRParen);
                 case '{': return new Token(_line, _column, TokenType.OpLBrace);
                 case '}': return new Token(_line, _column, TokenType.OPRBrace);
-                case '[': return new Token(_line, _column, TokenType.OpLBracket);
-                case ']': return new Token(_line, _column, TokenType.OpRBracket);
 
                 // Math
                 case '+': return CreatePlusToken();

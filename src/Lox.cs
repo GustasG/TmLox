@@ -18,8 +18,8 @@ namespace TmLox
 
             try
             {
-                var lexer = new LoxLexer(source);
-                var parser = new LoxParser(lexer);
+                var lexer = new Lexer(source);
+                var parser = new Parser(lexer);
                 var program = parser.Run();
 
                 PrintAst(program);
