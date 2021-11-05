@@ -2,17 +2,17 @@
 
 namespace TmLox.Ast
 {
-    public class Program
+    public class LoxProgram
     {
         public IList<Statement> Statements { get; }
 
 
-        public Program()
+        public LoxProgram()
         {
             Statements = new List<Statement>();
         }
 
-        public Program(IList<Statement> statements)
+        public LoxProgram(IList<Statement> statements)
         {
             Statements = statements;
         }

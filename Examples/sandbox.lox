@@ -15,4 +15,11 @@ fun fib(n) {
 }
 
 
-var t = (50 + 70) * 5;
+for (var i = factorial(5); i < 10; i += 1) {
+    print(factorial(i));
+}
+
+while (m < 20) {
+    print(m);
+    m *= 2;
+}

@@ -37,7 +37,6 @@
 
         KwAnd, // and
         KwBreak, // break
-        KwClass, // class
         KwElse, // else
         KwFalse, // false
         KwTrue, // true
@@ -47,8 +46,6 @@
         KwNil, // nil
         KwOr, // or
         KwReturn, // return
-        KwSuper, // super
-        KwThis, // this
         KwVar, // var
         KwWhile, // while
 

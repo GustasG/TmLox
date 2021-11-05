@@ -30,7 +30,7 @@ namespace TmLox
             }
         }
 
-        private static void PrintAst(Program program)
+        private static void PrintAst(LoxProgram program)
         {
             var settings = new JsonSerializerSettings
             {

@@ -12,7 +12,6 @@ namespace TmLox
         {
             { "and", TokenType.KwAnd },
             { "break", TokenType.KwBreak },
-            { "class", TokenType.KwClass },
             { "else", TokenType.KwElse },
             { "false", TokenType.KwFalse },
             { "true", TokenType.KwTrue },
@@ -22,8 +21,6 @@ namespace TmLox
             { "nil", TokenType.KwNil },
             { "or", TokenType.KwOr },
             { "return", TokenType.KwReturn },
-            { "super", TokenType.KwSuper },
-            { "this", TokenType.KwThis },
             { "var", TokenType.KwVar },
             { "while", TokenType.KwWhile }
         };

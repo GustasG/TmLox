@@ -22,7 +22,7 @@ namespace TmLox
             _tokenStream.MoveNext();
         }
 
-        public Program Run()
+        public LoxProgram Run()
         {
             var statements = new List<Statement>();
 
@@ -31,7 +31,7 @@ namespace TmLox
                 statements.Add(ParseStatement());
             }
 
-            return new Program(statements);
+            return new LoxProgram(statements);
         }
 
         private Statement ParseStatement()
@@ -42,13 +42,14 @@ namespace TmLox
                 return ParseIfStatement();
             else if (Accept(TokenType.KwFun))
                 return ParseFunctionStatement();
-
             else if (Accept(TokenType.KwReturn))
                 return ParseReturnStatement();
-
-            // TODO: NOT FINISHED
-            else if (Accept(TokenType.KwClass))
-                return ParseClassDeclaration();
+            else if (Accept(TokenType.KwBreak))
+                return ParseBreakStatement();
+            else if (Accept(TokenType.KwFor))
+                return ParseForStatement();
+            else if (Accept(TokenType.KwWhile))
+                return ParseWhileStatement();
 
             return ParseExpressionStatement();
         }
@@ -119,6 +120,61 @@ namespace TmLox
             return new ReturnStatement(value);
         }
 
+        private ForStatement ParseForStatement()
+        {
+            Expect(TokenType.OPLParen, "(");
+
+            Statement? initial = null;
+            if (!Accept(TokenType.OpSemicolon))
+            {
+                if (Accept(TokenType.KwVar))
+                    initial = ParseVariableStatement();
+                else
+                    initial = ParseExpressionStatement();
+            }
+
+            Expression? condition = null;
+            if (!Accept(TokenType.OpSemicolon))
+            {
+                condition = ParseExpression();
+                Expect(TokenType.OpSemicolon, ";");
+            }
+
+            Expression? increment = null;
+            if (!Accept(TokenType.OpRParen))
+            {
+                increment = ParseExpression();
+                Expect(TokenType.OpRParen, ")");
+            }
+
+
+            Expect(TokenType.OpLBrace, "{");
+            var body = ParseBlock();
+            Expect(TokenType.OPRBrace, "}");
+
+            return new ForStatement(initial, condition, increment, body);
+        }
+
+        private WhileStatement ParseWhileStatement()
+        {
+            Expect(TokenType.OPLParen, "(");
+            var condition = ParseExpression();
+            Expect(TokenType.OpRParen, ")");
+
+            Expect(TokenType.OpLBrace, "{");
+            var body = ParseBlock();
+            Expect(TokenType.OPRBrace, "}");
+
+            return new WhileStatement(condition, body);
+        }
+
+        private BreakStatement ParseBreakStatement()
+        {
+            Expect(TokenType.OpSemicolon, ";");
+
+            return new BreakStatement();
+        }
+
         private IList<Statement> ParseBlock()
         {
             var statements = new List<Statement>();
@@ -129,30 +185,6 @@ namespace TmLox
             }
 
             return statements;
-        }
-
-        private ClassStatement ParseClassDeclaration()
-        {
-            var name = Expect(TokenType.Identifier, "Class name");
-            var inherited = new List<string>();
-
-            if (Accept(TokenType.OpLess))
-            {
-                do
-                {
-                    var className = Expect(TokenType.Identifier, "Class name for inheritance");
-                    Accept(TokenType.OpComma);
-
-                    inherited.Add(className.Value as string);
-                }
-                while (!Match(TokenType.OPRBrace));
-            }
-
-            Expect(TokenType.OpLBrace, "{");
-            // TODO: Handle class body
-            Expect(TokenType.OPRBrace, "}");
-
-            return new ClassStatement(name, inherited);
         }
 
         private Statement ParseExpressionStatement()
@@ -306,7 +338,7 @@ namespace TmLox
                 return expression;
             }
 
-            throw new ParserException(Current(), "Expected expression");
+            throw new ParserException(Current(), "invalid expression");
         }
 
         private IList<Expression> ParseFunctionArguments()
