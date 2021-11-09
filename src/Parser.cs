@@ -36,24 +36,24 @@ namespace TmLox
         private Statement ParseStatement()
         {
             if (Accept(TokenType.KwVar))
-                return ParseVariableStatement();
+                return ParseVariableDeclaration();
             else if (Accept(TokenType.KwIf))
-                return ParseIfStatement();
+                return ParseIf();
             else if (Accept(TokenType.KwFun))
-                return ParseFunctionStatement();
+                return ParseFunctionDeclaration();
             else if (Accept(TokenType.KwReturn))
-                return ParseReturnStatement();
+                return ParseReturn();
             else if (Accept(TokenType.KwBreak))
-                return ParseBreakStatement();
+                return ParseBreak();
             else if (Accept(TokenType.KwFor))
-                return ParseForStatement();
+                return ParseFor();
             else if (Accept(TokenType.KwWhile))
-                return ParseWhileStatement();
+                return ParseWhile();
 
             return ParseExpressionStatement();
         }
 
-        private VariableDeclarationStatement ParseVariableStatement()
+        private VariableDeclarationStatement ParseVariableDeclaration()
         {
             var name = Expect(TokenType.Identifier, "Identifier");
             Expression? value = null;
@@ -65,7 +65,7 @@ namespace TmLox
             return new VariableDeclarationStatement(name, value);
         }
 
-        private IfStatement ParseIfStatement()
+        private IfStatement ParseIf()
         {
             Expect(TokenType.OPLParen, "(");
             var condition = ParseExpression();
@@ -102,7 +102,7 @@ namespace TmLox
             return new IfStatement(condition, body, elseIfStatements, elseBody);
         }
 
-        private FunctionDeclarationStatement ParseFunctionStatement()
+        private FunctionDeclarationStatement ParseFunctionDeclaration()
         {
             var name = Expect(TokenType.Identifier, "Identifier");
 
@@ -124,15 +124,16 @@ namespace TmLox
             while (!Match(TokenType.OpRParen))
             {
                 var parameter = Expect(TokenType.Identifier, "Identifier");
-                Accept(TokenType.OpComma);
-
                 parameters.Add(parameter.Value as string);
+
+                if (!Match(TokenType.OpRParen))
+                    Expect(TokenType.OpComma, ",");
             }
 
             return parameters;
         }
 
-        private ReturnStatement ParseReturnStatement()
+        private ReturnStatement ParseReturn()
         {
             Expression? value = null;
 
@@ -143,7 +144,7 @@ namespace TmLox
             return new ReturnStatement(value);
         }
 
-        private ForStatement ParseForStatement()
+        private ForStatement ParseFor()
         {
             Expect(TokenType.OPLParen, "(");
 
@@ -151,7 +152,7 @@ namespace TmLox
             if (!Accept(TokenType.OpSemicolon))
             {
                 if (Accept(TokenType.KwVar))
-                    initial = ParseVariableStatement();
+                    initial = ParseVariableDeclaration();
                 else
                     initial = ParseExpressionStatement();
             }
@@ -178,7 +179,7 @@ namespace TmLox
             return new ForStatement(initial, condition, increment, body);
         }
 
-        private WhileStatement ParseWhileStatement()
+        private WhileStatement ParseWhile()
         {
             Expect(TokenType.OPLParen, "(");
             var condition = ParseExpression();
@@ -191,7 +192,7 @@ namespace TmLox
             return new WhileStatement(condition, body);
         }
 
-        private BreakStatement ParseBreakStatement()
+        private BreakStatement ParseBreak()
         {
             Expect(TokenType.OpSemicolon, ";");
 
@@ -361,7 +362,14 @@ namespace TmLox
                 return expression;
             }
 
-            throw new ParserException(Current(), "invalid expression");
+            // some errors
+            if (Accept(TokenType.KwElif))
+                throw new ParserException(Current(), "\"elif\" used without coresponding \"if\"");
+            else if (Accept(TokenType.KwElse))
+                throw new ParserException(Current(), "\"else\" used without coresponding \"if\"");
+
+
+            throw new ParserException(Current(), "Invalid expression");
         }
 
         private IList<Expression> ParseFunctionArguments()
@@ -371,7 +379,9 @@ namespace TmLox
             while (!Accept(TokenType.OpRParen))
             {
                 arguments.Add(ParseExpression());
-                Accept(TokenType.OpComma);
+
+                if (!Match(TokenType.OpRParen))
+                    Expect(TokenType.OpComma, ",");
             }
 
             return arguments;
@@ -399,7 +409,7 @@ namespace TmLox
 
         private Token Expect(TokenType tokenType, string expected)
         {
-            return Accept(tokenType, out var token) ? token : throw new ParserException(Current(), expected);
+            return Accept(tokenType, out var token) ? token : throw new ParserException(Current(), $"Expected: \"{expected}\"");
         }
 
         private bool Match(params TokenType[] types)

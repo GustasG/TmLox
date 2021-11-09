@@ -12,7 +12,7 @@
         }
 
         public ParserException(int line, int column, string text)
-            : this($"({line}:{column}): Expected: \"{text}\"")
+            : this($"({line}:{column}): {text}")
         {
         }
 
