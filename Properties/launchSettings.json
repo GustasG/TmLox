@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "TmLox": {
-      "commandName": "Project",
-      "workingDirectory": "$(SolutionDir)"
-    }
-  }
-}

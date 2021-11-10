@@ -1,6 +1,7 @@
 # Visual Studio
-.vs/
 .editorconfig
+.vs/
+Properties/
 Visual Studio 2019/
 
 # Visual Studio Code
