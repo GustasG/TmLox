@@ -1,4 +1,6 @@
-﻿namespace TmLox.Ast.Statements
+﻿using System.Diagnostics;
+
+namespace TmLox.Ast.Statements
 {
     public class VariableDeclarationStatement : Statement
     {
@@ -6,20 +8,18 @@
 
         public Expression? Value { get; }
 
-        public VariableDeclarationStatement(string name, Expression? value)
+        public VariableDeclarationStatement(string name, Expression? value = null)
         {
             Name = name;
             Value = value;
         }
 
-        public VariableDeclarationStatement(string name)
-            : this(name, null)
+        public VariableDeclarationStatement(Token name, Expression? value = null)
         {
-        }
+            Debug.Assert(name.TokenType == TokenType.Identifier && name.Value != null, "Token is not a valid identifier");
 
-        public VariableDeclarationStatement(Token name, Expression? value)
-            : this(name.Value as string, value)
-        {
+            Name = name.Value as string;
+            Value = value;
         }
 
         public override NodeType Type()

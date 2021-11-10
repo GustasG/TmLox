@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace TmLox.Ast.Statements
 {
@@ -18,16 +19,13 @@ namespace TmLox.Ast.Statements
             Body = new List<Statement>();
         }
 
-        public FunctionDeclarationStatement(string name, IList<string> parameters, IList<Statement> body)
+        public FunctionDeclarationStatement(Token name, IList<string> parameters, IList<Statement> body)
         {
-            Name = name;
+            Debug.Assert(name.TokenType == TokenType.Identifier && name.Value != null, "Token is not a valid identifier");
+
+            Name = name.Value as string;
             Parameters = parameters;
             Body = body;
-        }
-
-        public FunctionDeclarationStatement(Token name, IList<string> parameters, IList<Statement> body)
-            : this(name.Value as string, parameters, body)
-        {
         }
 
         public override NodeType Type()

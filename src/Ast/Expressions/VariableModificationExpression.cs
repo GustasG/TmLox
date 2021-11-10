@@ -1,4 +1,6 @@
-﻿namespace TmLox.Ast.Expressions
+﻿using System.Diagnostics;
+
+namespace TmLox.Ast.Expressions
 {
     public abstract class VariableModificationExpression : Expression
     {
@@ -14,8 +16,11 @@
         }
 
         public VariableModificationExpression(Token variable, Expression value)
-            : this(variable.Value as string, value)
         {
+            Debug.Assert(variable.TokenType == TokenType.Identifier && variable.Value != null, "Token is not a valid identifier");
+
+            Variable = variable.Value as string;
+            Value = value;
         }
     }
 }

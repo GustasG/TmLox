@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace TmLox.Ast.Expressions
 {
@@ -16,8 +17,11 @@ namespace TmLox.Ast.Expressions
         }
 
         public FunctionCallExpression(Token name, IList<Expression> arguments)
-            : this(name.Value as string, arguments)
         {
+            Debug.Assert(name.TokenType == TokenType.Identifier && name.Value != null, "Token is not a valid identifier");
+
+            Name = name.Value as string;
+            Arguments = arguments;
         }
 
         public override NodeType Type()
