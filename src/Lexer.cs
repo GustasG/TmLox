@@ -144,7 +144,7 @@ namespace TmLox
                     else if (char.IsLetter(startingChar) || startingChar == '_')
                         return CreateIdentifierToken();
                     else
-                        throw new LexerException(_line, _column, $"Unexpected characted: {startingChar}");
+                        throw new SyntaxError(_line, _column, $"Unexpected characted: {startingChar}");
             }
         }
 
@@ -229,7 +229,7 @@ namespace TmLox
             while (!TryConsume('"'))
             {
                 if (IsEnd())
-                    throw new LexerException(startingLine, startingColumn, "Unterminated string");
+                    throw new SyntaxError(startingLine, startingColumn, "Unterminated string");
 
                 var currentChar = Advance();
 
@@ -266,7 +266,7 @@ namespace TmLox
                 'r' => '\r',
                 't' => '\t',
                 'v' => '\v',
-                _ => throw new LexerException(_line, _column - 1, $"Invalid escape symbol: \\{symbol}"),
+                _ => throw new SyntaxError(_line, _column - 1, $"Invalid escape symbol: \\{symbol}"),
             };
         }
 
@@ -282,7 +282,7 @@ namespace TmLox
             else if (double.TryParse(value, out var floatingPoint))
                 return new Token(_line, startingColumn, TokenType.LitFloat, floatingPoint);
             else
-                throw new LexerException(_line, startingColumn, "Invalid number");
+                throw new SyntaxError(_line, startingColumn, "Invalid number");
         }
 
         private string CreateNumber()

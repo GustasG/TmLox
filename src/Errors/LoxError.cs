@@ -2,13 +2,13 @@
 
 namespace TmLox.Errors
 {
-    public class LoxException : Exception
+    public abstract class LoxError : Exception
     {
-        public LoxException()
+        public LoxError()
         {
         }
 
-        public LoxException(string message)
+        public LoxError(string message)
             : base(message)
         {
         }

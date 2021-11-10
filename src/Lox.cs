@@ -4,15 +4,14 @@ using System.IO;
 using Newtonsoft.Json;
 
 using TmLox.Ast;
-using TmLox.Errors;
 
 namespace TmLox
 {
     class Lox
     {
-        public static void Main(string[] args)
+        public static int Main(string[] args)
         {
-            var path = "examples/sandbox.lox";
+            var path = "Examples/sandbox.lox";
             var source = File.ReadAllText(path);
 
             try
@@ -23,14 +22,13 @@ namespace TmLox
 
                 PrintAst(program);
             }
-            catch (LoxException e)
-            {
-                Console.Error.WriteLine("{0}: {1}", path, e.Message);
-            }
             catch(Exception e)
             {
                 Console.Error.WriteLine(e);
+                return e.HResult;
             }
+
+            return 0;
         }
 
         private static void PrintAst(LoxProgram program)

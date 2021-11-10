@@ -364,12 +364,12 @@ namespace TmLox
 
             // some errors
             if (Accept(TokenType.KwElif))
-                throw new ParserException(Current(), "\"elif\" used without coresponding \"if\"");
+                throw new SyntaxError(Current(), "\"elif\" used without coresponding \"if\"");
             else if (Accept(TokenType.KwElse))
-                throw new ParserException(Current(), "\"else\" used without coresponding \"if\"");
+                throw new SyntaxError(Current(), "\"else\" used without coresponding \"if\"");
 
 
-            throw new ParserException(Current(), "Invalid expression");
+            throw new SyntaxError(Current(), "Invalid expression");
         }
 
         private IList<Expression> ParseFunctionArguments()
@@ -409,7 +409,7 @@ namespace TmLox
 
         private Token Expect(TokenType tokenType, string expected)
         {
-            return Accept(tokenType, out var token) ? token : throw new ParserException(Current(), $"Expected: \"{expected}\"");
+            return Accept(tokenType, out var token) ? token : throw new SyntaxError(Current(), $"Expected: \"{expected}\"");
         }
 
         private bool Match(params TokenType[] types)
