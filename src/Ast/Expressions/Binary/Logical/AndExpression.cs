@@ -9,7 +9,7 @@
 
         public override NodeType Type()
         {
-            return NodeType.AndE;
+            return NodeType.And;
         }
     }
 }

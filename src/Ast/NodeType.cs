@@ -10,7 +10,7 @@
         Subtraction,
 
         // Logical expressions
-        AndE,
+        And,
         Equal,
         LessEqual,
         Less,
