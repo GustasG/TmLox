@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
 
 using Newtonsoft.Json;
 
@@ -26,7 +25,11 @@ namespace TmLox
             }
             catch (LoxException e)
             {
-                Console.WriteLine("{0}: {1}", path, e.Message);
+                Console.Error.WriteLine("{0}: {1}", path, e.Message);
+            }
+            catch(Exception e)
+            {
+                Console.Error.WriteLine(e);
             }
         }
 
@@ -39,18 +42,6 @@ namespace TmLox
             };
 
             Console.WriteLine(JsonConvert.SerializeObject(program, settings));
-        }
-
-        private static void PrintTokens(IEnumerable<Token> tokenStream)
-        {
-            var fmt = "| {0,7} | {1,10} | {2,15} | {3,20} |";
-
-            Console.WriteLine(fmt, "LINE", "COLUMN", "TYPE", "VALUE");
-
-            foreach(var token in tokenStream)
-            {
-                Console.WriteLine(fmt, token.Line, token.Column, token.TokenType, token.Value);
-            }
         }
     }
 }
