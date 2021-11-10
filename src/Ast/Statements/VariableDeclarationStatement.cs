@@ -21,5 +21,10 @@
             : this(name.Value as string, value)
         {
         }
+
+        public override NodeType Type()
+        {
+            return NodeType.VariableDeclaration;
+        }
     }
 }

@@ -14,6 +14,11 @@ namespace TmLox.Ast.Statements
             Condition = condition;
             Body = body;
         }
+
+        public override NodeType Type()
+        {
+            return NodeType.Elif;
+        }
     }
 
 
@@ -47,6 +52,11 @@ namespace TmLox.Ast.Statements
             Body = body;
             ElseIfStatements = elseIfStatements;
             ElseBody = elseBody;
+        }
+
+        public override NodeType Type()
+        {
+            return NodeType.If;
         }
     }
 }

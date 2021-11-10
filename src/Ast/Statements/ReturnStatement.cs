@@ -14,5 +14,10 @@
         {
             Value = value;
         }
+
+        public override NodeType Type()
+        {
+            return NodeType.Return;
+        }
     }
 }

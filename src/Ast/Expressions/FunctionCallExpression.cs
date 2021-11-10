@@ -19,5 +19,10 @@ namespace TmLox.Ast.Expressions
             : this(name.Value as string, arguments)
         {
         }
+
+        public override NodeType Type()
+        {
+            return NodeType.FunctionCall;
+        }
     }
 }

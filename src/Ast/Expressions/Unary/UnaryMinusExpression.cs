@@ -6,5 +6,10 @@
             : base(expression)
         {
         }
+
+        public override NodeType Type()
+        {
+            return NodeType.UnaryMinus;
+        }
     }
 }

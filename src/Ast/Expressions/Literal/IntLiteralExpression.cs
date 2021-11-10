@@ -11,5 +11,10 @@
             : this((long)token.Value)
         {
         }
+
+        public override NodeType Type()
+        {
+            return NodeType.IntLiteral;
+        }
     }
 }

@@ -11,5 +11,10 @@
             : this((double)token.Value)
         {
         }
+
+        public override NodeType Type()
+        {
+            return NodeType.FloatLiteral;
+        }
     }
 }

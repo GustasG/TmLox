@@ -6,5 +6,10 @@
             : base(null)
         {
         }
+
+        public override NodeType Type()
+        {
+            return NodeType.NullLiteral;
+        }
     }
 }

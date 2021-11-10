@@ -14,5 +14,10 @@
             : this(token.Value as string)
         {
         }
+
+        public override NodeType Type()
+        {
+            return NodeType.Variable;
+        }
     }
 }

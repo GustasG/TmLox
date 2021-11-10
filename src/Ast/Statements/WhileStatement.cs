@@ -20,5 +20,10 @@ namespace TmLox.Ast.Statements
             Condition = condition;
             Body = body;
         }
+
+        public override NodeType Type()
+        {
+            return NodeType.While;
+        }
     }
 }

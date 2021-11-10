@@ -6,5 +6,10 @@
             : base(left, right)
         {
         }
+
+        public override NodeType Type()
+        {
+            return NodeType.Subtraction;
+        }
     }
 }

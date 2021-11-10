@@ -29,5 +29,10 @@ namespace TmLox.Ast.Statements
             : this(name.Value as string, parameters, body)
         {
         }
+
+        public override NodeType Type()
+        {
+            return NodeType.FunctionDeclaration;
+        }
     }
 }

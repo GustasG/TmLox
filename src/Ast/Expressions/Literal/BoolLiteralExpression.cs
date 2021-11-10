@@ -6,5 +6,10 @@
             : base(value)
         {
         }
+
+        public override NodeType Type()
+        {
+            return NodeType.BoolLiteral;
+        }
     }
 }

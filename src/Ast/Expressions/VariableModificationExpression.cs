@@ -1,6 +1,6 @@
 ﻿namespace TmLox.Ast.Expressions
 {
-    public class VariableModificationExpression : Expression
+    public abstract class VariableModificationExpression : Expression
     {
         public string Variable { get; }
 

@@ -11,5 +11,10 @@
             : base(variable, value)
         {
         }
+
+        public override NodeType Type()
+        {
+            return NodeType.VariableSubtraction;
+        }
     }
 }

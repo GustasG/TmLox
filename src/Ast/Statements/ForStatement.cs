@@ -25,5 +25,10 @@ namespace TmLox.Ast.Statements
             Increment = increment;
             Body = body;
         }
+
+        public override NodeType Type()
+        {
+            return NodeType.For;
+        }
     }
 }
