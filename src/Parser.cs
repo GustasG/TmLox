@@ -21,7 +21,7 @@ namespace TmLox
             _tokenStream = tokenStream;
         }
 
-        public LoxProgram Run()
+        public IList<Statement> Parse()
         {
             var statements = new List<Statement>();
 
@@ -30,7 +30,7 @@ namespace TmLox
                 statements.Add(ParseStatement());
             }
 
-            return new LoxProgram(statements);
+            return statements;
         }
 
         private Statement ParseStatement()

@@ -15,6 +15,11 @@ namespace TmLox.Ast.Statements
             Body = body;
         }
 
+        public override T Accept<T>(IVisitor<T> visitor)
+        {
+            return visitor.Visit(this);
+        }
+
         public override NodeType Type()
         {
             return NodeType.Elif;
@@ -52,6 +57,11 @@ namespace TmLox.Ast.Statements
             Body = body;
             ElseIfStatements = elseIfStatements;
             ElseBody = elseBody;
+        }
+
+        public override T Accept<T>(IVisitor<T> visitor)
+        {
+            return visitor.Visit(this);
         }
 
         public override NodeType Type()

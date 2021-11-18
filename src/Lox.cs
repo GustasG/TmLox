@@ -1,10 +1,6 @@
 ﻿using System;
 using System.IO;
 
-using Newtonsoft.Json;
-
-using TmLox.Ast;
-
 namespace TmLox
 {
     class Lox
@@ -18,9 +14,10 @@ namespace TmLox
             {
                 var lexer = new Lexer(source);
                 var parser = new Parser(lexer);
-                var program = parser.Run();
+                var statements = parser.Parse();
 
-                PrintAst(program);
+                var interpreter = new TreeWalkingInterpreter();
+                interpreter.Interpret(statements);
             }
             catch(Exception e)
             {
@@ -29,17 +26,6 @@ namespace TmLox
             }
 
             return 0;
-        }
-
-        private static void PrintAst(LoxProgram program)
-        {
-            var settings = new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.Objects,
-                Formatting = Formatting.Indented
-            };
-
-            Console.WriteLine(JsonConvert.SerializeObject(program, settings));
         }
     }
 }
