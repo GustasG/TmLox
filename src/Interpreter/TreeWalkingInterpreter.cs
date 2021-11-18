@@ -45,13 +45,12 @@ namespace TmLox.Interpreter
 
         public void RegisterVariable(string name, AnyValue value)
         {
-            _currentEnvironment.Add(name, value);
+            _globalEnironment.Add(name, value);
         }
 
         public void RegisterFunction(string name, IFunction function)
         {
-            var fun = AnyValue.FromFunction(function);
-            _currentEnvironment.Add(name, fun);
+            _globalEnironment.Add(name, AnyValue.FromFunction(function));
         }
 
         public AnyValue Visit(BreakStatement breakStatement)
@@ -90,48 +89,77 @@ namespace TmLox.Interpreter
         public AnyValue Visit(FunctionDeclarationStatement functionDeclarationStatement)
         {
             var function = new LoxFunction(functionDeclarationStatement.Parameters, functionDeclarationStatement.Body);
-            RegisterFunction(functionDeclarationStatement.Name, function);
+            _currentEnvironment.Add(functionDeclarationStatement.Name, AnyValue.FromFunction(function));
 
             return AnyValue.FromNull();
         }
 
         public AnyValue Visit(IfStatement ifStatement)
         {
-            // TODO: Limit variable scope for appropriate if, elif, else blocks
+            if (!VisitIf(ifStatement) && !VisitElif(ifStatement) && ifStatement.ElseBody != null)
+            {
+                var currentEnviroment = _currentEnvironment;
+                _currentEnvironment = new Environment(_currentEnvironment);
+
+                try
+                {
+                    Execute(ifStatement.ElseBody);
+                }
+                finally
+                {
+                    _currentEnvironment = currentEnviroment;
+                }
+            }
+
+            return AnyValue.FromNull();
+        }
+
+        private bool VisitIf(IfStatement ifStatement)
+        {
             var currentEnviroment = _currentEnvironment;
             _currentEnvironment = new Environment(_currentEnvironment);
 
             try
             {
-                bool checkElse = true;
-
                 if (CheckBool(Evaluate(ifStatement.Condition)))
                 {
                     Execute(ifStatement.Body);
-                    checkElse = false;
+                    return true;
                 }
-                else if (ifStatement.ElseIfStatements != null)
-                {
-                    foreach (var elifStatement in ifStatement.ElseIfStatements)
-                    {
-                        if (CheckBool(Evaluate(elifStatement.Condition)))
-                        {
-                            Execute(elifStatement.Body);
-                            checkElse = false;
-                            break;
-                        }
-                    }
-                }
-
-                if (checkElse && ifStatement.ElseBody != null)
-                    Execute(ifStatement.ElseBody);
             }
             finally
             {
                 _currentEnvironment = currentEnviroment;
             }
 
-            return AnyValue.FromNull();
+            return false;
+        }
+
+        private bool VisitElif(IfStatement elifStatement)
+        {
+            if (elifStatement.ElseIfStatements != null)
+            {
+                foreach (var elif in elifStatement.ElseIfStatements)
+                {
+                    var currentEnviroment = _currentEnvironment;
+                    _currentEnvironment = new Environment(_currentEnvironment);
+
+                    try
+                    {
+                        if (CheckBool(Evaluate(elif.Condition)))
+                        {
+                            Execute(elif.Body);
+                            return true;
+                        }
+                    }
+                    finally
+                    {
+                        _currentEnvironment = currentEnviroment;
+                    }
+                }
+            }
+
+            return false;
         }
 
         public AnyValue Visit(ElseIfStatement elseIfStatement)
