@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 using TmLox.Ast;
 using TmLox.Interpreter;
-using TmLox.Functions.Native;
+using TmLox.Interpreter.Functions.Native;
 
 namespace TmLox
 {
@@ -14,6 +14,7 @@ namespace TmLox
         {
             var interpreter = new TreeWalkingInterpreter();
             interpreter.RegisterFunction("print", new PrintFunction());
+            interpreter.RegisterFunction("clock", new ClockFunction());
 
             try
             {

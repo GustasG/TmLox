@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 
-using TmLox.Interpreter;
-
-namespace TmLox.Functions
+namespace TmLox.Interpreter.Functions
 {
     public interface IFunction
     {

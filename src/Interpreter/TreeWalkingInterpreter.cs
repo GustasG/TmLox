@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 using TmLox.Ast;
 using TmLox.Errors;
-using TmLox.Functions;
 using TmLox.Ast.Statements;
 using TmLox.Ast.Expressions;
+using TmLox.Interpreter.Functions;
 using TmLox.Ast.Expressions.Unary;
 using TmLox.Ast.Expressions.Literal;
 using TmLox.Ast.Expressions.Variable;
@@ -18,11 +18,13 @@ namespace TmLox.Interpreter
 {
     public class TreeWalkingInterpreter : IInterpreter
     {
-        private Dictionary<string, AnyValue> _variables;
+        private readonly Environment _globalEnironment;
+        private Environment _currentEnvironment;
 
         public TreeWalkingInterpreter()
         {
-            _variables = new Dictionary<string, AnyValue>();
+            _globalEnironment = new Environment();
+            _currentEnvironment = _globalEnironment;
         }
 
         public void Execute(IList<Statement> statements)
@@ -43,13 +45,13 @@ namespace TmLox.Interpreter
 
         public void RegisterVariable(string name, AnyValue value)
         {
-            _variables[name] = value;
+            _currentEnvironment.Add(name, value);
         }
 
         public void RegisterFunction(string name, IFunction function)
         {
             var fun = AnyValue.FromFunction(function);
-            RegisterVariable(name, fun);
+            _currentEnvironment.Add(name, fun);
         }
 
         public AnyValue Visit(BreakStatement breakStatement)
@@ -59,7 +61,8 @@ namespace TmLox.Interpreter
 
         public AnyValue Visit(ForStatement forStatement)
         {
-            var currentVariables = new Dictionary<string, AnyValue>(_variables);
+            var currentEnviroment = _currentEnvironment;
+            _currentEnvironment = new Environment(_currentEnvironment);
 
             try
             {
@@ -71,7 +74,6 @@ namespace TmLox.Interpreter
                     Execute(forStatement.Body);
                     Execute(forStatement.Increment);
                 }
-
             }
             catch(BreakUnwind)
             {
@@ -79,7 +81,7 @@ namespace TmLox.Interpreter
             }
             finally
             {
-                _variables = currentVariables;
+                _currentEnvironment = currentEnviroment;
             }
 
             return AnyValue.FromNull();
@@ -96,7 +98,8 @@ namespace TmLox.Interpreter
         public AnyValue Visit(IfStatement ifStatement)
         {
             // TODO: Limit variable scope for appropriate if, elif, else blocks
-            var currentVariables = new Dictionary<string, AnyValue>(_variables);
+            var currentEnviroment = _currentEnvironment;
+            _currentEnvironment = new Environment(_currentEnvironment);
 
             try
             {
@@ -107,7 +110,7 @@ namespace TmLox.Interpreter
                     Execute(ifStatement.Body);
                     checkElse = false;
                 }
-                else if(ifStatement.ElseIfStatements != null)
+                else if (ifStatement.ElseIfStatements != null)
                 {
                     foreach (var elifStatement in ifStatement.ElseIfStatements)
                     {
@@ -125,7 +128,7 @@ namespace TmLox.Interpreter
             }
             finally
             {
-                _variables = currentVariables;
+                _currentEnvironment = currentEnviroment;
             }
 
             return AnyValue.FromNull();
@@ -149,14 +152,15 @@ namespace TmLox.Interpreter
         public AnyValue Visit(VariableDeclarationStatement variableDeclarationStatement)
         {
             var value = Evaluate(variableDeclarationStatement.Value);
-            RegisterVariable(variableDeclarationStatement.Name, value);
+            _currentEnvironment.Add(variableDeclarationStatement.Name, value);
 
             return value;
         }
 
         public AnyValue Visit(WhileStatement whileStatement)
         {
-            var currentVariables = new Dictionary<string, AnyValue>(_variables);
+            var currentEnviroment = _currentEnvironment;
+            _currentEnvironment = new Environment(_currentEnvironment);
 
             try
             {
@@ -169,7 +173,7 @@ namespace TmLox.Interpreter
             }
             finally
             {
-                _variables = currentVariables;
+                _currentEnvironment = currentEnviroment;
             }
 
             return AnyValue.FromNull();
@@ -333,7 +337,7 @@ namespace TmLox.Interpreter
             var variable = GetVariable(variableAdditionExpression.Variable);
             var value = Evaluate(variableAdditionExpression.Value);
 
-            RegisterVariable(variableAdditionExpression.Variable, Add(variable, value));
+            _currentEnvironment.Assign(variableAdditionExpression.Variable, Add(variable, value));
 
             return AnyValue.FromNull();
         }
@@ -343,7 +347,7 @@ namespace TmLox.Interpreter
             GetVariable(variableAssigmentExpression.Variable);
             var value = Evaluate(variableAssigmentExpression.Value);
 
-            RegisterVariable(variableAssigmentExpression.Variable, value);
+            _currentEnvironment.Assign(variableAssigmentExpression.Variable, value);
 
             return AnyValue.FromNull();
         }
@@ -353,7 +357,7 @@ namespace TmLox.Interpreter
             var variable = GetVariable(variableDivisionExpression.Variable);
             var value = Evaluate(variableDivisionExpression.Value);
 
-            RegisterVariable(variableDivisionExpression.Variable, Divide(variable, value));
+            _currentEnvironment.Assign(variableDivisionExpression.Variable, Divide(variable, value));
 
             return AnyValue.FromNull();
         }
@@ -363,7 +367,7 @@ namespace TmLox.Interpreter
             var variable = GetVariable(variableModulusExpression.Variable);
             var value = Evaluate(variableModulusExpression.Value);
 
-            RegisterVariable(variableModulusExpression.Variable, Modulus(variable, value));
+            _currentEnvironment.Assign(variableModulusExpression.Variable, Modulus(variable, value));
 
             return AnyValue.FromNull();
         }
@@ -373,7 +377,7 @@ namespace TmLox.Interpreter
             var variable = GetVariable(variableMultiplicationExpression.Variable);
             var value = Evaluate(variableMultiplicationExpression.Value);
 
-            RegisterVariable(variableMultiplicationExpression.Variable, Multiply(variable, value));
+            _currentEnvironment.Assign(variableMultiplicationExpression.Variable, Multiply(variable, value));
 
             return AnyValue.FromNull();
         }
@@ -383,7 +387,7 @@ namespace TmLox.Interpreter
             var variable = GetVariable(variableSubtractionExpression.Variable);
             var value = Evaluate(variableSubtractionExpression.Value);
 
-            RegisterVariable(variableSubtractionExpression.Variable, Subtract(variable, value));
+            _currentEnvironment.Assign(variableSubtractionExpression.Variable, Subtract(variable, value));
 
             return AnyValue.FromNull();
         }
@@ -396,7 +400,8 @@ namespace TmLox.Interpreter
                 Select(e => Evaluate(e))
                 .ToList();
 
-            var currentVariables = new Dictionary<string, AnyValue>(_variables);
+            var currentEnviroment = _currentEnvironment;
+            _currentEnvironment = new Environment(_currentEnvironment);
 
             try
             {
@@ -404,7 +409,7 @@ namespace TmLox.Interpreter
             }
             finally
             {
-                _variables = currentVariables;
+                _currentEnvironment = currentEnviroment;
             }
         }
 
@@ -415,7 +420,7 @@ namespace TmLox.Interpreter
 
         private AnyValue GetVariable(string name)
         {
-            if (_variables.TryGetValue(name, out var variable))
+            if (_currentEnvironment.TryGet(name, out var variable))
             {
                 if (!variable.IsPrimitive())
                     throw new ValueError($"Cannot perform operation with {name} which is instance of {variable.Type}");
@@ -428,7 +433,7 @@ namespace TmLox.Interpreter
 
         private IFunction GetFunction(string name)
         {
-            if (_variables.TryGetValue(name, out var variable))
+            if (_currentEnvironment.TryGet(name, out var variable))
             {
                 if (!variable.IsFunction())
                     throw new ValueError($"{name} is instance of {variable.Type} and not a function");

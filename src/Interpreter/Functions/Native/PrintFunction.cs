@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using TmLox.Interpreter;
 
-namespace TmLox.Functions.Native
+namespace TmLox.Interpreter.Functions.Native
 {
     public class PrintFunction : IFunction
     {

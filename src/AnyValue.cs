@@ -1,5 +1,5 @@
 ﻿using TmLox.Errors;
-using TmLox.Functions;
+using TmLox.Interpreter.Functions;
 
 namespace TmLox
 {

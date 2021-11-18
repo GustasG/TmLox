@@ -5,7 +5,7 @@ using TmLox.Errors;
 using TmLox.Interpreter;
 using TmLox.Interpreter.StackUnwinding;
 
-namespace TmLox.Functions
+namespace TmLox.Interpreter.Functions
 {
     public class LoxFunction : IFunction
     {

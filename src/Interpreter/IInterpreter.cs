@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using TmLox.Ast;
-using TmLox.Functions;
+using TmLox.Interpreter.Functions;
 
 namespace TmLox.Interpreter
 {
