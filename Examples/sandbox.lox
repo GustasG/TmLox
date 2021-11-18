@@ -1,19 +1,10 @@
-﻿fun fac_rec(n) {
-    if (n == 0) {
-        return 1;
+﻿fun fib(n) {
+    if (n == 0 or n == 1) {
+        return n;
     }
 
-    return n * factorial(n - 1);
+    return fib(n - 1) + fib(n - 2);
 }
 
-fun fac_iter(n) {
-    var result = 1;
 
-    for (var i = 1; i <= n; i += 1) {
-        result *= i;
-    }
-
-    return result;
-}
-
-print(fac_iter(10));
+print(fib(15));

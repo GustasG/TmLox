@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TmLox.Errors
+﻿namespace TmLox.Errors
 {
     public class ValueError: LoxError
     {
@@ -16,6 +10,11 @@ namespace TmLox.Errors
         public ValueError(string message)
             : base(message)
         {
+        }
+
+        public override string ToString()
+        {
+            return Message;
         }
     }
 }

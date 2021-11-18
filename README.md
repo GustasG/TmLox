@@ -6,5 +6,6 @@ Interpreter was created for transliavimo metodai (compiling methods) course.
 
 ## Missing features
 
-* Classes
-* Lists
+- Classes
+- Lists
+- Ternary conditional operator

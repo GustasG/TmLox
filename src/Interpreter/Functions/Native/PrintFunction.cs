@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using TmLox.Interpreter;
 
-namespace TmLox
+namespace TmLox.Functions.Native
 {
     public class PrintFunction : IFunction
     {

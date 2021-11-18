@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 using TmLox.Ast;
 using TmLox.Errors;
+using TmLox.Functions;
 using TmLox.Ast.Statements;
 using TmLox.Ast.Expressions;
 using TmLox.Ast.Expressions.Unary;
@@ -30,17 +31,25 @@ namespace TmLox.Interpreter
                 Execute(statement);
         }
 
-        public AnyValue Execute(Statement statement)
+        public void Execute(Statement statement)
         {
-            if (statement != null)
-                return statement.Accept(this);
-
-            return AnyValue.FromNull();
+            statement.Accept(this);
         }
 
-        public void AddVariable(string name, AnyValue value)
+        public AnyValue Evaluate(Statement statement)
+        {
+            return statement.Accept(this);
+        }
+
+        public void RegisterVariable(string name, AnyValue value)
         {
             _variables[name] = value;
+        }
+
+        public void RegisterFunction(string name, IFunction function)
+        {
+            var fun = AnyValue.FromFunction(function);
+            RegisterVariable(name, fun);
         }
 
         public AnyValue Visit(BreakStatement breakStatement)
@@ -57,7 +66,7 @@ namespace TmLox.Interpreter
                 if (forStatement.Initial != null)
                     Execute(forStatement.Initial);
 
-                while (CheckBool(Execute(forStatement.Condition)))
+                while (CheckBool(Evaluate(forStatement.Condition)))
                 {
                     Execute(forStatement.Body);
                     Execute(forStatement.Increment);
@@ -79,7 +88,7 @@ namespace TmLox.Interpreter
         public AnyValue Visit(FunctionDeclarationStatement functionDeclarationStatement)
         {
             var function = new LoxFunction(functionDeclarationStatement.Parameters, functionDeclarationStatement.Body);
-            AddVariable(functionDeclarationStatement.Name, AnyValue.FromFunction(function));
+            RegisterFunction(functionDeclarationStatement.Name, function);
 
             return AnyValue.FromNull();
         }
@@ -93,7 +102,7 @@ namespace TmLox.Interpreter
             {
                 bool checkElse = true;
 
-                if (CheckBool(Execute(ifStatement.Condition)))
+                if (CheckBool(Evaluate(ifStatement.Condition)))
                 {
                     Execute(ifStatement.Body);
                     checkElse = false;
@@ -102,7 +111,7 @@ namespace TmLox.Interpreter
                 {
                     foreach (var elifStatement in ifStatement.ElseIfStatements)
                     {
-                        if (CheckBool(Execute(elifStatement.Condition)))
+                        if (CheckBool(Evaluate(elifStatement.Condition)))
                         {
                             Execute(elifStatement.Body);
                             checkElse = false;
@@ -132,15 +141,15 @@ namespace TmLox.Interpreter
             var value = AnyValue.FromNull();
 
             if (returnStatement.Value != null)
-                value = Execute(returnStatement.Value);
+                value = Evaluate(returnStatement.Value);
 
             throw new ReturnUnwind(value);
         }
 
         public AnyValue Visit(VariableDeclarationStatement variableDeclarationStatement)
         {
-            var value = Execute(variableDeclarationStatement.Value);
-            AddVariable(variableDeclarationStatement.Name, value);
+            var value = Evaluate(variableDeclarationStatement.Value);
+            RegisterVariable(variableDeclarationStatement.Name, value);
 
             return value;
         }
@@ -151,7 +160,7 @@ namespace TmLox.Interpreter
 
             try
             {
-                while (CheckBool(Execute(whileStatement.Condition)))
+                while (CheckBool(Evaluate(whileStatement.Condition)))
                     Execute(whileStatement.Body);
             }
             catch (BreakUnwind)
@@ -168,108 +177,105 @@ namespace TmLox.Interpreter
 
         public AnyValue Visit(AdditionExpression additionExpression)
         {
-            var lhs = Execute(additionExpression.Left);
-            var rhs = Execute(additionExpression.Right);
+            var lhs = Evaluate(additionExpression.Left);
+            var rhs = Evaluate(additionExpression.Right);
 
             return Add(lhs, rhs);
         }
 
         public AnyValue Visit(DivisionExpression divisionExpression)
         {
-            var lhs = Execute(divisionExpression.Left);
-            var rhs = Execute(divisionExpression.Right);
+            var lhs = Evaluate(divisionExpression.Left);
+            var rhs = Evaluate(divisionExpression.Right);
 
             return Divide(lhs, rhs);
         }
 
         public AnyValue Visit(ModulusExpression modulusExpression)
         {
-            var lhs = Execute(modulusExpression.Left);
-            var rhs = Execute(modulusExpression.Right);
+            var lhs = Evaluate(modulusExpression.Left);
+            var rhs = Evaluate(modulusExpression.Right);
 
             return Modulus(lhs, rhs);
         }
 
         public AnyValue Visit(MultiplicationExpression multiplicationExpression)
         {
-            var lhs = Execute(multiplicationExpression.Left);
-            var rhs = Execute(multiplicationExpression.Right);
+            var lhs = Evaluate(multiplicationExpression.Left);
+            var rhs = Evaluate(multiplicationExpression.Right);
 
             return Multiply(lhs, rhs);
         }
 
         public AnyValue Visit(SubtractionExpression subtractionExpression)
         {
-            var lhs = Execute(subtractionExpression.Left);
-            var rhs = Execute(subtractionExpression.Right);
+            var lhs = Evaluate(subtractionExpression.Left);
+            var rhs = Evaluate(subtractionExpression.Right);
 
             return Subtract(lhs, rhs);
         }
 
         public AnyValue Visit(AndExpression andExpression)
         {
-            var lhs = CheckBool(Execute(andExpression.Left));
+            var lhs = CheckBool(Evaluate(andExpression.Left));
 
-            if (lhs)
-                return AnyValue.FromBool(CheckBool(Execute(andExpression.Right)));
-
-            return AnyValue.FromBool(false);
+            return lhs ? AnyValue.FromBool(CheckBool(Evaluate(andExpression.Right))) : AnyValue.FromBool(false);
         }
 
         public AnyValue Visit(EqualExpression equalExpression)
         {
-            var lhs = Execute(equalExpression.Left);
-            var rhs = Execute(equalExpression.Right);
+            var lhs = Evaluate(equalExpression.Left);
+            var rhs = Evaluate(equalExpression.Right);
 
-            return AnyValue.FromBool(Equals(lhs.Value, rhs.Value));
+            return AnyValue.FromBool(Equals(lhs._value, rhs._value));
         }
 
         public AnyValue Visit(LessEqualExpression lessEqualExpression)
         {
-            var lhs = Execute(lessEqualExpression.Left);
-            var rhs = Execute(lessEqualExpression.Right);
+            var lhs = Evaluate(lessEqualExpression.Left);
+            var rhs = Evaluate(lessEqualExpression.Right);
 
             return AnyValue.FromBool(!IsMore(lhs, rhs));
         }
 
         public AnyValue Visit(LessExpression lessExpression)
         {
-            var lhs = Execute(lessExpression.Left);
-            var rhs = Execute(lessExpression.Right);
+            var lhs = Evaluate(lessExpression.Left);
+            var rhs = Evaluate(lessExpression.Right);
 
             return AnyValue.FromBool(IsLess(lhs, rhs));
         }
 
         public AnyValue Visit(MoreEqualExpression moreEqualExpression)
         {
-            var lhs = Execute(moreEqualExpression.Left);
-            var rhs = Execute(moreEqualExpression.Right);
+            var lhs = Evaluate(moreEqualExpression.Left);
+            var rhs = Evaluate(moreEqualExpression.Right);
 
             return AnyValue.FromBool(!IsLess(lhs, rhs));
         }
 
         public AnyValue Visit(MoreExpression moreExpression)
         {
-            var lhs = Execute(moreExpression.Left);
-            var rhs = Execute(moreExpression.Right);
+            var lhs = Evaluate(moreExpression.Left);
+            var rhs = Evaluate(moreExpression.Right);
 
             return AnyValue.FromBool(IsMore(lhs, rhs));
         }
 
         public AnyValue Visit(NotEqualExpression notEqualExpression)
         {
-            var lhs = Execute(notEqualExpression.Left);
-            var rhs = Execute(notEqualExpression.Right);
+            var lhs = Evaluate(notEqualExpression.Left);
+            var rhs = Evaluate(notEqualExpression.Right);
 
-            return AnyValue.FromBool(!Equals(lhs.Value, rhs.Value));
+            return AnyValue.FromBool(!Equals(lhs._value, rhs._value));
         }
 
         public AnyValue Visit(OrExpression orExpression)
         {
-            var lhs = CheckBool(Execute(orExpression.Left));
+            var lhs = CheckBool(Evaluate(orExpression.Left));
 
             if (!lhs)
-                return AnyValue.FromBool(CheckBool(Execute(orExpression.Right)));
+                return AnyValue.FromBool(CheckBool(Evaluate(orExpression.Right)));
 
             return AnyValue.FromBool(true);
         }
@@ -301,7 +307,7 @@ namespace TmLox.Interpreter
 
         public AnyValue Visit(UnaryMinusExpression unaryMinusExpression)
         {
-            var value = Execute(unaryMinusExpression.Expression);
+            var value = Evaluate(unaryMinusExpression.Expression);
 
             return value.Type switch
             {
@@ -313,7 +319,7 @@ namespace TmLox.Interpreter
 
         public AnyValue Visit(UnaryNotExpression unaryNotExpression)
         {
-            var value = Execute(unaryNotExpression.Expression);
+            var value = Evaluate(unaryNotExpression.Expression);
 
             return value.Type switch
             {
@@ -325,9 +331,9 @@ namespace TmLox.Interpreter
         public AnyValue Visit(VariableAdditionExpression variableAdditionExpression)
         {
             var variable = GetVariable(variableAdditionExpression.Variable);
-            var value = Execute(variableAdditionExpression.Value);
+            var value = Evaluate(variableAdditionExpression.Value);
 
-            AddVariable(variableAdditionExpression.Variable, Add(variable, value));
+            RegisterVariable(variableAdditionExpression.Variable, Add(variable, value));
 
             return AnyValue.FromNull();
         }
@@ -335,9 +341,9 @@ namespace TmLox.Interpreter
         public AnyValue Visit(VariableAssigmentExpression variableAssigmentExpression)
         {
             GetVariable(variableAssigmentExpression.Variable);
-            var value = Execute(variableAssigmentExpression.Value);
+            var value = Evaluate(variableAssigmentExpression.Value);
 
-            AddVariable(variableAssigmentExpression.Variable, value);
+            RegisterVariable(variableAssigmentExpression.Variable, value);
 
             return AnyValue.FromNull();
         }
@@ -345,9 +351,9 @@ namespace TmLox.Interpreter
         public AnyValue Visit(VariableDivisionExpression variableDivisionExpression)
         {
             var variable = GetVariable(variableDivisionExpression.Variable);
-            var value = Execute(variableDivisionExpression.Value);
+            var value = Evaluate(variableDivisionExpression.Value);
 
-            AddVariable(variableDivisionExpression.Variable, Divide(variable, value));
+            RegisterVariable(variableDivisionExpression.Variable, Divide(variable, value));
 
             return AnyValue.FromNull();
         }
@@ -355,9 +361,9 @@ namespace TmLox.Interpreter
         public AnyValue Visit(VariableModulusExpression variableModulusExpression)
         {
             var variable = GetVariable(variableModulusExpression.Variable);
-            var value = Execute(variableModulusExpression.Value);
+            var value = Evaluate(variableModulusExpression.Value);
 
-            AddVariable(variableModulusExpression.Variable, Modulus(variable, value));
+            RegisterVariable(variableModulusExpression.Variable, Modulus(variable, value));
 
             return AnyValue.FromNull();
         }
@@ -365,9 +371,9 @@ namespace TmLox.Interpreter
         public AnyValue Visit(VariableMultiplicationExpression variableMultiplicationExpression)
         {
             var variable = GetVariable(variableMultiplicationExpression.Variable);
-            var value = Execute(variableMultiplicationExpression.Value);
+            var value = Evaluate(variableMultiplicationExpression.Value);
 
-            AddVariable(variableMultiplicationExpression.Variable, Multiply(variable, value));
+            RegisterVariable(variableMultiplicationExpression.Variable, Multiply(variable, value));
 
             return AnyValue.FromNull();
         }
@@ -375,9 +381,9 @@ namespace TmLox.Interpreter
         public AnyValue Visit(VariableSubtractionExpression variableSubtractionExpression)
         {
             var variable = GetVariable(variableSubtractionExpression.Variable);
-            var value = Execute(variableSubtractionExpression.Value);
+            var value = Evaluate(variableSubtractionExpression.Value);
 
-            AddVariable(variableSubtractionExpression.Variable, Subtract(variable, value));
+            RegisterVariable(variableSubtractionExpression.Variable, Subtract(variable, value));
 
             return AnyValue.FromNull();
         }
@@ -387,7 +393,7 @@ namespace TmLox.Interpreter
             var function = GetFunction(functionCallExpression.Name);
 
             var arguments = functionCallExpression.Arguments.
-                Select(e => Execute(e))
+                Select(e => Evaluate(e))
                 .ToList();
 
             var currentVariables = new Dictionary<string, AnyValue>(_variables);
@@ -486,7 +492,7 @@ namespace TmLox.Interpreter
             if (lhs.IsNumber() && rhs.IsNumber())
                 return lhs.AsFloat() < rhs.AsFloat();
 
-            throw new ValueError($"Cannot compare {lhs.Value} and {rhs.Value}");
+            throw new ValueError($"Cannot compare {lhs._value} and {rhs._value}");
         }
 
         private static bool IsMore(AnyValue lhs, AnyValue rhs)

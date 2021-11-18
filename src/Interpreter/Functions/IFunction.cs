@@ -2,7 +2,7 @@
 
 using TmLox.Interpreter;
 
-namespace TmLox
+namespace TmLox.Functions
 {
     public interface IFunction
     {
