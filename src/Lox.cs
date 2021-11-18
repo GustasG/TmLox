@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 
+using TmLox.Interpreter;
+
 namespace TmLox
 {
     class Lox
@@ -12,12 +14,14 @@ namespace TmLox
 
             try
             {
+                var interpreter = new TreeWalkingInterpreter();
+                interpreter.AddVariable("print", AnyValue.FromFunction(new PrintFunction()));
+
                 var lexer = new Lexer(source);
                 var parser = new Parser(lexer);
                 var statements = parser.Parse();
 
-                var interpreter = new TreeWalkingInterpreter();
-                interpreter.Interpret(statements);
+                interpreter.Execute(statements);
             }
             catch(Exception e)
             {

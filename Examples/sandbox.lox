@@ -1,1 +1,19 @@
-﻿print(20 % 5);
+﻿fun fac_rec(n) {
+    if (n == 0) {
+        return 1;
+    }
+
+    return n * factorial(n - 1);
+}
+
+fun fac_iter(n) {
+    var result = 1;
+
+    for (var i = 1; i <= n; i += 1) {
+        result *= i;
+    }
+
+    return result;
+}
+
+print(fac_iter(10));

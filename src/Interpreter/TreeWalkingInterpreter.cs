@@ -9,32 +9,28 @@ using TmLox.Ast.Expressions;
 using TmLox.Ast.Expressions.Unary;
 using TmLox.Ast.Expressions.Literal;
 using TmLox.Ast.Expressions.Variable;
+using TmLox.Interpreter.StackUnwinding;
 using TmLox.Ast.Expressions.Binary.Logical;
 using TmLox.Ast.Expressions.Binary.Arithmetic;
 
-namespace TmLox
+namespace TmLox.Interpreter
 {
-    public class TreeWalkingInterpreter : IVisitor<AnyValue>
+    public class TreeWalkingInterpreter : IInterpreter
     {
         private Dictionary<string, AnyValue> _variables;
 
         public TreeWalkingInterpreter()
         {
             _variables = new Dictionary<string, AnyValue>();
-
-            var print = AnyValue.FromCallable(new PrintFunction());
-            _variables.Add("print", print);
         }
 
-        public void Interpret(IList<Statement> statements)
+        public void Execute(IList<Statement> statements)
         {
             foreach (var statement in statements)
-            {
                 Execute(statement);
-            }
         }
 
-        private AnyValue Execute(Statement statement)
+        public AnyValue Execute(Statement statement)
         {
             if (statement != null)
                 return statement.Accept(this);
@@ -42,24 +38,88 @@ namespace TmLox
             return AnyValue.FromNull();
         }
 
+        public void AddVariable(string name, AnyValue value)
+        {
+            _variables[name] = value;
+        }
+
         public AnyValue Visit(BreakStatement breakStatement)
         {
-            throw new NotImplementedException();
+            throw new BreakUnwind();
         }
 
         public AnyValue Visit(ForStatement forStatement)
         {
-            throw new NotImplementedException();
+            var currentVariables = new Dictionary<string, AnyValue>(_variables);
+
+            try
+            {
+                if (forStatement.Initial != null)
+                    Execute(forStatement.Initial);
+
+                while (CheckBool(Execute(forStatement.Condition)))
+                {
+                    Execute(forStatement.Body);
+                    Execute(forStatement.Increment);
+                }
+
+            }
+            catch(BreakUnwind)
+            {
+
+            }
+            finally
+            {
+                _variables = currentVariables;
+            }
+
+            return AnyValue.FromNull();
         }
 
         public AnyValue Visit(FunctionDeclarationStatement functionDeclarationStatement)
         {
-            throw new NotImplementedException();
+            var function = new LoxFunction(functionDeclarationStatement.Parameters, functionDeclarationStatement.Body);
+            AddVariable(functionDeclarationStatement.Name, AnyValue.FromFunction(function));
+
+            return AnyValue.FromNull();
         }
 
         public AnyValue Visit(IfStatement ifStatement)
         {
-            throw new NotImplementedException();
+            // TODO: Limit variable scope for appropriate if, elif, else blocks
+            var currentVariables = new Dictionary<string, AnyValue>(_variables);
+
+            try
+            {
+                bool checkElse = true;
+
+                if (CheckBool(Execute(ifStatement.Condition)))
+                {
+                    Execute(ifStatement.Body);
+                    checkElse = false;
+                }
+                else if(ifStatement.ElseIfStatements != null)
+                {
+                    foreach (var elifStatement in ifStatement.ElseIfStatements)
+                    {
+                        if (CheckBool(Execute(elifStatement.Condition)))
+                        {
+                            Execute(elifStatement.Body);
+                            checkElse = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (checkElse && ifStatement.ElseBody != null)
+                    Execute(ifStatement.ElseBody);
+            }
+            finally
+            {
+                _variables = currentVariables;
+            }
+
+            return AnyValue.FromNull();
         }
 
         public AnyValue Visit(ElseIfStatement elseIfStatement)
@@ -69,23 +129,41 @@ namespace TmLox
 
         public AnyValue Visit(ReturnStatement returnStatement)
         {
-            if (returnStatement.Value != null)
-                return Execute(returnStatement.Value);
+            var value = AnyValue.FromNull();
 
-            return AnyValue.FromNull();
+            if (returnStatement.Value != null)
+                value = Execute(returnStatement.Value);
+
+            throw new ReturnUnwind(value);
         }
 
         public AnyValue Visit(VariableDeclarationStatement variableDeclarationStatement)
         {
             var value = Execute(variableDeclarationStatement.Value);
-            _variables.Add(variableDeclarationStatement.Name, value);
+            AddVariable(variableDeclarationStatement.Name, value);
 
             return value;
         }
 
         public AnyValue Visit(WhileStatement whileStatement)
         {
-            throw new NotImplementedException();
+            var currentVariables = new Dictionary<string, AnyValue>(_variables);
+
+            try
+            {
+                while (CheckBool(Execute(whileStatement.Condition)))
+                    Execute(whileStatement.Body);
+            }
+            catch (BreakUnwind)
+            {
+
+            }
+            finally
+            {
+                _variables = currentVariables;
+            }
+
+            return AnyValue.FromNull();
         }
 
         public AnyValue Visit(AdditionExpression additionExpression)
@@ -133,9 +211,7 @@ namespace TmLox
             var lhs = CheckBool(Execute(andExpression.Left));
 
             if (lhs)
-            {
                 return AnyValue.FromBool(CheckBool(Execute(andExpression.Right)));
-            }
 
             return AnyValue.FromBool(false);
         }
@@ -193,9 +269,7 @@ namespace TmLox
             var lhs = CheckBool(Execute(orExpression.Left));
 
             if (!lhs)
-            {
                 return AnyValue.FromBool(CheckBool(Execute(orExpression.Right)));
-            }
 
             return AnyValue.FromBool(true);
         }
@@ -231,8 +305,8 @@ namespace TmLox
 
             return value.Type switch
             {
-                ValueType.Integer => AnyValue.FromInteger(-value.AsInteger()),
-                ValueType.Float => AnyValue.FromFloat(-value.AsFloat()),
+                AnyValueType.Integer => AnyValue.FromInteger(-value.AsInteger()),
+                AnyValueType.Float => AnyValue.FromFloat(-value.AsFloat()),
                 _ => throw new ValueError($"Operator - not supported for {value.Type}")
             };
         }
@@ -243,7 +317,7 @@ namespace TmLox
 
             return value.Type switch
             {
-                ValueType.Bool => AnyValue.FromBool(!value.AsBool()),
+                AnyValueType.Bool => AnyValue.FromBool(!value.AsBool()),
                 _ => throw new ValueError($"Operator ! not supported for {value.Type}")
             };
         }
@@ -253,7 +327,7 @@ namespace TmLox
             var variable = GetVariable(variableAdditionExpression.Variable);
             var value = Execute(variableAdditionExpression.Value);
 
-            _variables[variableAdditionExpression.Variable] = Add(variable, value);
+            AddVariable(variableAdditionExpression.Variable, Add(variable, value));
 
             return AnyValue.FromNull();
         }
@@ -263,7 +337,7 @@ namespace TmLox
             GetVariable(variableAssigmentExpression.Variable);
             var value = Execute(variableAssigmentExpression.Value);
 
-            _variables[variableAssigmentExpression.Variable] = value;
+            AddVariable(variableAssigmentExpression.Variable, value);
 
             return AnyValue.FromNull();
         }
@@ -273,7 +347,7 @@ namespace TmLox
             var variable = GetVariable(variableDivisionExpression.Variable);
             var value = Execute(variableDivisionExpression.Value);
 
-            _variables[variableDivisionExpression.Variable] = Divide(variable, value);
+            AddVariable(variableDivisionExpression.Variable, Divide(variable, value));
 
             return AnyValue.FromNull();
         }
@@ -283,7 +357,7 @@ namespace TmLox
             var variable = GetVariable(variableModulusExpression.Variable);
             var value = Execute(variableModulusExpression.Value);
 
-            _variables[variableModulusExpression.Variable] = Modulus(variable, value);
+            AddVariable(variableModulusExpression.Variable, Modulus(variable, value));
 
             return AnyValue.FromNull();
         }
@@ -293,7 +367,7 @@ namespace TmLox
             var variable = GetVariable(variableMultiplicationExpression.Variable);
             var value = Execute(variableMultiplicationExpression.Value);
 
-            _variables[variableMultiplicationExpression.Variable] = Multiply(variable, value);
+            AddVariable(variableMultiplicationExpression.Variable, Multiply(variable, value));
 
             return AnyValue.FromNull();
         }
@@ -303,7 +377,7 @@ namespace TmLox
             var variable = GetVariable(variableSubtractionExpression.Variable);
             var value = Execute(variableSubtractionExpression.Value);
 
-            _variables[variableSubtractionExpression.Variable] = Subtract(variable, value);
+            AddVariable(variableSubtractionExpression.Variable, Subtract(variable, value));
 
             return AnyValue.FromNull();
         }
@@ -311,13 +385,16 @@ namespace TmLox
         public AnyValue Visit(FunctionCallExpression functionCallExpression)
         {
             var function = GetFunction(functionCallExpression.Name);
-            var arguments = functionCallExpression.Arguments.Select(e => Execute(e));
+
+            var arguments = functionCallExpression.Arguments.
+                Select(e => Execute(e))
+                .ToList();
 
             var currentVariables = new Dictionary<string, AnyValue>(_variables);
 
             try
             {
-                return function.Call(arguments);
+                return function.Call(this, arguments);
             }
             finally
             {

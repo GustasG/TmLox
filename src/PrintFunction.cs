@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using TmLox.Interpreter;
+
 namespace TmLox
 {
     public class PrintFunction : IFunction
     {
-        public AnyValue Call(IEnumerable<AnyValue> arguments)
+        public AnyValue Call(IInterpreter interpreter, IList<AnyValue> arguments)
         {
-            foreach (var argument in arguments)
+            for (int i = 0; i < arguments.Count; i++)
             {
-                Console.Write(argument);
+                Console.Write(arguments[i]);
+
+                if (i != arguments.Count - 1)
+                    Console.Write(' ');
             }
 
             Console.WriteLine();

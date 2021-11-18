@@ -1,10 +1,8 @@
-﻿using System;
-
-using TmLox.Errors;
+﻿using TmLox.Errors;
 
 namespace TmLox
 {
-    public enum ValueType
+    public enum AnyValueType
     {
         Null,
         Bool,
@@ -19,26 +17,26 @@ namespace TmLox
     {
         public object? Value { get; private set; }
 
-        public ValueType Type { get; private set; }
+        public AnyValueType Type { get; private set; }
 
         public bool IsNull()
         {
-            return Type == ValueType.Null;
+            return Type == AnyValueType.Null;
         }
 
         public bool IsBool()
         {
-            return Type == ValueType.Bool;
+            return Type == AnyValueType.Bool;
         }
 
         public bool IsInteger()
         {
-            return Type == ValueType.Integer;
+            return Type == AnyValueType.Integer;
         }
 
         public bool IsFloat()
         {
-            return Type == ValueType.Float;
+            return Type == AnyValueType.Float;
         }
 
         public bool IsNumber()
@@ -48,12 +46,12 @@ namespace TmLox
 
         public bool IsString()
         {
-            return Type == ValueType.String;
+            return Type == AnyValueType.String;
         }
 
         public bool IsFunction()
         {
-            return Type == ValueType.Function;
+            return Type == AnyValueType.Function;
         }
 
         public bool IsPrimitive()
@@ -70,8 +68,8 @@ namespace TmLox
         {
             return Type switch
             {
-                ValueType.Integer => (long)Value,
-                ValueType.Float => (long)(double)Value,
+                AnyValueType.Integer => (long)Value,
+                AnyValueType.Float => (long)(double)Value,
                 _ => throw new ValueError($"Cannot convert {Type} to int"),
             };
         }
@@ -80,8 +78,8 @@ namespace TmLox
         {
             return Type switch
             {
-                ValueType.Integer => (double)(long)Value,
-                ValueType.Float => (double)Value,
+                AnyValueType.Integer => (double)(long)Value,
+                AnyValueType.Float => (double)Value,
                 _ => throw new ValueError($"Cannot convert {Type} to float"),
             };
         }
@@ -106,7 +104,7 @@ namespace TmLox
             return new AnyValue
             {
                 Value = null,
-                Type = ValueType.Null
+                Type = AnyValueType.Null
             };
         }
 
@@ -115,7 +113,7 @@ namespace TmLox
             return new AnyValue
             {
                 Value = value,
-                Type = ValueType.Bool
+                Type = AnyValueType.Bool
             };
         }
 
@@ -124,7 +122,7 @@ namespace TmLox
             return new AnyValue
             {
                 Value = value,
-                Type = ValueType.Integer
+                Type = AnyValueType.Integer
             };
         }
 
@@ -133,7 +131,7 @@ namespace TmLox
             return new AnyValue
             {
                 Value = value,
-                Type = ValueType.Float
+                Type = AnyValueType.Float
             };
         }
 
@@ -142,16 +140,16 @@ namespace TmLox
             return new AnyValue
             {
                 Value = value,
-                Type = ValueType.String
+                Type = AnyValueType.String
             };
         }
 
-        public static AnyValue FromCallable(IFunction callable)
+        public static AnyValue FromFunction(IFunction function)
         {
             return new AnyValue
             {
-                Value = callable,
-                Type = ValueType.Function
+                Value = function,
+                Type = AnyValueType.Function
             };
         }
     }
