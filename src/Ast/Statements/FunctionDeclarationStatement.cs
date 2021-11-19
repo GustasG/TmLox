@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace TmLox.Ast.Statements
 {
@@ -21,9 +20,7 @@ namespace TmLox.Ast.Statements
 
         public FunctionDeclarationStatement(Token name, IList<string> parameters, IList<Statement> body)
         {
-            Debug.Assert(name.TokenType == TokenType.Identifier && name.Value != null, "Token is not a valid identifier");
-
-            Name = name.Value as string;
+            Name = name.Value.AsString();
             Parameters = parameters;
             Body = body;
         }

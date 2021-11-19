@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace TmLox.Ast.Statements
+﻿namespace TmLox.Ast.Statements
 {
     public class VariableDeclarationStatement : Statement
     {
@@ -15,11 +13,8 @@ namespace TmLox.Ast.Statements
         }
 
         public VariableDeclarationStatement(Token name, Expression? value = null)
+            : this(name.Value.AsString(), value)
         {
-            Debug.Assert(name.TokenType == TokenType.Identifier && name.Value != null, "Token is not a valid identifier");
-
-            Name = name.Value as string;
-            Value = value;
         }
 
         public override T Accept<T>(IVisitor<T> visitor)

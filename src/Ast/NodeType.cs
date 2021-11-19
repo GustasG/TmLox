@@ -20,11 +20,7 @@
         Or,
 
         // Literal expressions
-        BoolLiteral,
-        FloatLiteral,
-        IntLiteral,
-        NullLiteral,
-        StringLiteral,
+        Literal,
 
         // Unary expressions
         UnaryMinus,

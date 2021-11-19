@@ -6,16 +6,24 @@
 
         public int Column { get; set; }
 
-        public TokenType TokenType { get; set; }
+        public Lexeme Lexeme { get; set; }
 
-        public object? Value { get; set; } // Possible values: long, double, string, null
+        public AnyValue Value { get; set; }
 
 
-        public Token(int line, int column, TokenType tokenType, object? value = null)
+        public Token(int line, int column, Lexeme lexeme)
         {
             Line = line;
             Column = column;
-            TokenType = tokenType;
+            Lexeme = lexeme;
+            Value = AnyValue.CreateNull();
+        }
+
+        public Token(int line, int column, Lexeme lexeme, AnyValue value)
+        {
+            Line = line;
+            Column = column;
+            Lexeme = lexeme;
             Value = value;
         }
     }

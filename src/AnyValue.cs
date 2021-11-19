@@ -101,7 +101,7 @@ namespace TmLox
             return _value != null ? _value.ToString() : "null";
         }
 
-        public static AnyValue FromNull()
+        public static AnyValue CreateNull()
         {
             return new AnyValue
             {
@@ -110,7 +110,7 @@ namespace TmLox
             };
         }
 
-        public static AnyValue FromBool(bool value)
+        public static AnyValue CreateBool(bool value)
         {
             return new AnyValue
             {
@@ -119,7 +119,7 @@ namespace TmLox
             };
         }
 
-        public static AnyValue FromInteger(long value)
+        public static AnyValue CreateInteger(long value)
         {
             return new AnyValue
             {
@@ -128,7 +128,7 @@ namespace TmLox
             };
         }
 
-        public static AnyValue FromFloat(double value)
+        public static AnyValue CreateFloat(double value)
         {
             return new AnyValue
             {
@@ -137,7 +137,7 @@ namespace TmLox
             };
         }
 
-        public static AnyValue FromString(string value)
+        public static AnyValue CreateString(string value)
         {
             return new AnyValue
             {
@@ -146,7 +146,7 @@ namespace TmLox
             };
         }
 
-        public static AnyValue FromFunction(IFunction function)
+        public static AnyValue CreateFunction(IFunction function)
         {
             return new AnyValue
             {

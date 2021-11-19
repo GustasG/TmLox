@@ -25,18 +25,18 @@ namespace TmLox.Interpreter.Functions
                 throw new ValueError($"Expected {_parameters.Count} parameters, got {arguments.Count}");
 
             for (int i = 0; i < _parameters.Count; i++)
-                interpreter.RegisterVariable(_parameters[i], arguments[i]);
+                interpreter.AddVariable(_parameters[i], arguments[i]);
 
             try
             {
                 interpreter.Execute(_body);
             }
-            catch(ReturnUnwind returnValue)
+            catch (ReturnUnwind returnValue)
             {
                 return returnValue.Value;
             }
             
-            return AnyValue.FromNull();
+            return AnyValue.CreateNull();
         }
     }
 }

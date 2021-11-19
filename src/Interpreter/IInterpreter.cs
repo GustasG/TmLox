@@ -16,5 +16,9 @@ namespace TmLox.Interpreter
         void RegisterVariable(string name, AnyValue value);
 
         void RegisterFunction(string name, IFunction function);
+
+        void AddVariable(string name, AnyValue value);
+
+        void AddFunction(string name, IFunction function);
     }
 }

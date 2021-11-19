@@ -18,7 +18,7 @@ namespace TmLox.Interpreter.Functions.Native
 
             Console.WriteLine();
 
-            return AnyValue.FromNull();
+            return AnyValue.CreateNull();
         }
     }
 }

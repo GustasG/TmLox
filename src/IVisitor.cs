@@ -1,7 +1,6 @@
 ﻿using TmLox.Ast.Statements;
 using TmLox.Ast.Expressions;
 using TmLox.Ast.Expressions.Unary;
-using TmLox.Ast.Expressions.Literal;
 using TmLox.Ast.Expressions.Variable;
 using TmLox.Ast.Expressions.Binary.Logical;
 using TmLox.Ast.Expressions.Binary.Arithmetic;
@@ -55,15 +54,7 @@ namespace TmLox
 
         T Visit(OrExpression orExpression);
 
-        T Visit(BoolLiteralExpression boolLiteralExpression);
-
-        T Visit(FloatLiteralExpression floatLiteralExpression);
-
-        T Visit(IntLiteralExpression intLiteralExpression);
-
-        T Visit(NullLiteralExpression nullLiteralExpression);
-
-        T Visit(StringLiteralExpression stringLiteralExpression);
+        T Visit(LiteralExpression literalExpression);
 
         T Visit(UnaryMinusExpression unaryMinusExpression);
 

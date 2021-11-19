@@ -7,7 +7,7 @@ namespace TmLox.Interpreter.Functions.Native
     {
         public AnyValue Call(IInterpreter interpreter, IList<AnyValue> arguments)
         {
-            return AnyValue.FromInteger(DateTime.Now.Second);
+            return AnyValue.CreateInteger(DateTime.Now.Second);
         }
     }
 }

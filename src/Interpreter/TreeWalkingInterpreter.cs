@@ -8,7 +8,6 @@ using TmLox.Ast.Statements;
 using TmLox.Ast.Expressions;
 using TmLox.Interpreter.Functions;
 using TmLox.Ast.Expressions.Unary;
-using TmLox.Ast.Expressions.Literal;
 using TmLox.Ast.Expressions.Variable;
 using TmLox.Interpreter.StackUnwinding;
 using TmLox.Ast.Expressions.Binary.Logical;
@@ -50,7 +49,17 @@ namespace TmLox.Interpreter
 
         public void RegisterFunction(string name, IFunction function)
         {
-            _globalEnironment.Add(name, AnyValue.FromFunction(function));
+            _globalEnironment.Add(name, AnyValue.CreateFunction(function));
+        }
+
+        public void AddVariable(string name, AnyValue value)
+        {
+            _currentEnvironment.Add(name, value);
+        }
+
+        public void AddFunction(string name, IFunction function)
+        {
+            _currentEnvironment.Add(name, AnyValue.CreateFunction(function));
         }
 
         public AnyValue Visit(BreakStatement breakStatement)
@@ -83,15 +92,15 @@ namespace TmLox.Interpreter
                 _currentEnvironment = currentEnviroment;
             }
 
-            return AnyValue.FromNull();
+            return AnyValue.CreateNull();
         }
 
         public AnyValue Visit(FunctionDeclarationStatement functionDeclarationStatement)
         {
             var function = new LoxFunction(functionDeclarationStatement.Parameters, functionDeclarationStatement.Body);
-            _currentEnvironment.Add(functionDeclarationStatement.Name, AnyValue.FromFunction(function));
+            _currentEnvironment.Add(functionDeclarationStatement.Name, AnyValue.CreateFunction(function));
 
-            return AnyValue.FromNull();
+            return AnyValue.CreateNull();
         }
 
         public AnyValue Visit(IfStatement ifStatement)
@@ -111,7 +120,7 @@ namespace TmLox.Interpreter
                 }
             }
 
-            return AnyValue.FromNull();
+            return AnyValue.CreateNull();
         }
 
         private bool VisitIf(IfStatement ifStatement)
@@ -169,7 +178,7 @@ namespace TmLox.Interpreter
 
         public AnyValue Visit(ReturnStatement returnStatement)
         {
-            var value = AnyValue.FromNull();
+            var value = AnyValue.CreateNull();
 
             if (returnStatement.Value != null)
                 value = Evaluate(returnStatement.Value);
@@ -204,7 +213,7 @@ namespace TmLox.Interpreter
                 _currentEnvironment = currentEnviroment;
             }
 
-            return AnyValue.FromNull();
+            return AnyValue.CreateNull();
         }
 
         public AnyValue Visit(AdditionExpression additionExpression)
@@ -251,7 +260,7 @@ namespace TmLox.Interpreter
         {
             var lhs = CheckBool(Evaluate(andExpression.Left));
 
-            return lhs ? AnyValue.FromBool(CheckBool(Evaluate(andExpression.Right))) : AnyValue.FromBool(false);
+            return lhs ? AnyValue.CreateBool(CheckBool(Evaluate(andExpression.Right))) : AnyValue.CreateBool(false);
         }
 
         public AnyValue Visit(EqualExpression equalExpression)
@@ -259,7 +268,7 @@ namespace TmLox.Interpreter
             var lhs = Evaluate(equalExpression.Left);
             var rhs = Evaluate(equalExpression.Right);
 
-            return AnyValue.FromBool(Equals(lhs._value, rhs._value));
+            return AnyValue.CreateBool(Equals(lhs._value, rhs._value));
         }
 
         public AnyValue Visit(LessEqualExpression lessEqualExpression)
@@ -267,7 +276,7 @@ namespace TmLox.Interpreter
             var lhs = Evaluate(lessEqualExpression.Left);
             var rhs = Evaluate(lessEqualExpression.Right);
 
-            return AnyValue.FromBool(!IsMore(lhs, rhs));
+            return AnyValue.CreateBool(!IsMore(lhs, rhs));
         }
 
         public AnyValue Visit(LessExpression lessExpression)
@@ -275,7 +284,7 @@ namespace TmLox.Interpreter
             var lhs = Evaluate(lessExpression.Left);
             var rhs = Evaluate(lessExpression.Right);
 
-            return AnyValue.FromBool(IsLess(lhs, rhs));
+            return AnyValue.CreateBool(IsLess(lhs, rhs));
         }
 
         public AnyValue Visit(MoreEqualExpression moreEqualExpression)
@@ -283,7 +292,7 @@ namespace TmLox.Interpreter
             var lhs = Evaluate(moreEqualExpression.Left);
             var rhs = Evaluate(moreEqualExpression.Right);
 
-            return AnyValue.FromBool(!IsLess(lhs, rhs));
+            return AnyValue.CreateBool(!IsLess(lhs, rhs));
         }
 
         public AnyValue Visit(MoreExpression moreExpression)
@@ -291,7 +300,7 @@ namespace TmLox.Interpreter
             var lhs = Evaluate(moreExpression.Left);
             var rhs = Evaluate(moreExpression.Right);
 
-            return AnyValue.FromBool(IsMore(lhs, rhs));
+            return AnyValue.CreateBool(IsMore(lhs, rhs));
         }
 
         public AnyValue Visit(NotEqualExpression notEqualExpression)
@@ -299,52 +308,28 @@ namespace TmLox.Interpreter
             var lhs = Evaluate(notEqualExpression.Left);
             var rhs = Evaluate(notEqualExpression.Right);
 
-            return AnyValue.FromBool(!Equals(lhs._value, rhs._value));
+            return AnyValue.CreateBool(!Equals(lhs._value, rhs._value));
         }
 
         public AnyValue Visit(OrExpression orExpression)
         {
             var lhs = CheckBool(Evaluate(orExpression.Left));
 
-            if (!lhs)
-                return AnyValue.FromBool(CheckBool(Evaluate(orExpression.Right)));
-
-            return AnyValue.FromBool(true);
+            return !lhs ? AnyValue.CreateBool(CheckBool(Evaluate(orExpression.Right))) : AnyValue.CreateBool(true);
         }
 
-        public AnyValue Visit(BoolLiteralExpression boolLiteralExpression)
+        public AnyValue Visit(LiteralExpression literalExpression)
         {
-            return AnyValue.FromBool(boolLiteralExpression.Value);
+            return literalExpression.Value;
         }
-
-        public AnyValue Visit(FloatLiteralExpression floatLiteralExpression)
-        {
-            return AnyValue.FromFloat(floatLiteralExpression.Value);
-        }
-
-        public AnyValue Visit(IntLiteralExpression intLiteralExpression)
-        {
-            return AnyValue.FromInteger(intLiteralExpression.Value);
-        }
-
-        public AnyValue Visit(NullLiteralExpression nullLiteralExpression)
-        {
-            return AnyValue.FromNull();
-        }
-
-        public AnyValue Visit(StringLiteralExpression stringLiteralExpression)
-        {
-            return AnyValue.FromString(stringLiteralExpression.Value);
-        }
-
         public AnyValue Visit(UnaryMinusExpression unaryMinusExpression)
         {
             var value = Evaluate(unaryMinusExpression.Expression);
 
             return value.Type switch
             {
-                AnyValueType.Integer => AnyValue.FromInteger(-value.AsInteger()),
-                AnyValueType.Float => AnyValue.FromFloat(-value.AsFloat()),
+                AnyValueType.Integer => AnyValue.CreateInteger(-value.AsInteger()),
+                AnyValueType.Float => AnyValue.CreateFloat(-value.AsFloat()),
                 _ => throw new ValueError($"Operator - not supported for {value.Type}")
             };
         }
@@ -355,7 +340,7 @@ namespace TmLox.Interpreter
 
             return value.Type switch
             {
-                AnyValueType.Bool => AnyValue.FromBool(!value.AsBool()),
+                AnyValueType.Bool => AnyValue.CreateBool(!value.AsBool()),
                 _ => throw new ValueError($"Operator ! not supported for {value.Type}")
             };
         }
@@ -367,7 +352,7 @@ namespace TmLox.Interpreter
 
             _currentEnvironment.Assign(variableAdditionExpression.Variable, Add(variable, value));
 
-            return AnyValue.FromNull();
+            return AnyValue.CreateNull();
         }
 
         public AnyValue Visit(VariableAssigmentExpression variableAssigmentExpression)
@@ -377,7 +362,7 @@ namespace TmLox.Interpreter
 
             _currentEnvironment.Assign(variableAssigmentExpression.Variable, value);
 
-            return AnyValue.FromNull();
+            return AnyValue.CreateNull();
         }
 
         public AnyValue Visit(VariableDivisionExpression variableDivisionExpression)
@@ -387,7 +372,7 @@ namespace TmLox.Interpreter
 
             _currentEnvironment.Assign(variableDivisionExpression.Variable, Divide(variable, value));
 
-            return AnyValue.FromNull();
+            return AnyValue.CreateNull();
         }
 
         public AnyValue Visit(VariableModulusExpression variableModulusExpression)
@@ -397,7 +382,7 @@ namespace TmLox.Interpreter
 
             _currentEnvironment.Assign(variableModulusExpression.Variable, Modulus(variable, value));
 
-            return AnyValue.FromNull();
+            return AnyValue.CreateNull();
         }
 
         public AnyValue Visit(VariableMultiplicationExpression variableMultiplicationExpression)
@@ -407,7 +392,7 @@ namespace TmLox.Interpreter
 
             _currentEnvironment.Assign(variableMultiplicationExpression.Variable, Multiply(variable, value));
 
-            return AnyValue.FromNull();
+            return AnyValue.CreateNull();
         }
 
         public AnyValue Visit(VariableSubtractionExpression variableSubtractionExpression)
@@ -417,7 +402,7 @@ namespace TmLox.Interpreter
 
             _currentEnvironment.Assign(variableSubtractionExpression.Variable, Subtract(variable, value));
 
-            return AnyValue.FromNull();
+            return AnyValue.CreateNull();
         }
 
         public AnyValue Visit(FunctionCallExpression functionCallExpression)
@@ -449,12 +434,7 @@ namespace TmLox.Interpreter
         private AnyValue GetVariable(string name)
         {
             if (_currentEnvironment.TryGet(name, out var variable))
-            {
-                if (!variable.IsPrimitive())
-                    throw new ValueError($"Cannot perform operation with {name} which is instance of {variable.Type}");
-
                 return variable;
-            }
 
             throw new ValueError($"Variable {name} does not exist");
         }
@@ -475,9 +455,9 @@ namespace TmLox.Interpreter
         private static AnyValue Add(AnyValue lhs, AnyValue rhs)
         {
             if (lhs.IsInteger() && rhs.IsInteger())
-                return AnyValue.FromInteger(lhs.AsInteger() + rhs.AsInteger());
+                return AnyValue.CreateInteger(lhs.AsInteger() + rhs.AsInteger());
             else if (lhs.IsNumber() && rhs.IsNumber())
-                return AnyValue.FromFloat(lhs.AsFloat() + rhs.AsFloat());
+                return AnyValue.CreateFloat(lhs.AsFloat() + rhs.AsFloat());
 
             throw new ValueError($"Operator + not supported for {lhs.Type} and {rhs.Type}");
         }
@@ -485,9 +465,9 @@ namespace TmLox.Interpreter
         private static AnyValue Subtract(AnyValue lhs, AnyValue rhs)
         {
             if (lhs.IsInteger() && rhs.IsInteger())
-                return AnyValue.FromInteger(lhs.AsInteger() - rhs.AsInteger());
+                return AnyValue.CreateInteger(lhs.AsInteger() - rhs.AsInteger());
             else if (lhs.IsNumber() && rhs.IsNumber())
-                return AnyValue.FromFloat(lhs.AsFloat() - rhs.AsFloat());
+                return AnyValue.CreateFloat(lhs.AsFloat() - rhs.AsFloat());
 
             throw new ValueError($"Operator - not supported for {lhs.Type} and {rhs.Type}");
         }
@@ -495,9 +475,9 @@ namespace TmLox.Interpreter
         private static AnyValue Multiply(AnyValue lhs, AnyValue rhs)
         {
             if (lhs.IsInteger() && rhs.IsInteger())
-                return AnyValue.FromInteger(lhs.AsInteger() * rhs.AsInteger());
+                return AnyValue.CreateInteger(lhs.AsInteger() * rhs.AsInteger());
             else if (lhs.IsNumber() && rhs.IsNumber())
-                return AnyValue.FromFloat(lhs.AsFloat() * rhs.AsFloat());
+                return AnyValue.CreateFloat(lhs.AsFloat() * rhs.AsFloat());
 
             throw new ValueError($"Operator * not supported for {lhs.Type} and {rhs.Type}");
         }
@@ -505,7 +485,7 @@ namespace TmLox.Interpreter
         private static AnyValue Divide(AnyValue lhs, AnyValue rhs)
         {
             if (lhs.IsNumber() && rhs.IsNumber())
-                return AnyValue.FromFloat(lhs.AsFloat() / rhs.AsFloat());
+                return AnyValue.CreateFloat(lhs.AsFloat() / rhs.AsFloat());
 
             throw new ValueError($"Operator / not supported for {lhs.Type} and {rhs.Type}");
         }
@@ -513,9 +493,9 @@ namespace TmLox.Interpreter
         private static AnyValue Modulus(AnyValue lhs, AnyValue rhs)
         {
             if (lhs.IsInteger() && rhs.IsInteger())
-                return AnyValue.FromInteger(lhs.AsInteger() % rhs.AsInteger());
+                return AnyValue.CreateInteger(lhs.AsInteger() % rhs.AsInteger());
             else if (lhs.IsNumber() && rhs.IsNumber())
-                return AnyValue.FromFloat(lhs.AsFloat() % rhs.AsFloat());
+                return AnyValue.CreateFloat(lhs.AsFloat() % rhs.AsFloat());
 
             throw new ValueError($"Operator % not supported for {lhs.Type} and {rhs.Type}");
         }
