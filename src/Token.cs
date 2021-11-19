@@ -2,13 +2,13 @@
 {
     public class Token
     {
-        public int Line { get; set; }
+        public int Line { get; }
 
-        public int Column { get; set; }
+        public int Column { get; }
 
-        public Lexeme Lexeme { get; set; }
+        public Lexeme Lexeme { get; }
 
-        public AnyValue Value { get; set; }
+        public AnyValue Value { get; }
 
 
         public Token(int line, int column, Lexeme lexeme)

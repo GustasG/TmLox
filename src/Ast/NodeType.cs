@@ -19,7 +19,7 @@
         NotEqual,
         Or,
 
-        // Literal expressions
+        // Literal expression
         Literal,
 
         // Unary expressions

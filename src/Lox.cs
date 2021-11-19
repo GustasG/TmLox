@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using TmLox.Ast;
 using TmLox.Interpreter;
 using TmLox.Interpreter.Functions.Native;
+using TmLox.Ast.Statements;
+using TmLox.Interpreter.Functions;
 
 namespace TmLox
 {
@@ -22,6 +24,8 @@ namespace TmLox
                 var source = File.ReadAllText(path);
 
                 var statements = CreateAst(source);
+                RegisterGlobals(interpreter, statements);
+
                 interpreter.Execute(statements);
             }
             catch (Exception e)
@@ -40,6 +44,20 @@ namespace TmLox
             var statements = parser.Parse();
 
             return statements;
+        }
+
+        private static void RegisterGlobals(IInterpreter interpreter, IList<Statement> statements)
+        {
+            foreach (var statement in statements)
+            {
+                switch (statement.Type())
+                {
+                    case NodeType.FunctionDeclaration:
+                        var functionDeclaration = statement as FunctionDeclarationStatement;
+                        interpreter.RegisterFunction(functionDeclaration.Name, new LoxFunction(functionDeclaration.Parameters, functionDeclaration.Body));
+                        break;
+                }
+            }
         }
     }
 }

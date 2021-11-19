@@ -6,6 +6,7 @@
     return n * factorial(n - 1);
 }
 
+
 fun fac_iter(n) {
     var result = 1;
 
