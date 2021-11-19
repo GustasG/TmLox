@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 using TmLox.Ast;
 using TmLox.Interpreter;
-using TmLox.Interpreter.Functions.Native;
 using TmLox.Ast.Statements;
 using TmLox.Interpreter.Functions;
+using TmLox.Interpreter.Functions.Native;
 
 namespace TmLox
 {
