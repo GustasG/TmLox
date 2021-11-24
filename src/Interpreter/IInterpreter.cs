@@ -5,7 +5,7 @@ using TmLox.Interpreter.Functions;
 
 namespace TmLox.Interpreter
 {
-    public interface IInterpreter : IVisitor<AnyValue>
+    public interface IInterpreter
     {
         void Execute(IList<Statement> statements);
 

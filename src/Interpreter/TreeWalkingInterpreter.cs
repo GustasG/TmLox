@@ -15,7 +15,7 @@ using TmLox.Ast.Expressions.Binary.Arithmetic;
 
 namespace TmLox.Interpreter
 {
-    public class TreeWalkingInterpreter : IInterpreter
+    public class TreeWalkingInterpreter : IInterpreter, IVisitor<AnyValue>
     {
         private readonly Environment _globalEnironment;
         private Environment _currentEnvironment;

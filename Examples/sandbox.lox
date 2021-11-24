@@ -3,7 +3,7 @@
         return 1;
     }
 
-    return n * factorial(n - 1);
+    return n * fac_rec(n - 1);
 }
 
 
@@ -18,4 +18,16 @@ fun fac_iter(n) {
 }
 
 
-print(fac_iter(5));
+fun fib(n) {
+    if (n == 0 or n == 1) {
+        return 1;
+    }
+
+    return fib(n - 1) + fib(n - 2);
+}
+
+
+print(5 + 30 * 5);
+print("Iterative fact:", fac_iter(5));
+print("Recursize fact:", fac_rec(5));
+print("Recursize fib:", fib(5));

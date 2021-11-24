@@ -13,6 +13,7 @@ namespace TmLox.Interpreter.Functions
 
         private readonly IList<Statement> _body;
 
+
         public LoxFunction(IList<string> parameters, IList<Statement> body)
         {
             _parameters = parameters;
