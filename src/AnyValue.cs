@@ -16,7 +16,7 @@ namespace TmLox
 
     public struct AnyValue
     {
-        public object? _value;
+        public object? Value { get; private set; }
 
         public AnyValueType Type { get; private set; }
 
@@ -63,15 +63,15 @@ namespace TmLox
 
         public bool AsBool()
         {
-            return (bool)_value;
+            return (bool)Value;
         }
 
         public long AsInteger()
         {
             return Type switch
             {
-                AnyValueType.Integer => (long)_value,
-                AnyValueType.Float => (long)(double)_value,
+                AnyValueType.Integer => (long)Value,
+                AnyValueType.Float => (long)(double)Value,
                 _ => throw new ValueError($"Cannot convert {Type} to int"),
             };
         }
@@ -80,32 +80,32 @@ namespace TmLox
         {
             return Type switch
             {
-                AnyValueType.Integer => (double)(long)_value,
-                AnyValueType.Float => (double)_value,
+                AnyValueType.Integer => (double)(long)Value,
+                AnyValueType.Float => (double)Value,
                 _ => throw new ValueError($"Cannot convert {Type} to float"),
             };
         }
 
         public string AsString()
         {
-            return _value as string;
+            return Value as string;
         }
 
         public IFunction AsFunction()
         {
-            return _value as IFunction;
+            return Value as IFunction;
         }
 
         public override string ToString()
         {
-            return _value != null ? _value.ToString() : "null";
+            return Value != null ? Value.ToString() : "null";
         }
 
         public static AnyValue CreateNull()
         {
             return new AnyValue
             {
-                _value = null,
+                Value = null,
                 Type = AnyValueType.Null
             };
         }
@@ -114,7 +114,7 @@ namespace TmLox
         {
             return new AnyValue
             {
-                _value = value,
+                Value = value,
                 Type = AnyValueType.Bool
             };
         }
@@ -123,7 +123,7 @@ namespace TmLox
         {
             return new AnyValue
             {
-                _value = value,
+                Value = value,
                 Type = AnyValueType.Integer
             };
         }
@@ -132,7 +132,7 @@ namespace TmLox
         {
             return new AnyValue
             {
-                _value = value,
+                Value = value,
                 Type = AnyValueType.Float
             };
         }
@@ -141,7 +141,7 @@ namespace TmLox
         {
             return new AnyValue
             {
-                _value = value,
+                Value = value,
                 Type = AnyValueType.String
             };
         }
@@ -150,9 +150,19 @@ namespace TmLox
         {
             return new AnyValue
             {
-                _value = function,
+                Value = function,
                 Type = AnyValueType.Function
             };
+        }
+
+        public static bool operator== (AnyValue lhs, AnyValue rhs)
+        {
+            return Equals(lhs.Value, rhs.Value);
+        }
+
+        public static bool operator != (AnyValue lhs, AnyValue rhs)
+        {
+            return !(lhs == rhs);
         }
     }
 }

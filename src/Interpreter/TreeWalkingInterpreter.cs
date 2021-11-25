@@ -268,7 +268,7 @@ namespace TmLox.Interpreter
             var lhs = Evaluate(equalExpression.Left);
             var rhs = Evaluate(equalExpression.Right);
 
-            return AnyValue.CreateBool(Equals(lhs._value, rhs._value));
+            return AnyValue.CreateBool(lhs == rhs);
         }
 
         public AnyValue Visit(LessEqualExpression lessEqualExpression)
@@ -308,7 +308,7 @@ namespace TmLox.Interpreter
             var lhs = Evaluate(notEqualExpression.Left);
             var rhs = Evaluate(notEqualExpression.Right);
 
-            return AnyValue.CreateBool(!Equals(lhs._value, rhs._value));
+            return AnyValue.CreateBool(lhs != rhs);
         }
 
         public AnyValue Visit(OrExpression orExpression)
@@ -505,7 +505,7 @@ namespace TmLox.Interpreter
             if (lhs.IsNumber() && rhs.IsNumber())
                 return lhs.AsFloat() < rhs.AsFloat();
 
-            throw new ValueError($"Cannot compare {lhs._value} and {rhs._value}");
+            throw new ValueError($"Cannot compare {lhs.Value} and {rhs.Value}");
         }
 
         private static bool IsMore(AnyValue lhs, AnyValue rhs)
