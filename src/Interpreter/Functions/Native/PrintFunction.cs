@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace TmLox.Interpreter.Functions.Native
 {
-    public class PrintFunction : IFunction
+    public class PrintFunction : ICallable
     {
         public AnyValue Call(IInterpreter interpreter, IList<AnyValue> arguments)
         {

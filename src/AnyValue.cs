@@ -94,9 +94,9 @@ namespace TmLox
             return Value as string;
         }
 
-        public IFunction AsFunction()
+        public ICallable AsFunction()
         {
-            return Value as IFunction;
+            return Value as ICallable;
         }
 
         public override string ToString()
@@ -149,7 +149,7 @@ namespace TmLox
             };
         }
 
-        public static AnyValue CreateFunction(IFunction function)
+        public static AnyValue CreateFunction(ICallable function)
         {
             return new AnyValue
             {

@@ -15,8 +15,8 @@ namespace TmLox
         public static int Main(string[] args)
         {
             var interpreter = new TreeWalkingInterpreter();
-            interpreter.RegisterFunction("print", new PrintFunction());
-            interpreter.RegisterFunction("clock", new ClockFunction());
+            interpreter.AddFunction("print", new PrintFunction());
+            interpreter.AddFunction("clock", new ClockFunction());
 
             try
             {

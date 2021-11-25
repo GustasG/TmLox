@@ -7,7 +7,7 @@ using TmLox.Interpreter.StackUnwinding;
 
 namespace TmLox.Interpreter.Functions
 {
-    public class LoxFunction : IFunction
+    public class LoxFunction : ICallable
     {
         private readonly IList<string> _parameters;
 

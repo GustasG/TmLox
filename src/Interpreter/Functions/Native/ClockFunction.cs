@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TmLox.Interpreter.Functions.Native
 {
-    class ClockFunction : IFunction
+    class ClockFunction : ICallable
     {
         public AnyValue Call(IInterpreter interpreter, IList<AnyValue> arguments)
         {

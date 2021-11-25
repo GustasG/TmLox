@@ -17,13 +17,11 @@ namespace TmLox.Interpreter
 {
     public class TreeWalkingInterpreter : IInterpreter, IVisitor<AnyValue>
     {
-        private readonly Environment _globalEnironment;
         private Environment _currentEnvironment;
 
         public TreeWalkingInterpreter()
         {
-            _globalEnironment = new Environment();
-            _currentEnvironment = _globalEnironment;
+            _currentEnvironment = new Environment();
         }
 
         public void Execute(IList<Statement> statements)
@@ -42,22 +40,12 @@ namespace TmLox.Interpreter
             return statement.Accept(this);
         }
 
-        public void RegisterVariable(string name, AnyValue value)
-        {
-            _globalEnironment.Add(name, value);
-        }
-
-        public void RegisterFunction(string name, IFunction function)
-        {
-            _globalEnironment.Add(name, AnyValue.CreateFunction(function));
-        }
-
         public void AddVariable(string name, AnyValue value)
         {
             _currentEnvironment.Add(name, value);
         }
 
-        public void AddFunction(string name, IFunction function)
+        public void AddFunction(string name, ICallable function)
         {
             _currentEnvironment.Add(name, AnyValue.CreateFunction(function));
         }
@@ -439,7 +427,7 @@ namespace TmLox.Interpreter
             throw new ValueError($"Variable {name} does not exist");
         }
 
-        private IFunction GetFunction(string name)
+        private ICallable GetFunction(string name)
         {
             if (_currentEnvironment.TryGet(name, out var variable))
             {
