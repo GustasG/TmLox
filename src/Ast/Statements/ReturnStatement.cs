@@ -10,7 +10,7 @@
             Value = null;
         }
 
-        public ReturnStatement(Expression value)
+        public ReturnStatement(Expression? value)
         {
             Value = value;
         }

@@ -1,13 +1,14 @@
 ﻿using System.Text;
-using System.Collections;
 using System.Collections.Generic;
 
 using TmLox.Errors;
 
 namespace TmLox
 {
-    public class Lexer : IEnumerator<Token>, IEnumerable<Token>
+    public class Lexer : ILexer
     {
+        public Token? Current { get; private set; }
+
         private static readonly Dictionary<string, Lexeme> _keywords = new()
         {
             { "and", Lexeme.KwAnd },
@@ -32,13 +33,12 @@ namespace TmLox
         private int _column;
         private bool _finished;
 
-        public Token Current { get; private set; }
 
         public Lexer(string source)
         {
             _source = source;
             Reset();
-            MoveNext();
+            Next();
         }
 
         public void Reset()
@@ -49,36 +49,24 @@ namespace TmLox
             _finished = false;
         }
 
-        object IEnumerator.Current
+        public Token? Next()
         {
-            get { return Current; }
-        }
-
-        public bool MoveNext()
-        {
-            if (!_finished)
+            if (!Finished())
             {
                 Current = FetchToken();
                 _finished = Current.Lexeme == Lexeme.Eof;
-
-                return true;
             }
-
-            return false;
+            else
+            {
+                Current = null;
+            }
+            
+            return Current;
         }
 
-        public void Dispose()
+        public bool Finished()
         {
-        }
-
-        public IEnumerator<Token> GetEnumerator()
-        {
-            return this;
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return this;
+            return _finished;
         }
 
         private Token FetchToken()

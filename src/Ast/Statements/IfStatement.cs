@@ -33,7 +33,7 @@ namespace TmLox.Ast.Statements
 
         public IList<Statement> Body { get; }
 
-        public IList<ElseIfStatement>? ElseIfStatements { get; }
+        public IList<ElseIfStatement> ElseIfStatements { get; }
 
         public IList<Statement>? ElseBody { get; }
 
@@ -42,6 +42,7 @@ namespace TmLox.Ast.Statements
         {
             Condition = condition;
             Body = statements;
+            ElseIfStatements = new List<ElseIfStatement>();
         }
 
         public IfStatement(Expression condition, IList<Statement> body, IList<ElseIfStatement> elseIfStatements)
@@ -51,7 +52,7 @@ namespace TmLox.Ast.Statements
             ElseIfStatements = elseIfStatements;
         }
 
-        public IfStatement(Expression condition, IList<Statement> body, IList<ElseIfStatement> elseIfStatements, IList<Statement> elseBody)
+        public IfStatement(Expression condition, IList<Statement> body, IList<ElseIfStatement> elseIfStatements, IList<Statement>? elseBody)
         {
             Condition = condition;
             Body = body;

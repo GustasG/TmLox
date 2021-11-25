@@ -77,10 +77,13 @@ namespace TmLox.Interpreter
                 if (forStatement.Initial != null)
                     Execute(forStatement.Initial);
 
+                // TODO: If condition is null this will crash interpreter. Figure out what to do when condition is not existant.
                 while (CheckBool(Evaluate(forStatement.Condition)))
                 {
                     Execute(forStatement.Body);
-                    Execute(forStatement.Increment);
+
+                    if (forStatement.Increment != null)
+                        Execute(forStatement.Increment);
                 }
             }
             catch (BreakUnwind)
@@ -146,25 +149,22 @@ namespace TmLox.Interpreter
 
         private bool VisitElif(IfStatement elifStatement)
         {
-            if (elifStatement.ElseIfStatements != null)
+            foreach (var elif in elifStatement.ElseIfStatements)
             {
-                foreach (var elif in elifStatement.ElseIfStatements)
-                {
-                    var currentEnviroment = _currentEnvironment;
-                    _currentEnvironment = new Environment(_currentEnvironment);
+                var currentEnviroment = _currentEnvironment;
+                _currentEnvironment = new Environment(_currentEnvironment);
 
-                    try
+                try
+                {
+                    if (CheckBool(Evaluate(elif.Condition)))
                     {
-                        if (CheckBool(Evaluate(elif.Condition)))
-                        {
-                            Execute(elif.Body);
-                            return true;
-                        }
+                        Execute(elif.Body);
+                        return true;
                     }
-                    finally
-                    {
-                        _currentEnvironment = currentEnviroment;
-                    }
+                }
+                finally
+                {
+                    _currentEnvironment = currentEnviroment;
                 }
             }
 
@@ -188,7 +188,7 @@ namespace TmLox.Interpreter
 
         public AnyValue Visit(VariableDeclarationStatement variableDeclarationStatement)
         {
-            var value = Evaluate(variableDeclarationStatement.Value);
+            var value = variableDeclarationStatement.Value != null ? Evaluate(variableDeclarationStatement.Value) : AnyValue.CreateNull();
             _currentEnvironment.Add(variableDeclarationStatement.Name, value);
 
             return value;

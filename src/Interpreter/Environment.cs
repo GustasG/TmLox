@@ -1,14 +1,12 @@
 ﻿using System.Collections.Generic;
 
-using TmLox.Errors;
-
 namespace TmLox.Interpreter
 {
     public class Environment
     {
-        private Environment? _enclosing;
+        private readonly Environment? _enclosing;
 
-        private IDictionary<string, AnyValue> _values;
+        private readonly IDictionary<string, AnyValue> _values;
 
 
         public Environment()

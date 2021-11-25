@@ -1,16 +1,19 @@
-﻿using TmLox.Errors;
+﻿using System;
+
+using TmLox.Errors;
 using TmLox.Interpreter.Functions;
 
 namespace TmLox
 {
+    [Flags]
     public enum AnyValueType
     {
-        Null,
-        Bool,
-        Integer,
-        Float,
-        String,
-        Function
+        Null = 0,
+        Bool = 1,
+        Integer = 2,
+        Float = 4,
+        String = 8,
+        Function = 16
     }
 
 
@@ -163,6 +166,19 @@ namespace TmLox
         public static bool operator != (AnyValue lhs, AnyValue rhs)
         {
             return !(lhs == rhs);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(Value, obj);
+        }
+
+        public override int GetHashCode()
+        {
+            if (Value != null)
+                return Type.GetHashCode() ^ Value.GetHashCode();
+            
+            return Type.GetHashCode();
         }
     }
 }

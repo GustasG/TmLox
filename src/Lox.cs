@@ -48,13 +48,28 @@ namespace TmLox
 
         private static void RegisterGlobals(IInterpreter interpreter, IList<Statement> statements)
         {
+            // First register functions, then variables
+            // Because global variables might be initialized with function return value
+            // So all functions have to be defined beforehand
+
             foreach (var statement in statements)
             {
                 switch (statement.Type())
                 {
                     case NodeType.FunctionDeclaration:
                         var functionDeclaration = statement as FunctionDeclarationStatement;
-                        interpreter.RegisterFunction(functionDeclaration.Name, new LoxFunction(functionDeclaration.Parameters, functionDeclaration.Body));
+                        interpreter.AddFunction(functionDeclaration.Name, new LoxFunction(functionDeclaration.Parameters, functionDeclaration.Body));
+                        break;
+                }
+            }
+
+            foreach (var statement in statements)
+            {
+                switch (statement.Type())
+                {
+                    case NodeType.VariableDeclaration:
+                        var variableDeclaration = statement as VariableDeclarationStatement;
+                        interpreter.AddVariable(variableDeclaration.Name, interpreter.Evaluate(variableDeclaration.Value));
                         break;
                 }
             }

@@ -13,11 +13,11 @@ namespace TmLox
 {
     public class Parser
     {
-        private readonly IEnumerator<Token> _tokenStream;
+        private readonly ILexer _lexer;
 
-        public Parser(IEnumerator<Token> tokenStream)
+        public Parser(ILexer lexer)
         {
-            _tokenStream = tokenStream;
+            _lexer = lexer;
         }
 
         public IList<Statement> Parse()
@@ -426,12 +426,16 @@ namespace TmLox
 
         private Token Current()
         {
-            return _tokenStream.Current;
+            var current = _lexer.Current;
+
+            if (current == null)
+                throw new SyntaxError(0, 0, "Unexpected end of file");
+            return current;
         }
 
         private void Advance()
         {
-            _tokenStream.MoveNext();
+            _lexer.Next();
         }
     }
 }
