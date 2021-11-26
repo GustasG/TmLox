@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TmLox.Interpreter.Functions.Native
 {
-    class ClockFunction : NativeFunction
+    public class ClockFunction : NativeFunction
     {
         public ClockFunction()
             :  base("clock")

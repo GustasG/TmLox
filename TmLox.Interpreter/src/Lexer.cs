@@ -53,8 +53,9 @@ namespace TmLox
         {
             if (!Finished())
             {
-                Current = FetchToken();
-                _finished = Current.Lexeme == Lexeme.Eof;
+                var current = FetchToken();
+                Current = current;
+                _finished = current.Lexeme == Lexeme.Eof;
             }
             else
             {
