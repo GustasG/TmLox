@@ -59,11 +59,6 @@ namespace TmLox
             return Type == AnyValueType.Function;
         }
 
-        public bool IsPrimitive()
-        {
-            return IsNull() || IsBool() || IsInteger() || IsFloat() || IsString();
-        }
-
         public bool AsBool()
         {
             return (bool)Value;

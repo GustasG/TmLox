@@ -8,19 +8,37 @@ namespace TmLox.Interpreter.Functions
 {
     public class LoxFunction : ICallable
     {
+        public string Name { get; }
+
+        public Environment? Environment { set; get; }
+
         private readonly IList<string> _parameters;
 
         private readonly IList<Statement> _body;
 
 
-        public LoxFunction(IList<string> parameters, IList<Statement> body)
+        public LoxFunction(string name, IList<string> parameters, IList<Statement> body)
         {
+            Name = name;
+            _parameters = parameters;
+            _body = body;
+        }
+
+        public LoxFunction(Environment environment, string name, IList<string> parameters, IList<Statement> body)
+        {
+            Name = name;
+            Environment = environment;
             _parameters = parameters;
             _body = body;
         }
 
         public LoxFunction(FunctionDeclarationStatement functionDeclarationStatement)
-            : this(functionDeclarationStatement.Parameters, functionDeclarationStatement.Body)
+            : this(functionDeclarationStatement.Name, functionDeclarationStatement.Parameters, functionDeclarationStatement.Body)
+        {
+        }
+
+        public LoxFunction(Environment enviroment, FunctionDeclarationStatement functionDeclarationStatement)
+            : this(enviroment, functionDeclarationStatement.Name, functionDeclarationStatement.Parameters, functionDeclarationStatement.Body)
         {
         }
 
@@ -49,6 +67,11 @@ namespace TmLox.Interpreter.Functions
             }
             
             return AnyValue.CreateNull();
+        }
+
+        public override string ToString()
+        {
+            return $"<function {Name}>";
         }
     }
 }

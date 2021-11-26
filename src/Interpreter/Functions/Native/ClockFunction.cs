@@ -5,6 +5,11 @@ namespace TmLox.Interpreter.Functions.Native
 {
     class ClockFunction : NativeFunction
     {
+        public ClockFunction()
+            :  base("clock")
+        {
+        }
+
         public override int Arity()
         {
             return 0;

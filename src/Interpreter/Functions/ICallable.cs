@@ -4,6 +4,10 @@ namespace TmLox.Interpreter.Functions
 {
     public interface ICallable
     {
+        string Name { get; }
+
+        Environment? Environment { set; get; }
+
         bool CheckArity();
 
         int Arity();

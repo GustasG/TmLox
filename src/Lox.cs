@@ -15,8 +15,8 @@ namespace TmLox
         public static int Main(string[] args)
         {
             var interpreter = new TreeWalkingInterpreter();
-            interpreter.AddFunction("print", new PrintFunction());
-            interpreter.AddFunction("clock", new ClockFunction());
+            interpreter.AddFunction(new PrintFunction());
+            interpreter.AddFunction(new ClockFunction());
 
             try
             {
@@ -58,7 +58,7 @@ namespace TmLox
                 {
                     case NodeType.FunctionDeclaration:
                         var functionDeclaration = statement as FunctionDeclarationStatement;
-                        interpreter.AddFunction(functionDeclaration.Name, new LoxFunction(functionDeclaration.Parameters, functionDeclaration.Body));
+                        interpreter.AddFunction(new LoxFunction(functionDeclaration));
                         break;
                 }
             }

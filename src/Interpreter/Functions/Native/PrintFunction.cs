@@ -6,6 +6,11 @@ namespace TmLox.Interpreter.Functions.Native
 {
     public class PrintFunction : NativeFunction
     {
+        public PrintFunction()
+            : base("print")
+        {
+        }
+        
         public override bool CheckArity()
         {
             return false;

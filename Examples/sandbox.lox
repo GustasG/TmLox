@@ -17,7 +17,6 @@ fun fac_iter(n) {
     return result;
 }
 
-
 fun fib(n) {
     if (n == 0 or n == 1) {
         return 1;
@@ -26,8 +25,20 @@ fun fib(n) {
     return fib(n - 1) + fib(n - 2);
 }
 
+fun first(x) {
+    fun second(y) {
+        return x + y;
+    }
+
+    return second;
+}
+
 
 print(5 + 30 * 5);
 print("Iterative fact:", fac_iter(5));
 print("Recursize fact:", fac_rec(5));
 print("Recursize fib:", fib(5));
+
+var num1 = first(5);
+var final_num = num1(7);
+print(final_num);

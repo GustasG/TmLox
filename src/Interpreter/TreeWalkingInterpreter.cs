@@ -19,6 +19,7 @@ namespace TmLox.Interpreter
     {
         private Environment _currentEnvironment;
 
+
         public TreeWalkingInterpreter()
         {
             _currentEnvironment = new Environment();
@@ -45,9 +46,10 @@ namespace TmLox.Interpreter
             _currentEnvironment.Add(name, value);
         }
 
-        public void AddFunction(string name, ICallable function)
+        public void AddFunction(ICallable function)
         {
-            _currentEnvironment.Add(name, AnyValue.CreateFunction(function));
+            function.Environment = _currentEnvironment;
+            _currentEnvironment.Add(function.Name, AnyValue.CreateFunction(function));
         }
 
         public AnyValue Visit(BreakStatement breakStatement)
@@ -65,8 +67,7 @@ namespace TmLox.Interpreter
                 if (forStatement.Initial != null)
                     Execute(forStatement.Initial);
 
-                // TODO: If condition is null this will crash interpreter. Figure out what to do when condition is not existant.
-                while (CheckBool(Evaluate(forStatement.Condition)))
+                while (forStatement.Condition == null || CheckBool(Evaluate(forStatement.Condition)))
                 {
                     Execute(forStatement.Body);
 
@@ -88,8 +89,7 @@ namespace TmLox.Interpreter
 
         public AnyValue Visit(FunctionDeclarationStatement functionDeclarationStatement)
         {
-            var function = new LoxFunction(functionDeclarationStatement);
-            _currentEnvironment.Add(functionDeclarationStatement.Name, AnyValue.CreateFunction(function));
+            AddFunction(new LoxFunction(functionDeclarationStatement));
 
             return AnyValue.CreateNull();
         }
@@ -310,6 +310,7 @@ namespace TmLox.Interpreter
         {
             return literalExpression.Value;
         }
+
         public AnyValue Visit(UnaryMinusExpression unaryMinusExpression)
         {
             var value = Evaluate(unaryMinusExpression.Expression);
@@ -405,7 +406,7 @@ namespace TmLox.Interpreter
                 throw new ValueError($"Function {functionCallExpression.Name} expects {function.Arity()} arguments, while {arguments.Count} were provided");
 
             var currentEnviroment = _currentEnvironment;
-            _currentEnvironment = new Environment(_currentEnvironment);
+            _currentEnvironment = new Environment(function.Environment);
 
             try
             {
@@ -449,6 +450,8 @@ namespace TmLox.Interpreter
                 return AnyValue.CreateInteger(lhs.AsInteger() + rhs.AsInteger());
             else if (lhs.IsNumber() && rhs.IsNumber())
                 return AnyValue.CreateFloat(lhs.AsFloat() + rhs.AsFloat());
+            else if (lhs.IsString() && rhs.IsString())
+                return AnyValue.CreateString(lhs.AsString() + rhs.AsString());
 
             throw new ValueError($"Operator + not supported for {lhs.Type} and {rhs.Type}");
         }
