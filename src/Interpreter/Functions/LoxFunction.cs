@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using TmLox.Ast;
-using TmLox.Errors;
-using TmLox.Interpreter;
+using TmLox.Ast.Statements;
 using TmLox.Interpreter.StackUnwinding;
 
 namespace TmLox.Interpreter.Functions
@@ -20,11 +19,23 @@ namespace TmLox.Interpreter.Functions
             _body = body;
         }
 
+        public LoxFunction(FunctionDeclarationStatement functionDeclarationStatement)
+            : this(functionDeclarationStatement.Parameters, functionDeclarationStatement.Body)
+        {
+        }
+
+        public bool CheckArity()
+        {
+            return true;
+        }
+
+        public int Arity()
+        {
+            return _parameters.Count;
+        }
+
         public AnyValue Call(IInterpreter interpreter, IList<AnyValue> arguments)
         {
-            if (_parameters.Count != arguments.Count)
-                throw new ValueError($"Expected {_parameters.Count} parameters, got {arguments.Count}");
-
             for (int i = 0; i < _parameters.Count; i++)
                 interpreter.AddVariable(_parameters[i], arguments[i]);
 

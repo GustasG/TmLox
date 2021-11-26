@@ -4,9 +4,19 @@ using System.Collections.Generic;
 
 namespace TmLox.Interpreter.Functions.Native
 {
-    public class PrintFunction : ICallable
+    public class PrintFunction : NativeFunction
     {
-        public AnyValue Call(IInterpreter interpreter, IList<AnyValue> arguments)
+        public override bool CheckArity()
+        {
+            return false;
+        }
+
+        public override int Arity()
+        {
+            return -1;
+        }
+
+        public override AnyValue Call(IInterpreter interpreter, IList<AnyValue> arguments)
         {
             for (int i = 0; i < arguments.Count; i++)
             {

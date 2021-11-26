@@ -11,13 +11,6 @@ namespace TmLox.Ast.Statements
         public IList<Statement> Body { get; }
 
 
-        public FunctionDeclarationStatement(string name)
-        {
-            Name = name;
-            Parameters = new List<string>();
-            Body = new List<Statement>();
-        }
-
         public FunctionDeclarationStatement(Token name, IList<string> parameters, IList<Statement> body)
         {
             Name = name.Value.AsString();

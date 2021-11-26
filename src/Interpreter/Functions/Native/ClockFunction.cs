@@ -3,9 +3,14 @@ using System.Collections.Generic;
 
 namespace TmLox.Interpreter.Functions.Native
 {
-    class ClockFunction : ICallable
+    class ClockFunction : NativeFunction
     {
-        public AnyValue Call(IInterpreter interpreter, IList<AnyValue> arguments)
+        public override int Arity()
+        {
+            return 0;
+        }
+
+        public override AnyValue Call(IInterpreter interpreter, IList<AnyValue> arguments)
         {
             return AnyValue.CreateInteger(DateTime.Now.Second);
         }

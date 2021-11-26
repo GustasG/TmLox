@@ -88,7 +88,7 @@ namespace TmLox.Interpreter
 
         public AnyValue Visit(FunctionDeclarationStatement functionDeclarationStatement)
         {
-            var function = new LoxFunction(functionDeclarationStatement.Parameters, functionDeclarationStatement.Body);
+            var function = new LoxFunction(functionDeclarationStatement);
             _currentEnvironment.Add(functionDeclarationStatement.Name, AnyValue.CreateFunction(function));
 
             return AnyValue.CreateNull();
@@ -318,7 +318,7 @@ namespace TmLox.Interpreter
             {
                 AnyValueType.Integer => AnyValue.CreateInteger(-value.AsInteger()),
                 AnyValueType.Float => AnyValue.CreateFloat(-value.AsFloat()),
-                _ => throw new ValueError($"Operator - not supported for {value.Type}")
+                _ => throw new ValueError($"Unary - not supported for {value.Type}")
             };
         }
 
@@ -329,7 +329,7 @@ namespace TmLox.Interpreter
             return value.Type switch
             {
                 AnyValueType.Bool => AnyValue.CreateBool(!value.AsBool()),
-                _ => throw new ValueError($"Operator ! not supported for {value.Type}")
+                _ => throw new ValueError($"Unary ! not supported for {value.Type}")
             };
         }
 
@@ -400,6 +400,9 @@ namespace TmLox.Interpreter
             var arguments = functionCallExpression.Arguments.
                 Select(e => Evaluate(e))
                 .ToList();
+
+            if (function.CheckArity() && function.Arity() != arguments.Count)
+                throw new ValueError($"Function {functionCallExpression.Name} expects {function.Arity()} arguments, while {arguments.Count} were provided");
 
             var currentEnviroment = _currentEnvironment;
             _currentEnvironment = new Environment(_currentEnvironment);

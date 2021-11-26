@@ -4,6 +4,10 @@ namespace TmLox.Interpreter.Functions
 {
     public interface ICallable
     {
-        AnyValue Call(IInterpreter interpreter, IList<AnyValue> arguments);
+        bool CheckArity();
+
+        int Arity();
+
+        AnyValue Call(IInterpreter interpreter, IList<AnyValue> arguments);        
     }
 }
