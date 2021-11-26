@@ -4,11 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <Authors></Authors>
-    <Company></Company>
     <StartupObject></StartupObject>
-    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-    <Product />
   </PropertyGroup>
   
   <ItemGroup>

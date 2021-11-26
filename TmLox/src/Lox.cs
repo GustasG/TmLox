@@ -24,7 +24,7 @@ namespace TmLox
                 var source = File.ReadAllText(path);
 
                 var statements = CreateAst(source);
-                RegisterGlobals(interpreter, statements);
+//                RegisterGlobals(interpreter, statements);
 
                 interpreter.Execute(statements);
             }
@@ -46,6 +46,7 @@ namespace TmLox
             return statements;
         }
 
+        /*
         private static void RegisterGlobals(IInterpreter interpreter, IList<Statement> statements)
         {
             // First register functions, then variables
@@ -74,5 +75,6 @@ namespace TmLox
                 }
             }
         }
+        */
     }
 }

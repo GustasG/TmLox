@@ -2,9 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <Authors>Gustas Gedminas</Authors>
-    <Company>Vilnius University</Company>
-    <Product>TmLox</Product>
   </PropertyGroup>
 
 </Project>
