@@ -95,9 +95,8 @@ namespace TmLox.Interpreter.Tests
             var testVariable = script["test_variable"];
 
             Assert.AreEqual(testVariable.Type, AnyValueType.Float);
-            Assert.AreEqual(testVariable.AsFloat(), -567.357);
+            Assert.AreEqual(testVariable.AsFloat(), -567.357, 0.1);
         }
-
 
         [Test]
         public void TestVariableCreationWithStringLiteral()
