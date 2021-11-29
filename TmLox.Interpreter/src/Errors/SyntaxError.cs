@@ -10,15 +10,13 @@
 
 
         public SyntaxError(int line, int column, string text)
+            : base($"Syntax Error: ({line}:{column}): {text}")
         {
-            Line = line;
-            Column = column;
-            Text = text;
         }
 
         public override string ToString()
         {
-            return $"Syntax Error: ({Line}:{Column}): {Text}";
+            return Message;
         }
     }
 }

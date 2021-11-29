@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Globalization;
 using System.Collections.Generic;
 
 using TmLox.Interpreter.Errors;
@@ -264,11 +265,11 @@ namespace TmLox.Interpreter
             int startingColumn = _column;
 
             var value = CreateNumber();
-            value = value.Replace('.', ',');
+            //value = value.Replace('.', ',');
 
             if (long.TryParse(value, out var integer))
                 return new Token(_line, startingColumn, Lexeme.LitInt, AnyValue.CreateInteger(integer));
-            else if (double.TryParse(value, out var floatingPoint))
+            else if (double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out var floatingPoint))
                 return new Token(_line, startingColumn, Lexeme.LitFloat, AnyValue.CreateFloat(floatingPoint));
             else
                 throw new SyntaxError(_line, startingColumn, "Invalid number");
