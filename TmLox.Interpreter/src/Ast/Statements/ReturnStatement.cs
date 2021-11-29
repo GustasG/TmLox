@@ -1,4 +1,4 @@
-﻿namespace TmLox.Ast.Statements
+﻿namespace TmLox.Interpreter.Ast.Statements
 {
     public class ReturnStatement : Statement
     {

@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 
-using TmLox.Ast;
-using TmLox.Ast.Statements;
-using TmLox.Interpreter.StackUnwinding;
+using TmLox.Interpreter.Ast;
+using TmLox.Interpreter.Ast.Statements;
+using TmLox.Interpreter.Execution.StackUnwinding;
 
-namespace TmLox.Interpreter.Functions
+namespace TmLox.Interpreter.Execution.Functions
 {
-    public class LoxFunction : ICallable
+    internal class LoxFunction : ICallable
     {
         public string Name { get; }
 

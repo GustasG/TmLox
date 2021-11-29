@@ -1,6 +1,6 @@
-namespace TmLox
+namespace TmLox.Interpreter
 {
-    public interface ILexer
+    internal interface ILexer
     {
         Token? Current { get; }
 

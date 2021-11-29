@@ -2,20 +2,21 @@
 using System.Linq;
 using System.Collections.Generic;
 
-using TmLox.Ast;
-using TmLox.Errors;
-using TmLox.Ast.Statements;
-using TmLox.Ast.Expressions;
-using TmLox.Interpreter.Functions;
-using TmLox.Ast.Expressions.Unary;
-using TmLox.Ast.Expressions.Variable;
-using TmLox.Interpreter.StackUnwinding;
-using TmLox.Ast.Expressions.Binary.Logical;
-using TmLox.Ast.Expressions.Binary.Arithmetic;
+using TmLox.Interpreter.Ast;
+using TmLox.Interpreter.Ast.Statements;
+using TmLox.Interpreter.Ast.Expressions;
+using TmLox.Interpreter.Ast.Expressions.Unary;
+using TmLox.Interpreter.Ast.Expressions.Variable;
+using TmLox.Interpreter.Ast.Expressions.Binary.Logical;
+using TmLox.Interpreter.Ast.Expressions.Binary.Arithmetic;
+using TmLox.Interpreter.Errors;
+using TmLox.Interpreter.Execution.Functions;
+using TmLox.Interpreter.Execution.StackUnwinding;
 
-namespace TmLox.Interpreter
+
+namespace TmLox.Interpreter.Execution
 {
-    public class TreeWalkingInterpreter : IInterpreter, IVisitor<AnyValue>
+    internal class TreeWalkingInterpreter : IInterpreter, IVisitor<AnyValue>
     {
         private Environment _currentEnvironment;
 
@@ -50,6 +51,15 @@ namespace TmLox.Interpreter
         {
             function.Environment = _currentEnvironment;
             _currentEnvironment.Add(function.Name, AnyValue.CreateFunction(function));
+        }
+
+        public bool TryGet(string name, out AnyValue value)
+        {
+            if (_currentEnvironment.TryGet(name, out value))
+                return true;
+
+            value = default;
+            return false;
         }
 
         public AnyValue Visit(BreakStatement breakStatement)
@@ -425,7 +435,7 @@ namespace TmLox.Interpreter
 
         private AnyValue GetVariable(string name)
         {
-            if (_currentEnvironment.TryGet(name, out var variable))
+            if (TryGet(name, out var variable))
                 return variable;
 
             throw new ValueError($"Variable {name} does not exist");
@@ -433,7 +443,7 @@ namespace TmLox.Interpreter
 
         private ICallable GetFunction(string name)
         {
-            if (_currentEnvironment.TryGet(name, out var variable))
+            if (TryGet(name, out var variable))
             {
                 if (!variable.IsFunction())
                     throw new ValueError($"{name} is instance of {variable.Type} and not a function");

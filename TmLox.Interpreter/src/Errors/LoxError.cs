@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TmLox.Errors
+namespace TmLox.Interpreter.Errors
 {
     public abstract class LoxError : Exception
     {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TmLox.Interpreter.Functions.Native
+namespace TmLox.Interpreter.Execution.Functions.Native
 {
-    public class ClockFunction : NativeFunction
+    internal class ClockFunction : NativeFunction
     {
         public ClockFunction()
             :  base("clock")

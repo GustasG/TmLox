@@ -1,4 +1,4 @@
-﻿namespace TmLox.Ast.Expressions
+﻿namespace TmLox.Interpreter.Ast.Expressions
 {
     public class LiteralExpression : Expression
     {

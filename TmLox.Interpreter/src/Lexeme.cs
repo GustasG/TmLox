@@ -1,6 +1,6 @@
-﻿namespace TmLox
+﻿namespace TmLox.Interpreter
 {
-    public enum Lexeme
+    internal enum Lexeme
     {
         OpComma, // ,
         OpSemicolon, // ;
@@ -39,7 +39,7 @@
         KwFor, // for
         KwFun, // fun
         KwIf, // if
-        KwNil, // nil
+        KwNull, // nil
         KwOr, // or
         KwReturn, // return
         KwVar, // var

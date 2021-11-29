@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TmLox.Interpreter
+namespace TmLox.Interpreter.Execution
 {
     public class Environment
     {
@@ -43,11 +43,8 @@ namespace TmLox.Interpreter
 
         public bool TryGet(string name, out AnyValue value)
         {
-            if (_values.TryGetValue(name, out var existingValue))
-            {
-                value = existingValue;
+            if (_values.TryGetValue(name, out value))
                 return true;
-            }
 
             if (_enclosing != null)
                 return _enclosing.TryGet(name, out value);

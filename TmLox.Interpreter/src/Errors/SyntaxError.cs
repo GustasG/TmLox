@@ -1,4 +1,4 @@
-﻿namespace TmLox.Errors
+﻿namespace TmLox.Interpreter.Errors
 {
     public class SyntaxError : LoxError
     {
@@ -14,11 +14,6 @@
             Line = line;
             Column = column;
             Text = text;
-        }
-
-        public SyntaxError(Token token, string text)
-            : this(token.Line, token.Column, text)
-        {
         }
 
         public override string ToString()

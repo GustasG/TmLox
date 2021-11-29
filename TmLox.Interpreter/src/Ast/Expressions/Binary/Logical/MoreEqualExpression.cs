@@ -1,4 +1,4 @@
-﻿namespace TmLox.Ast.Expressions.Binary.Logical
+﻿namespace TmLox.Interpreter.Ast.Expressions.Binary.Logical
 {
     public class MoreEqualExpression : BinaryLogicalExpression
     {

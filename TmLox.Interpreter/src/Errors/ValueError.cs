@@ -1,4 +1,4 @@
-﻿namespace TmLox.Errors
+﻿namespace TmLox.Interpreter.Errors
 {
     public class ValueError: LoxError
     {

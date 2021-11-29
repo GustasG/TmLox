@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace TmLox.Interpreter.StackUnwinding
+namespace TmLox.Interpreter.Execution.StackUnwinding
 {
-    public class BreakUnwind : Exception
+    internal class BreakUnwind : Exception
     {
         public override string ToString()
         {

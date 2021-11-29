@@ -1,4 +1,4 @@
-﻿namespace TmLox.Ast.Expressions
+﻿namespace TmLox.Interpreter.Ast.Expressions
 {
     public class VariableExpression : Expression
     {
@@ -8,11 +8,6 @@
         public VariableExpression(string name)
         {
             Name = name;
-        }
-
-        public VariableExpression(Token token)
-            : this(token.Value.AsString())
-        {
         }
 
         public override T Accept<T>(IVisitor<T> visitor)

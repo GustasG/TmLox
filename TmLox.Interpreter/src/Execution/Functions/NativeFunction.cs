@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 
-namespace TmLox.Interpreter.Functions
+namespace TmLox.Interpreter.Execution.Functions
 {
-    public abstract class NativeFunction : ICallable
+    internal abstract class NativeFunction : ICallable
     {
         public string Name { get; }
 

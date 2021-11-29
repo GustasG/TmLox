@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TmLox.Ast.Statements
+namespace TmLox.Interpreter.Ast.Statements
 {
     public class WhileStatement : Statement
     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TmLox.Interpreter.Functions
+namespace TmLox.Interpreter.Execution.Functions
 {
     public interface ICallable
     {

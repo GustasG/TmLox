@@ -1,4 +1,4 @@
-﻿namespace TmLox.Ast.Expressions.Binary.Arithmetic
+﻿namespace TmLox.Interpreter.Ast.Expressions.Binary.Arithmetic
 {
     public class DivisionExpression : BinaryArithmeticExpression
     {

@@ -1,4 +1,4 @@
-﻿namespace TmLox.Ast
+﻿namespace TmLox.Interpreter.Ast
 {
     public enum NodeType
     {

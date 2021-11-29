@@ -1,17 +1,18 @@
 ﻿using System.Collections.Generic;
 
-using TmLox.Ast;
-using TmLox.Errors;
-using TmLox.Ast.Statements;
-using TmLox.Ast.Expressions;
-using TmLox.Ast.Expressions.Unary;
-using TmLox.Ast.Expressions.Variable;
-using TmLox.Ast.Expressions.Binary.Logical;
-using TmLox.Ast.Expressions.Binary.Arithmetic;
+using TmLox.Interpreter.Errors;
+using TmLox.Interpreter.Ast;
+using TmLox.Interpreter.Ast.Statements;
+using TmLox.Interpreter.Ast.Expressions;
+using TmLox.Interpreter.Ast.Expressions.Unary;
+using TmLox.Interpreter.Ast.Expressions.Variable;
+using TmLox.Interpreter.Ast.Expressions.Binary.Logical;
+using TmLox.Interpreter.Ast.Expressions.Binary.Arithmetic;
 
-namespace TmLox
+
+namespace TmLox.Interpreter
 {
-    public class Parser
+    internal class Parser
     {
         private readonly ILexer _lexer;
 
@@ -61,7 +62,7 @@ namespace TmLox
                 value = ParseExpression();
 
             Expect(Lexeme.OpSemicolon, ";");
-            return new VariableDeclarationStatement(name, value);
+            return new VariableDeclarationStatement(name.Value.AsString(), value);
         }
 
         private IfStatement ParseIf()
@@ -113,7 +114,7 @@ namespace TmLox
             var body = ParseBlock();
             Expect(Lexeme.OPRBrace, "}");
 
-            return new FunctionDeclarationStatement(name, parameters, body);
+            return new FunctionDeclarationStatement(name.Value.AsString(), parameters, body);
         }
 
         private IList<string> ParseFunctionParameters()
@@ -327,7 +328,7 @@ namespace TmLox
                 return expression;
             }
 
-            if (Accept(Lexeme.KwNil))
+            if (Accept(Lexeme.KwNull))
                 return new LiteralExpression(AnyValue.CreateNull());
             else if (Accept(Lexeme.KwFalse))
                 return new LiteralExpression(AnyValue.CreateBool(false));
@@ -341,34 +342,35 @@ namespace TmLox
                 return new LiteralExpression(stringToken.Value);
             else if (Accept(Lexeme.Identifier, out var identifierToken))
             {
-                Expression expression = new VariableExpression(identifierToken);
+                Expression expression = new VariableExpression(identifierToken.Value.AsString());
 
                 if (Accept(Lexeme.OpAssign))
-                    expression = new VariableAssigmentExpression(identifierToken, ParseExpression());
+                    expression = new VariableAssigmentExpression(identifierToken.Value.AsString(), ParseExpression());
                 else if (Accept(Lexeme.OpPlusEq))
-                    expression = new VariableAdditionExpression(identifierToken, ParseExpression());
+                    expression = new VariableAdditionExpression(identifierToken.Value.AsString(), ParseExpression());
                 else if (Accept(Lexeme.OpMinusEq))
-                    expression = new VariableSubtractionExpression(identifierToken, ParseExpression());
+                    expression = new VariableSubtractionExpression(identifierToken.Value.AsString(), ParseExpression());
                 else if (Accept(Lexeme.OpMulEq))
-                    expression = new VariableMultiplicationExpression(identifierToken, ParseExpression());
+                    expression = new VariableMultiplicationExpression(identifierToken.Value.AsString(), ParseExpression());
                 else if (Accept(Lexeme.OpDivEq))
-                    expression = new VariableDivisionExpression(identifierToken, ParseExpression());
+                    expression = new VariableDivisionExpression(identifierToken.Value.AsString(), ParseExpression());
                 else if (Accept(Lexeme.OpModEq))
-                    expression = new VariableModulusExpression(identifierToken, ParseExpression());
+                    expression = new VariableModulusExpression(identifierToken.Value.AsString(), ParseExpression());
                 else if (Accept(Lexeme.OPLParen))
-                    expression = new FunctionCallExpression(identifierToken, ParseFunctionArguments());
+                    expression = new FunctionCallExpression(identifierToken.Value.AsString(), ParseFunctionArguments());
 
                 return expression;
             }
 
+            var current = Current();
+
             // some errors
             if (Accept(Lexeme.KwElif))
-                throw new SyntaxError(Current(), "\"elif\" used without coresponding \"if\"");
+                throw new SyntaxError(current.Line, current.Column, "\"elif\" used without coresponding \"if\"");
             else if (Accept(Lexeme.KwElse))
-                throw new SyntaxError(Current(), "\"else\" used without coresponding \"if\"");
+                throw new SyntaxError(current.Line, current.Column, "\"else\" used without coresponding \"if\"");
 
-
-            throw new SyntaxError(Current(), "Invalid expression");
+            throw new SyntaxError(current.Line, current.Column, "Invalid expression");
         }
 
         private IList<Expression> ParseFunctionArguments()
@@ -408,7 +410,8 @@ namespace TmLox
 
         private Token Expect(Lexeme tokenType, string expected)
         {
-            return Accept(tokenType, out var token) ? token : throw new SyntaxError(Current(), $"Expected: \"{expected}\"");
+            var current = Current();
+            return Accept(tokenType, out var token) ? token : throw new SyntaxError(current.Line, current.Column, $"Expected: \"{expected}\"");
         }
 
         private bool Match(params Lexeme[] types)

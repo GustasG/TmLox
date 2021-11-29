@@ -1,4 +1,4 @@
-﻿namespace TmLox.Ast.Expressions.Binary
+﻿namespace TmLox.Interpreter.Ast.Expressions.Binary
 {
     public abstract class BinaryLogicalExpression : BinaryExpression
     {

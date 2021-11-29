@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TmLox.Ast.Statements
+namespace TmLox.Interpreter.Ast.Statements
 {
     public class FunctionDeclarationStatement : Statement
     {
@@ -11,9 +11,9 @@ namespace TmLox.Ast.Statements
         public IList<Statement> Body { get; }
 
 
-        public FunctionDeclarationStatement(Token name, IList<string> parameters, IList<Statement> body)
+        public FunctionDeclarationStatement(string name, IList<string> parameters, IList<Statement> body)
         {
-            Name = name.Value.AsString();
+            Name = name;
             Parameters = parameters;
             Body = body;
         }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TmLox.Ast.Expressions
+namespace TmLox.Interpreter.Ast.Expressions
 {
     public class FunctionCallExpression : Expression
     {
@@ -13,11 +13,6 @@ namespace TmLox.Ast.Expressions
         {
             Name = name;
             Arguments = arguments;
-        }
-
-        public FunctionCallExpression(Token name, IList<Expression> arguments)
-            : this(name.Value.AsString(), arguments)
-        {
         }
 
         public override T Accept<T>(IVisitor<T> visitor)

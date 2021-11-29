@@ -1,6 +1,6 @@
-﻿namespace TmLox
+﻿namespace TmLox.Interpreter
 {
-    public class Token
+    internal class Token
     {
         public int Line { get; }
 

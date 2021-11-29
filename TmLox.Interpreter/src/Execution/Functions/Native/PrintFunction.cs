@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-
-namespace TmLox.Interpreter.Functions.Native
+namespace TmLox.Interpreter.Execution.Functions.Native
 {
-    public class PrintFunction : NativeFunction
+    internal class PrintFunction : NativeFunction
     {
         public PrintFunction()
             : base("print")

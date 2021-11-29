@@ -1,9 +1,9 @@
 ﻿using System;
 
-using TmLox.Errors;
-using TmLox.Interpreter.Functions;
+using TmLox.Interpreter.Errors;
+using TmLox.Interpreter.Execution.Functions;
 
-namespace TmLox
+namespace TmLox.Interpreter
 {
     [Flags]
     public enum AnyValueType

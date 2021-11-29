@@ -1,4 +1,4 @@
-﻿namespace TmLox.Ast.Expressions
+﻿namespace TmLox.Interpreter.Ast.Expressions
 {
     public abstract class VariableModificationExpression : Expression
     {
@@ -11,11 +11,6 @@
         {
             Variable = variable;
             Value = value;
-        }
-
-        public VariableModificationExpression(Token variable, Expression value)
-            : this(variable.Value.AsString(), value)
-        {
         }
     }
 }

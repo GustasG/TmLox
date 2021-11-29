@@ -1,11 +1,11 @@
 ﻿using System.Text;
 using System.Collections.Generic;
 
-using TmLox.Errors;
+using TmLox.Interpreter.Errors;
 
-namespace TmLox
+namespace TmLox.Interpreter
 {
-    public class Lexer : ILexer
+    internal class Lexer : ILexer
     {
         public Token? Current { get; private set; }
 
@@ -20,7 +20,7 @@ namespace TmLox
             { "for", Lexeme.KwFor },
             { "fun", Lexeme.KwFun },
             { "if", Lexeme.KwIf },
-            { "nil", Lexeme.KwNil },
+            { "null", Lexeme.KwNull },
             { "or", Lexeme.KwOr },
             { "return", Lexeme.KwReturn },
             { "var", Lexeme.KwVar },

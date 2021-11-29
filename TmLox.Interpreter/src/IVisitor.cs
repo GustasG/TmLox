@@ -1,11 +1,11 @@
-﻿using TmLox.Ast.Statements;
-using TmLox.Ast.Expressions;
-using TmLox.Ast.Expressions.Unary;
-using TmLox.Ast.Expressions.Variable;
-using TmLox.Ast.Expressions.Binary.Logical;
-using TmLox.Ast.Expressions.Binary.Arithmetic;
+﻿using TmLox.Interpreter.Ast.Statements;
+using TmLox.Interpreter.Ast.Expressions;
+using TmLox.Interpreter.Ast.Expressions.Unary;
+using TmLox.Interpreter.Ast.Expressions.Variable;
+using TmLox.Interpreter.Ast.Expressions.Binary.Logical;
+using TmLox.Interpreter.Ast.Expressions.Binary.Arithmetic;
 
-namespace TmLox
+namespace TmLox.Interpreter
 {
     public interface IVisitor<T>
     {

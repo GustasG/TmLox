@@ -1,4 +1,4 @@
-﻿namespace TmLox.Ast.Expressions.Unary
+﻿namespace TmLox.Interpreter.Ast.Expressions.Unary
 {
     public class UnaryMinusExpression : UnaryExpression
     {

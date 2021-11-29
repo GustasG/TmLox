@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 
-using TmLox.Ast;
-using TmLox.Interpreter.Functions;
+using TmLox.Interpreter.Ast;
+using TmLox.Interpreter.Execution.Functions;
 
-namespace TmLox.Interpreter
+namespace TmLox.Interpreter.Execution
 {
     public interface IInterpreter
     {
@@ -16,5 +16,7 @@ namespace TmLox.Interpreter
         void AddVariable(string name, AnyValue value);
 
         void AddFunction(ICallable function);
+
+        bool TryGet(string name, out AnyValue value);
     }
 }

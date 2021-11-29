@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace TmLox.Interpreter.StackUnwinding
+namespace TmLox.Interpreter.Execution.StackUnwinding
 {
-    public class ReturnUnwind : Exception
+    internal class ReturnUnwind : Exception
     {
         public AnyValue Value { get; }
 
