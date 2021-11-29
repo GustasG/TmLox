@@ -1,8 +1,8 @@
 ﻿using NUnit.Framework;
 
-namespace TmLox.Interpreter.Tests
+namespace TmLox.Interpreter.Tests.Variable
 {
-    public class VariableTest
+    public class VariableCreationTests
     {
         [Test]
         public void TestVariableCreationWIthDefaultEmptyValue()
@@ -16,7 +16,7 @@ namespace TmLox.Interpreter.Tests
 
             var testVariable = script["test_variable"];
 
-            Assert.AreEqual(testVariable.Type, AnyValueType.Null);
+            Assert.True(testVariable.IsNull());
         }
 
         [Test]
@@ -31,7 +31,7 @@ namespace TmLox.Interpreter.Tests
 
             var testVariable = script["test_variable"];
 
-            Assert.AreEqual(testVariable.Type, AnyValueType.Null);
+            Assert.True(testVariable.IsNull());
         }
 
         [Test]
@@ -46,15 +46,15 @@ namespace TmLox.Interpreter.Tests
 
             var testVariable = script["test_variable"];
 
-            Assert.AreEqual(testVariable.Type, AnyValueType.Bool);
-            Assert.AreEqual(testVariable.AsBool(), false);
+            Assert.True(testVariable.IsBool());
+            Assert.False(testVariable.AsBool());
         }
 
         [Test]
         public void TestVariableCreationWithTrueBoolLiteral()
         {
             var code = @"
-                var test_variable = false;
+                var test_variable = true;
             ";
 
             var script = new Script();
@@ -62,8 +62,8 @@ namespace TmLox.Interpreter.Tests
 
             var testVariable = script["test_variable"];
 
-            Assert.AreEqual(testVariable.Type, AnyValueType.Bool);
-            Assert.AreEqual(testVariable.AsBool(), false);
+            Assert.True(testVariable.IsBool());
+            Assert.True(testVariable.AsBool());
         }
 
         [Test]
@@ -78,8 +78,8 @@ namespace TmLox.Interpreter.Tests
 
             var testVariable = script["test_variable"];
 
-            Assert.AreEqual(testVariable.Type, AnyValueType.Integer);
-            Assert.AreEqual(testVariable.AsInteger(), 42);
+            Assert.True(testVariable.IsInteger());
+            Assert.AreEqual(42, testVariable.AsInteger());
         }
 
         [Test]
@@ -94,8 +94,8 @@ namespace TmLox.Interpreter.Tests
 
             var testVariable = script["test_variable"];
 
-            Assert.AreEqual(testVariable.Type, AnyValueType.Float);
-            Assert.AreEqual(testVariable.AsFloat(), -567.357, 0.1);
+            Assert.True(testVariable.IsFloat());
+            Assert.AreEqual(-567.357, testVariable.AsFloat(), 0.1);
         }
 
         [Test]
@@ -110,8 +110,8 @@ namespace TmLox.Interpreter.Tests
 
             var testVariable = script["test_variable"];
 
-            Assert.AreEqual(testVariable.Type, AnyValueType.String);
-            Assert.AreEqual(testVariable.AsString(), "Hello world");
+            Assert.True(testVariable.IsString());
+            Assert.AreEqual("Hello world", testVariable.AsString());
         }
     }
 }
