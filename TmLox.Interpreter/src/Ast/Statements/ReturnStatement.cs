@@ -5,12 +5,7 @@
         public Expression? Value { get; }
 
 
-        public ReturnStatement()
-        {
-            Value = null;
-        }
-
-        public ReturnStatement(Expression? value)
+        public ReturnStatement(Expression? value = null)
         {
             Value = value;
         }

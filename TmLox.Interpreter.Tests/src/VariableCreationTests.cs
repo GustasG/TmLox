@@ -1,11 +1,11 @@
 ﻿using NUnit.Framework;
 
-namespace TmLox.Interpreter.Tests.Variable
+namespace TmLox.Interpreter.Tests
 {
     public class VariableCreationTests
     {
         [Test]
-        public void TestVariableCreationWIthDefaultEmptyValue()
+        public void Test_Variable_Creation_WIthout_Explicityly_Assigning_Value_Should_Produce_Null_Valued_Value()
         {
             var code = @"
                 var test_variable;
@@ -20,7 +20,7 @@ namespace TmLox.Interpreter.Tests.Variable
         }
 
         [Test]
-        public void TestVariableCreationWithNullLiteral()
+        public void Test_Variable_Creation_With_Null_Literal_Should_Produce_Null_Valued_Value()
         {
             var code = @"
                 var test_variable = null;
@@ -35,7 +35,7 @@ namespace TmLox.Interpreter.Tests.Variable
         }
 
         [Test]
-        public void TestVariableCreationWithFalseBoolLiteral()
+        public void Test_Variable_Creation_With_False_Bool_Literal_Should_Produce_Boolean_Valued_Value_With_Value_As_False()
         {
             var code = @"
                 var test_variable = false;
@@ -51,7 +51,7 @@ namespace TmLox.Interpreter.Tests.Variable
         }
 
         [Test]
-        public void TestVariableCreationWithTrueBoolLiteral()
+        public void Test_Variable_Creation_With_True_Bool_Literal_Should_Produce_Boolean_Valued_Value_With_Value_As_True()
         {
             var code = @"
                 var test_variable = true;
@@ -67,7 +67,7 @@ namespace TmLox.Interpreter.Tests.Variable
         }
 
         [Test]
-        public void TestVariableCreationWithIntegerLiteral()
+        public void Test_Variable_Creation_With_Integer_Literal_Shoule_Produce_Integer_Valued_Value_With_Value_As_42()
         {
             var code = @"
                 var test_variable = 42;
@@ -83,7 +83,7 @@ namespace TmLox.Interpreter.Tests.Variable
         }
 
         [Test]
-        public void TestVariableCreationWithFloatLiteral()
+        public void Test_Variable_Creation_With_Float_Literal_Shoule_Produce_Given_Float_Valued_Value()
         {
             var code = @"
                 var test_variable = -567.357;
@@ -99,7 +99,7 @@ namespace TmLox.Interpreter.Tests.Variable
         }
 
         [Test]
-        public void TestVariableCreationWithStringLiteral()
+        public void Test_Variable_Creation_With_String_Literal_Shoule_Produce_Given_String_Valued_Value()
         {
             var code = @"
                 var test_variable = ""Hello world"";

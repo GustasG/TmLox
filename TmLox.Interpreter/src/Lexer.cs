@@ -165,9 +165,9 @@ namespace TmLox.Interpreter
         private Token CreateDivToken()
         {
             if (TryConsume('='))
-                return new Token(_line, _column - 1, Lexeme.OpDiv);
+                return new Token(_line, _column - 1, Lexeme.OpDivEq);
             else
-                return new Token(_line, _column, Lexeme.OpDivEq);
+                return new Token(_line, _column, Lexeme.OpDiv);
         }
 
         private Token CreateModToken()

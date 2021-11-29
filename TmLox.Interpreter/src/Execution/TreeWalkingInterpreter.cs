@@ -55,11 +55,7 @@ namespace TmLox.Interpreter.Execution
 
         public bool TryGet(string name, out AnyValue value)
         {
-            if (_currentEnvironment.TryGet(name, out value))
-                return true;
-
-            value = default;
-            return false;
+            return _currentEnvironment.TryGet(name, out value);
         }
 
         public AnyValue Visit(BreakStatement breakStatement)
