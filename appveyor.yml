@@ -3,8 +3,9 @@ image: Visual Studio 2019
 
 before_build:
   - dotnet restore
-  - choco install opencover.portable
+  - choco install curl
   - choco install codecov
+  - choco install opencover.portable
 
 build:
   project: TmLox.sln
