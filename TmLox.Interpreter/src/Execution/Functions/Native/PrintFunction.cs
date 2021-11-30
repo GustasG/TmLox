@@ -27,7 +27,9 @@ namespace TmLox.Interpreter.Execution.Functions.Native
                 Console.Write(arguments[i]);
 
                 if (i != arguments.Count - 1)
+                {
                     Console.Write(' ');
+                }
             }
 
             Console.WriteLine();

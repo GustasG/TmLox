@@ -36,19 +36,33 @@ namespace TmLox.Interpreter
         private Statement ParseStatement()
         {
             if (Accept(Lexeme.KwVar))
+            {
                 return ParseVariableDeclaration();
+            }
             else if (Accept(Lexeme.KwIf))
+            {
                 return ParseIf();
+            }
             else if (Accept(Lexeme.KwFun))
+            {
                 return ParseFunctionDeclaration();
+            }
             else if (Accept(Lexeme.KwReturn))
+            {
                 return ParseReturn();
+            }
             else if (Accept(Lexeme.KwBreak))
+            {
                 return ParseBreak();
+            }
             else if (Accept(Lexeme.KwFor))
+            {
                 return ParseFor();
+            }
             else if (Accept(Lexeme.KwWhile))
+            {
                 return ParseWhile();
+            }
 
             return ParseExpressionStatement();
         }
@@ -59,7 +73,9 @@ namespace TmLox.Interpreter
             Expression? value = null;
 
             if (Accept(Lexeme.OpAssign))
+            {
                 value = ParseExpression();
+            }
 
             Expect(Lexeme.OpSemicolon, ";");
             return new VariableDeclarationStatement(name.Value.AsString(), value);
@@ -127,7 +143,9 @@ namespace TmLox.Interpreter
                 parameters.Add(parameter.Value.AsString());
 
                 if (!Match(Lexeme.OpRParen))
+                {
                     Expect(Lexeme.OpComma, ",");
+                }
             }
 
             return parameters;
@@ -138,7 +156,9 @@ namespace TmLox.Interpreter
             Expression? value = null;
 
             if (!Match(Lexeme.OpSemicolon))
+            {
                 value = ParseExpression();
+            }
 
             Expect(Lexeme.OpSemicolon, ";");
             return new ReturnStatement(value);
@@ -152,9 +172,13 @@ namespace TmLox.Interpreter
             if (!Accept(Lexeme.OpSemicolon))
             {
                 if (Accept(Lexeme.KwVar))
+                {
                     initial = ParseVariableDeclaration();
+                }
                 else
+                {
                     initial = ParseExpressionStatement();
+                }
             }
 
             Expression? condition = null;
@@ -230,7 +254,9 @@ namespace TmLox.Interpreter
             var expression = ParseAndExpression();
 
             while (Accept(Lexeme.KwOr))
+            {
                 expression = new OrExpression(expression, ParseAndExpression());
+            }
 
             return expression;
         }
@@ -240,7 +266,9 @@ namespace TmLox.Interpreter
             var expression = ParseEqualityExpression();
 
             while (Accept(Lexeme.KwAnd))
+            {
                 expression = new AndExpression(expression, ParseEqualityExpression());
+            }
 
             return expression;
         }
@@ -252,9 +280,13 @@ namespace TmLox.Interpreter
             while (Match(Lexeme.OpEq, Lexeme.OpNotEqual))
             {
                 if (Accept(Lexeme.OpEq))
+                {
                     expression = new EqualExpression(expression, ParseComparisonExpression());
+                }
                 else if (Accept(Lexeme.OpNotEqual))
+                {
                     expression = new NotEqualExpression(expression, ParseComparisonExpression());
+                }
             }
 
             return expression;
@@ -265,13 +297,21 @@ namespace TmLox.Interpreter
             var expression = ParseArithmeticExpression1();
 
             if (Accept(Lexeme.OpLess))
+            {
                 return new LessExpression(expression, ParseArithmeticExpression1());
+            }
             else if (Accept(Lexeme.OpLessEq))
+            {
                 return new LessEqualExpression(expression, ParseArithmeticExpression1());
+            }
             else if (Accept(Lexeme.OpMore))
+            {
                 return new MoreExpression(expression, ParseArithmeticExpression1());
+            }
             else if (Accept(Lexeme.OpMoreEq))
+            {
                 return new MoreEqualExpression(expression, ParseArithmeticExpression1());
+            }
 
             return expression;
         }
@@ -283,9 +323,13 @@ namespace TmLox.Interpreter
             while (Match(Lexeme.OpPlus, Lexeme.OpMinus))
             {
                 if (Accept(Lexeme.OpPlus))
+                {
                     expression = new AdditionExpression(expression, ParseArithmeticExpression2());
+                }
                 else if (Accept(Lexeme.OpMinus))
+                {
                     expression = new SubtractionExpression(expression, ParseArithmeticExpression2());
+                }
             }
 
             return expression;
@@ -298,11 +342,17 @@ namespace TmLox.Interpreter
             while (Match(Lexeme.OpMul, Lexeme.OpDiv, Lexeme.OpMod))
             {
                 if (Accept(Lexeme.OpMul))
+                {
                     expression = new MultiplicationExpression(expression, ParseUnaryExpression());
+                }
                 else if (Accept(Lexeme.OpDiv))
+                {
                     expression = new DivisionExpression(expression, ParseUnaryExpression());
+                }
                 else if (Accept(Lexeme.OpMod))
+                {
                     expression = new ModulusExpression(expression, ParseUnaryExpression());
+                }
             }
 
             return expression;
@@ -311,9 +361,13 @@ namespace TmLox.Interpreter
         private Expression ParseUnaryExpression()
         {
             if (Accept(Lexeme.OpExclamation))
+            {
                 return new UnaryNotExpression(ParseUnaryExpression());
+            }
             else if (Accept(Lexeme.OpMinus))
+            {
                 return new UnaryMinusExpression(ParseUnaryExpression());
+            }
 
             return ParsePrimaryExpression();
         }
@@ -329,35 +383,61 @@ namespace TmLox.Interpreter
             }
 
             if (Accept(Lexeme.KwNull))
+            {
                 return new LiteralExpression(AnyValue.CreateNull());
+            }
             else if (Accept(Lexeme.KwFalse))
+            {
                 return new LiteralExpression(AnyValue.CreateBool(false));
+            }
             else if (Accept(Lexeme.KwTrue))
+            {
                 return new LiteralExpression(AnyValue.CreateBool(true));
+            }
             else if (Accept(Lexeme.LitInt, out var intToken))
+            {
                 return new LiteralExpression(intToken.Value);
+            }
             else if (Accept(Lexeme.LitFloat, out var floatToken))
+            {
                 return new LiteralExpression(floatToken.Value);
+            }
             else if (Accept(Lexeme.LitString, out var stringToken))
+            {
                 return new LiteralExpression(stringToken.Value);
+            }
             else if (Accept(Lexeme.Identifier, out var identifierToken))
             {
                 Expression expression = new VariableExpression(identifierToken.Value.AsString());
 
                 if (Accept(Lexeme.OpAssign))
+                {
                     expression = new VariableAssigmentExpression(identifierToken.Value.AsString(), ParseExpression());
+                }
                 else if (Accept(Lexeme.OpPlusEq))
+                {
                     expression = new VariableAdditionExpression(identifierToken.Value.AsString(), ParseExpression());
+                }
                 else if (Accept(Lexeme.OpMinusEq))
+                {
                     expression = new VariableSubtractionExpression(identifierToken.Value.AsString(), ParseExpression());
+                }
                 else if (Accept(Lexeme.OpMulEq))
+                {
                     expression = new VariableMultiplicationExpression(identifierToken.Value.AsString(), ParseExpression());
+                }
                 else if (Accept(Lexeme.OpDivEq))
+                {
                     expression = new VariableDivisionExpression(identifierToken.Value.AsString(), ParseExpression());
+                }
                 else if (Accept(Lexeme.OpModEq))
+                {
                     expression = new VariableModulusExpression(identifierToken.Value.AsString(), ParseExpression());
+                }
                 else if (Accept(Lexeme.OPLParen))
+                {
                     expression = new FunctionCallExpression(identifierToken.Value.AsString(), ParseFunctionArguments());
+                }
 
                 return expression;
             }
@@ -366,9 +446,13 @@ namespace TmLox.Interpreter
 
             // some errors
             if (Accept(Lexeme.KwElif))
+            {
                 throw new SyntaxError(current.Line, current.Column, "\"elif\" used without coresponding \"if\"");
+            }
             else if (Accept(Lexeme.KwElse))
+            {
                 throw new SyntaxError(current.Line, current.Column, "\"else\" used without coresponding \"if\"");
+            }
 
             throw new SyntaxError(current.Line, current.Column, "Invalid expression");
         }
@@ -382,7 +466,9 @@ namespace TmLox.Interpreter
                 arguments.Add(ParseExpression());
 
                 if (!Match(Lexeme.OpRParen))
+                {
                     Expect(Lexeme.OpComma, ",");
+                }
             }
 
             return arguments;
@@ -421,7 +507,9 @@ namespace TmLox.Interpreter
             foreach (var type in types)
             {
                 if (current.Lexeme == type)
+                {
                     return true;
+                }
             }
 
             return false;
@@ -432,7 +520,10 @@ namespace TmLox.Interpreter
             var current = _lexer.Current;
 
             if (current == null)
+            {
                 throw new SyntaxError(0, 0, "Unexpected end of file");
+            }
+            
             return current;
         }
 

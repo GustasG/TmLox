@@ -141,73 +141,109 @@ namespace TmLox.Interpreter
         private Token CreatePlusToken()
         {
             if (TryConsume('='))
+            {
                 return new Token(_line, _column - 1, Lexeme.OpPlusEq);
+            }
             else
+            {
                 return new Token(_line, _column, Lexeme.OpPlus);
+            }
         }
 
         private Token CreateMinusToken()
         {
             if (TryConsume('='))
+            {
                 return new Token(_line, _column - 1, Lexeme.OpMinusEq);
+            }
             else
+            {
                 return new Token(_line, _column, Lexeme.OpMinus);
+            }
         }
 
         private Token CreateMulToken()
         {
             if (TryConsume('='))
+            {
                 return new Token(_line, _column - 1, Lexeme.OpMulEq);
+            }
             else
+            {
                 return new Token(_line, _column, Lexeme.OpMul);
+            }
         }
 
         private Token CreateDivToken()
         {
             if (TryConsume('='))
+            {
                 return new Token(_line, _column - 1, Lexeme.OpDivEq);
+            }
             else
+            {
                 return new Token(_line, _column, Lexeme.OpDiv);
+            }
         }
 
         private Token CreateModToken()
         {
             if (TryConsume('='))
+            {
                 return new Token(_line, _column - 1, Lexeme.OpModEq);
+            }
             else
+            {
                 return new Token(_line, _column, Lexeme.OpMod);
+            }
         }
 
         private Token CreateEqualToken()
         {
             if (TryConsume('='))
+            {
                 return new Token(_line, _column - 1, Lexeme.OpEq);
+            }
             else
+            {
                 return new Token(_line, _column, Lexeme.OpAssign);
+            }
         }
 
         private Token CreateExclamationToken()
         {
             if (TryConsume('='))
+            {
                 return new Token(_line, _column - 1, Lexeme.OpNotEqual);
+            }
             else
+            {
                 return new Token(_line, _column, Lexeme.OpExclamation);
+            }
         }
 
         private Token CreateLessToken()
         {
             if (TryConsume('='))
+            {
                 return new Token(_line, _column - 1, Lexeme.OpLessEq);
+            }
             else
+            {
                 return new Token(_line, _column, Lexeme.OpLess);
+            }
         }
 
         private Token CreateMoreToken()
         {
             if (TryConsume('='))
+            {
                 return new Token(_line, _column - 1, Lexeme.OpMoreEq);
+            }
             else
+            {
                 return new Token(_line, _column, Lexeme.OpMore);
+            }
         }
 
         private Token CreateStringToken()
@@ -219,7 +255,9 @@ namespace TmLox.Interpreter
             while (!TryConsume('"'))
             {
                 if (IsEnd())
+                {
                     throw new SyntaxError(startingLine, startingColumn, "Unterminated string");
+                }
 
                 var currentChar = Advance();
 

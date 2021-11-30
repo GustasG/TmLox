@@ -5,7 +5,7 @@
         public Expression Expression { get; }
 
 
-        public UnaryExpression(Expression expression)
+        protected UnaryExpression(Expression expression)
         {
             Expression = expression;
         }

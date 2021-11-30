@@ -55,7 +55,9 @@ namespace TmLox.Interpreter.Execution.Functions
         public AnyValue Call(IInterpreter interpreter, IList<AnyValue> arguments)
         {
             for (int i = 0; i < _parameters.Count; i++)
+            {
                 interpreter.AddVariable(_parameters[i], arguments[i]);
+            }
 
             try
             {

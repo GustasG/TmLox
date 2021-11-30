@@ -71,7 +71,9 @@ namespace TmLox.Interpreter.Execution
             try
             {
                 if (forStatement.Initial != null)
+                {
                     Execute(forStatement.Initial);
+                }
 
                 while (forStatement.Condition == null || CheckBool(Evaluate(forStatement.Condition)))
                 {
@@ -196,7 +198,9 @@ namespace TmLox.Interpreter.Execution
             try
             {
                 while (CheckBool(Evaluate(whileStatement.Condition)))
+                {
                     Execute(whileStatement.Body);
+                }
             }
             catch (BreakUnwind)
             {
@@ -409,7 +413,9 @@ namespace TmLox.Interpreter.Execution
                 .ToList();
 
             if (function.CheckArity() && function.Arity() != arguments.Count)
+            {
                 throw new ValueError($"Function {functionCallExpression.Name} expects {function.Arity()} arguments, while {arguments.Count} were provided");
+            }
 
             var currentEnviroment = _currentEnvironment;
             _currentEnvironment = new Environment(function.Environment);
@@ -442,7 +448,9 @@ namespace TmLox.Interpreter.Execution
             if (TryGet(name, out var variable))
             {
                 if (!variable.IsFunction())
+                {
                     throw new ValueError($"{name} is instance of {variable.Type} and not a function");
+                }
 
                 return variable.AsFunction();
             }

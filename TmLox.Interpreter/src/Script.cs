@@ -16,7 +16,9 @@ namespace TmLox.Interpreter
             get
             {
                 if (_interpreter.TryGet(name, out var value))
+                {
                     return value;
+                }
 
                 throw new KeyNotFoundException($"Variable with name {name} does not exist");
             }
@@ -61,6 +63,8 @@ namespace TmLox.Interpreter
                         var functionDeclaration = statement as FunctionDeclarationStatement;
                         _interpreter.AddFunction(new LoxFunction(functionDeclaration));
                         break;
+                    default:
+                        break;
                 }
             }
 
@@ -72,6 +76,8 @@ namespace TmLox.Interpreter
                         var variableDeclaration = statement as VariableDeclarationStatement;
                         var value = variableDeclaration.Value != null ? _interpreter.Evaluate(variableDeclaration.Value) : AnyValue.CreateNull();
                         _interpreter.AddVariable(variableDeclaration.Name, value);
+                        break;
+                    default:
                         break;
                 }
             }

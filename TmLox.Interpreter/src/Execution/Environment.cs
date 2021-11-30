@@ -44,10 +44,13 @@ namespace TmLox.Interpreter.Execution
         public bool TryGet(string name, out AnyValue value)
         {
             if (_values.TryGetValue(name, out value))
+            {
                 return true;
-
-            if (_enclosing != null)
+            }
+            else if (_enclosing != null)
+            {
                 return _enclosing.TryGet(name, out value);
+            }
 
             value = default;
             return false;
