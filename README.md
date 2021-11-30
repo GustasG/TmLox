@@ -2,6 +2,7 @@
 
 [![codecov](https://codecov.io/gh/GustasG/TmLox/branch/master/graph/badge.svg?token=AJFESEOBC9)](https://codecov.io/gh/GustasG/TmLox)
 [![Build status](https://ci.appveyor.com/api/projects/status/gb4bife35v1l7aek?svg=true)](https://ci.appveyor.com/project/GustasG/tmlox)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/db2a23751df047ddaf30fa158991d275)](https://www.codacy.com/gh/GustasG/TmLox/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=GustasG/TmLox&amp;utm_campaign=Badge_Grade)
 [![.NET](https://github.com/GustasG/TmLox/actions/workflows/dotnet.yml/badge.svg)](https://github.com/GustasG/TmLox/actions/workflows/dotnet.yml)
 [![CodeQL](https://github.com/GustasG/TmLox/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/GustasG/TmLox/actions/workflows/codeql-analysis.yml)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FGustasG%2FTmLox.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FGustasG%2FTmLox?ref=badge_shield)
