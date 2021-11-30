@@ -1,5 +1,6 @@
 # TmLox
 
+[![codecov](https://codecov.io/gh/GustasG/TmLox/branch/master/graph/badge.svg?token=AJFESEOBC9)](https://codecov.io/gh/GustasG/TmLox)
 [![Build status](https://ci.appveyor.com/api/projects/status/gb4bife35v1l7aek?svg=true)](https://ci.appveyor.com/project/GustasG/tmlox)
 [![.NET](https://github.com/GustasG/TmLox/actions/workflows/dotnet.yml/badge.svg)](https://github.com/GustasG/TmLox/actions/workflows/dotnet.yml)
 [![CodeQL](https://github.com/GustasG/TmLox/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/GustasG/TmLox/actions/workflows/codeql-analysis.yml)
