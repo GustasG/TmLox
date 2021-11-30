@@ -5,8 +5,12 @@ before_build:
   - choco install opencover.portable
   - choco install codecov
 
+build:
+  project: TmLox.sln
+  verbosity: minimal
+
 test_script:
-  - cmd: OpenCover.Console.exe -register:user -target:"C:/Program Files/dotnet/dotnet.exe" -targetargs:"test --logger:Appveyor" -output:".\coverage.xml"
+  - OpenCover.Console.exe -register:user -output:".\coverage.xml"
 
 after_test:
   - codecov -f "coverage.xml"
