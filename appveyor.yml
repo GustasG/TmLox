@@ -3,7 +3,6 @@ image: Visual Studio 2019
 
 before_build:
   - dotnet restore
-  - choco install curl
   - choco install codecov
   - choco install opencover.portable
 
@@ -16,4 +15,3 @@ test_script:
 
 after_test:
   - codecov -f "coverage.xml"
-  - bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r coverage.xml

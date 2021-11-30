@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+abstract: "TmLox is a lox language interpreter written with C# for university course"
+authors:
+  - family-names: Gedminas
+    given-names: Gustas
+    orcid:  https://orcid.org/0000-0001-8826-2715
+title: "TmLox"
+version: 1.0.0
+date-released: 2021
+license: MIT
+repository-code: https://github.com/GustasG/TmLox
