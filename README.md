@@ -1,5 +1,6 @@
 # TmLox
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/8c834976dcc64236a614f707999910f5)](https://app.codacy.com/gh/GustasG/TmLox?utm_source=github.com&utm_medium=referral&utm_content=GustasG/TmLox&utm_campaign=Badge_Grade_Settings)
 [![codecov](https://codecov.io/gh/GustasG/TmLox/branch/master/graph/badge.svg?token=AJFESEOBC9)](https://codecov.io/gh/GustasG/TmLox)
 [![Build status](https://ci.appveyor.com/api/projects/status/gb4bife35v1l7aek?svg=true)](https://ci.appveyor.com/project/GustasG/tmlox)
 [![.NET](https://github.com/GustasG/TmLox/actions/workflows/dotnet.yml/badge.svg)](https://github.com/GustasG/TmLox/actions/workflows/dotnet.yml)
