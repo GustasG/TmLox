@@ -1,3 +1,13 @@
 version: 1.0.{build}
-build:
-  verbosity: minimal
+
+before_build:
+  - dotnet restore
+  - choco install opencover.portable
+  - choco install codecov
+
+test_script:
+  - cmd: OpenCover.Console.exe -register:user -target:"C:/Program Files/dotnet/dotnet.exe" -targetargs:"test --test-adapter-path:. --logger:Appveyor" -output:".\coverage.xml" -oldstyle
+
+after_test:
+  - ps: |
+      codecov -f "coverage.xml"
