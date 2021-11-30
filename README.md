@@ -2,6 +2,8 @@
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FGustasG%2FTmLox.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FGustasG%2FTmLox?ref=badge_shield)
 
 
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FGustasG%2FTmLox.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FGustasG%2FTmLox?ref=badge_shield)
+
 Unfinished [Lox](https://craftinginterpreters.com/the-lox-language.html) programming language interpreter.
 
 Interpreter was created for transliavimo metodai (compiling methods) course at Vilnius University.
@@ -14,4 +16,5 @@ Interpreter was created for transliavimo metodai (compiling methods) course at V
 
 
 ## License
+
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FGustasG%2FTmLox.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FGustasG%2FTmLox?ref=badge_large)
