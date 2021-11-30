@@ -420,7 +420,7 @@ namespace TmLox.Interpreter.Execution
 
             if (function.CheckArity() && function.Arity() != arguments.Count)
             {
-                throw new ValueError($"Function {functionCallExpression.Name} expects {function.Arity()} arguments, while {arguments.Count} were provided");
+                throw new ValueError($"Function {functionCallExpression.Name} expects {function.Arity()} arguments, while {arguments.Count} arguments were provided");
             }
 
             var currentEnviroment = _currentEnvironment;

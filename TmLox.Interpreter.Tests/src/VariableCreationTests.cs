@@ -45,7 +45,7 @@ namespace TmLox.Interpreter.Tests
             script.RunString(code);
 
             var testVariable = script["test_variable"];
-
+            
             Assert.True(testVariable.IsBool());
             Assert.False(testVariable.AsBool());
         }
@@ -127,7 +127,7 @@ namespace TmLox.Interpreter.Tests
             var tmpVariable = script["_tmp"];
 
             Assert.True(tmpVariable.IsInteger());
-            Assert.AreEqual(tmpVariable.AsInteger(), -537);
+            Assert.AreEqual(-537, tmpVariable.AsInteger());
         }
     }
 }

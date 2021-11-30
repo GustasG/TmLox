@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using TmLox.Interpreter.Errors;
 
 namespace TmLox.Interpreter.Tests
 {
@@ -162,6 +163,22 @@ namespace TmLox.Interpreter.Tests
 
             Assert.True(testVariable.IsBool());
             Assert.False(testVariable.AsBool());
+        }
+
+        [Test]
+        public void Test_Negation_With_Value_That_Is_Not_Boolean_Should_Produce_Error_Abount_Unsupported_Operation()
+        {
+            var code = @"
+                var tmp = !""First"";
+            ";
+
+            var script = new Script();
+            var ex = Assert.Throws<ValueError>(delegate
+            {
+                script.RunString(code);
+            });
+
+            StringAssert.Contains("Unary ! not supported", ex.Message);
         }
     }
 }

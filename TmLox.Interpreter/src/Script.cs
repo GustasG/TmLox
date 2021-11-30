@@ -15,25 +15,25 @@ namespace TmLox.Interpreter
         {
             get
             {
-                if (_interpreter.TryGet(name, out var value))
+                if (Interpreter.TryGet(name, out var value))
                 {
                     return value;
                 }
 
                 throw new KeyNotFoundException($"Variable with name {name} does not exist");
             }
-            set => _interpreter.AddVariable(name, value);
+            set => Interpreter.AddVariable(name, value);
         }
 
+        public IInterpreter Interpreter { get; }
 
-        private readonly IInterpreter _interpreter;
-
+        
         public Script()
         {
-            _interpreter = new TreeWalkingInterpreter();
+            Interpreter = new TreeWalkingInterpreter();
 
-            _interpreter.AddFunction(new PrintFunction());
-            _interpreter.AddFunction(new ClockFunction());
+            Interpreter.AddFunction(new PrintFunction());
+            Interpreter.AddFunction(new ClockFunction());
         }
 
         public void RunString(string code)
@@ -41,7 +41,7 @@ namespace TmLox.Interpreter
             var statements = CreateAst(code);
 
             RegisterGlobals(statements);
-            _interpreter.Execute(statements);
+            Interpreter.Execute(statements);
         }
 
         public void RunFile(string path)
@@ -61,7 +61,7 @@ namespace TmLox.Interpreter
                 {
                     case NodeType.FunctionDeclaration:
                         var functionDeclaration = statement as FunctionDeclarationStatement;
-                        _interpreter.AddFunction(new LoxFunction(functionDeclaration));
+                        Interpreter.AddFunction(new LoxFunction(functionDeclaration));
                         break;
                 }
             }
@@ -72,8 +72,8 @@ namespace TmLox.Interpreter
                 {
                     case NodeType.VariableDeclaration:
                         var variableDeclaration = statement as VariableDeclarationStatement;
-                        var value = variableDeclaration.Value != null ? _interpreter.Evaluate(variableDeclaration.Value) : AnyValue.CreateNull();
-                        _interpreter.AddVariable(variableDeclaration.Name, value);
+                        var value = variableDeclaration.Value != null ? Interpreter.Evaluate(variableDeclaration.Value) : AnyValue.CreateNull();
+                        Interpreter.AddVariable(variableDeclaration.Name, value);
                         break;
                 }
             }
