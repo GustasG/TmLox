@@ -10,7 +10,7 @@ build:
   verbosity: minimal
 
 test_script:
-  - OpenCover.Console.exe -register:user -target:"dotnet" -output:".\coverage.xml"
+  - OpenCover.Console.exe -register:user -target:"nunit-console.exe" -output:".\coverage.xml"
 
 after_test:
   - codecov -f "coverage.xml"
