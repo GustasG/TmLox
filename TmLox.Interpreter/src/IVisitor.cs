@@ -7,7 +7,7 @@ using TmLox.Interpreter.Ast.Expressions.Binary.Arithmetic;
 
 namespace TmLox.Interpreter
 {
-    public interface IVisitor<T>
+    public interface IVisitor<out T>
     {
         // Statements
         T Visit(BreakStatement breakStatement);

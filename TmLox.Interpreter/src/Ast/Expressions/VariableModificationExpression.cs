@@ -7,7 +7,7 @@
         public Expression Value { get; }
 
 
-        public VariableModificationExpression(string variable, Expression value)
+        protected VariableModificationExpression(string variable, Expression value)
         {
             Variable = variable;
             Value = value;

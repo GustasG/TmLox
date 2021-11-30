@@ -4,11 +4,11 @@ namespace TmLox.Interpreter.Errors
 {
     public abstract class LoxError : Exception
     {
-        public LoxError()
+        protected LoxError()
         {
         }
 
-        public LoxError(string message)
+        protected LoxError(string message)
             : base(message)
         {
         }

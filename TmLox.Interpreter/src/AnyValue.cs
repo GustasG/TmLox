@@ -17,7 +17,7 @@ namespace TmLox.Interpreter
     }
 
 
-    public struct AnyValue
+    public struct AnyValue : IEquatable<AnyValue>
     {
         public object? Value { get; private set; }
 
@@ -168,10 +168,17 @@ namespace TmLox.Interpreter
             return Equals(Value, obj);
         }
 
+        public bool Equals(AnyValue other)
+        {
+            return Equals(Value, other.Value);
+        }
+
         public override int GetHashCode()
         {
             if (Value != null)
+            {
                 return Type.GetHashCode() ^ Value.GetHashCode();
+            }
             
             return Type.GetHashCode();
         }

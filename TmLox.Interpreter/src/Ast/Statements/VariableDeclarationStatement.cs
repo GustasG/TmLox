@@ -7,7 +7,7 @@
         public Expression? Value { get; }
 
 
-        public VariableDeclarationStatement(string name, Expression? value = null)
+        public VariableDeclarationStatement(string name, Expression? value)
         {
             Name = name;
             Value = value;

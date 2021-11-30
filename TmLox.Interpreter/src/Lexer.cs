@@ -130,11 +130,17 @@ namespace TmLox.Interpreter
 
                 default:
                     if (char.IsDigit(startingChar))
+                    {
                         return CreateNumberToken();
+                    }
                     else if (char.IsLetter(startingChar) || startingChar == '_')
+                    {
                         return CreateIdentifierToken();
+                    }
                     else
+                    {
                         throw new SyntaxError(_line, _column, $"Unexpected characted: {startingChar}");
+                    }
             }
         }
 
@@ -303,14 +309,17 @@ namespace TmLox.Interpreter
             int startingColumn = _column;
 
             var value = CreateNumber();
-            //value = value.Replace('.', ',');
 
             if (long.TryParse(value, out var integer))
+            {
                 return new Token(_line, startingColumn, Lexeme.LitInt, AnyValue.CreateInteger(integer));
+            }
             else if (double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out var floatingPoint))
+            {
                 return new Token(_line, startingColumn, Lexeme.LitFloat, AnyValue.CreateFloat(floatingPoint));
-            else
-                throw new SyntaxError(_line, startingColumn, "Invalid number");
+            }
+
+            throw new SyntaxError(_line, startingColumn, "Invalid number");
         }
 
         private string CreateNumber()
@@ -322,9 +331,13 @@ namespace TmLox.Interpreter
                 char currentSymbol = Peek();
 
                 if (char.IsDigit(currentSymbol) || currentSymbol == '.')
+                {
                     Advance();
+                }
                 else
+                {
                     break;
+                }
             }
 
             return _source[startingPosition.._position];
@@ -349,9 +362,13 @@ namespace TmLox.Interpreter
                 char currentSymbol = Peek();
 
                 if (char.IsLetterOrDigit(currentSymbol) || currentSymbol == '_')
+                {
                     Advance();
+                }
                 else
+                {
                     break;
+                }
             }
 
             return _source[startingPosition.._position];

@@ -9,7 +9,7 @@ namespace TmLox.Interpreter.Execution.Functions
         public Environment? Environment { set; get; }
 
 
-        public NativeFunction(string name)
+        protected NativeFunction(string name)
         {
             Name = name;
         }

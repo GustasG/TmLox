@@ -67,7 +67,7 @@ namespace TmLox.Interpreter.Tests
         }
 
         [Test]
-        public void Test_Variable_Creation_With_Integer_Literal_Shoule_Produce_Integer_Valued_Value_With_Value_As_42()
+        public void Test_Variable_Creation_With_Integer_Literal_Should_Produce_Integer_Valued_Value_With_Value_As_42()
         {
             var code = @"
                 var test_variable = 42;
@@ -83,7 +83,7 @@ namespace TmLox.Interpreter.Tests
         }
 
         [Test]
-        public void Test_Variable_Creation_With_Float_Literal_Shoule_Produce_Given_Float_Valued_Value()
+        public void Test_Variable_Creation_With_Float_Literal_Should_Produce_Given_Float_Valued_Value()
         {
             var code = @"
                 var test_variable = -567.357;
@@ -99,7 +99,7 @@ namespace TmLox.Interpreter.Tests
         }
 
         [Test]
-        public void Test_Variable_Creation_With_String_Literal_Shoule_Produce_Given_String_Valued_Value()
+        public void Test_Variable_Creation_With_String_Literal_Should_Produce_Given_String_Valued_Value()
         {
             var code = @"
                 var test_variable = ""Hello world"";
@@ -112,6 +112,22 @@ namespace TmLox.Interpreter.Tests
 
             Assert.True(testVariable.IsString());
             Assert.AreEqual("Hello world", testVariable.AsString());
+        }
+
+        [Test]
+        public void Test_Variable_Creation_With_Starting_Character_As_Underscode_And_Value_As_Integer_Literal_Should_Produce_Given_Integer_Value()
+        {
+            var code = @"
+                var _tmp = -537;
+            ";
+
+            var script = new Script();
+            script.RunString(code);
+
+            var tmpVariable = script["_tmp"];
+
+            Assert.True(tmpVariable.IsInteger());
+            Assert.AreEqual(tmpVariable.AsInteger(), -537);
         }
     }
 }

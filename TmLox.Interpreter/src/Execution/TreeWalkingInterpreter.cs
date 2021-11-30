@@ -29,7 +29,9 @@ namespace TmLox.Interpreter.Execution
         public void Execute(IList<Statement> statements)
         {
             foreach (var statement in statements)
+            {
                 Execute(statement);
+            }
         }
 
         public void Execute(Statement statement)
@@ -80,7 +82,9 @@ namespace TmLox.Interpreter.Execution
                     Execute(forStatement.Body);
 
                     if (forStatement.Increment != null)
+                    {
                         Execute(forStatement.Increment);
+                    }
                 }
             }
             catch (BreakUnwind)
@@ -177,7 +181,9 @@ namespace TmLox.Interpreter.Execution
             var value = AnyValue.CreateNull();
 
             if (returnStatement.Value != null)
+            {
                 value = Evaluate(returnStatement.Value);
+            }
 
             throw new ReturnUnwind(value);
         }
@@ -438,7 +444,9 @@ namespace TmLox.Interpreter.Execution
         private AnyValue GetVariable(string name)
         {
             if (TryGet(name, out var variable))
+            {
                 return variable;
+            }
 
             throw new ValueError($"Variable {name} does not exist");
         }
@@ -461,11 +469,17 @@ namespace TmLox.Interpreter.Execution
         private static AnyValue Add(AnyValue lhs, AnyValue rhs)
         {
             if (lhs.IsInteger() && rhs.IsInteger())
+            {
                 return AnyValue.CreateInteger(lhs.AsInteger() + rhs.AsInteger());
+            }
             else if (lhs.IsNumber() && rhs.IsNumber())
+            {
                 return AnyValue.CreateFloat(lhs.AsFloat() + rhs.AsFloat());
+            }
             else if (lhs.IsString() && rhs.IsString())
+            {
                 return AnyValue.CreateString(lhs.AsString() + rhs.AsString());
+            }
 
             throw new ValueError($"Operator + not supported for {lhs.Type} and {rhs.Type}");
         }
@@ -473,9 +487,13 @@ namespace TmLox.Interpreter.Execution
         private static AnyValue Subtract(AnyValue lhs, AnyValue rhs)
         {
             if (lhs.IsInteger() && rhs.IsInteger())
+            {
                 return AnyValue.CreateInteger(lhs.AsInteger() - rhs.AsInteger());
+            }
             else if (lhs.IsNumber() && rhs.IsNumber())
+            {
                 return AnyValue.CreateFloat(lhs.AsFloat() - rhs.AsFloat());
+            }
 
             throw new ValueError($"Operator - not supported for {lhs.Type} and {rhs.Type}");
         }
@@ -483,9 +501,13 @@ namespace TmLox.Interpreter.Execution
         private static AnyValue Multiply(AnyValue lhs, AnyValue rhs)
         {
             if (lhs.IsInteger() && rhs.IsInteger())
+            {
                 return AnyValue.CreateInteger(lhs.AsInteger() * rhs.AsInteger());
+            }
             else if (lhs.IsNumber() && rhs.IsNumber())
+            {
                 return AnyValue.CreateFloat(lhs.AsFloat() * rhs.AsFloat());
+            }
 
             throw new ValueError($"Operator * not supported for {lhs.Type} and {rhs.Type}");
         }
@@ -493,7 +515,9 @@ namespace TmLox.Interpreter.Execution
         private static AnyValue Divide(AnyValue lhs, AnyValue rhs)
         {
             if (lhs.IsNumber() && rhs.IsNumber())
+            {
                 return AnyValue.CreateFloat(lhs.AsFloat() / rhs.AsFloat());
+            }
 
             throw new ValueError($"Operator / not supported for {lhs.Type} and {rhs.Type}");
         }
@@ -501,9 +525,13 @@ namespace TmLox.Interpreter.Execution
         private static AnyValue Modulus(AnyValue lhs, AnyValue rhs)
         {
             if (lhs.IsInteger() && rhs.IsInteger())
+            {
                 return AnyValue.CreateInteger(lhs.AsInteger() % rhs.AsInteger());
+            }
             else if (lhs.IsNumber() && rhs.IsNumber())
+            {
                 return AnyValue.CreateFloat(lhs.AsFloat() % rhs.AsFloat());
+            }
 
             throw new ValueError($"Operator % not supported for {lhs.Type} and {rhs.Type}");
         }
@@ -511,7 +539,9 @@ namespace TmLox.Interpreter.Execution
         private static bool IsLess(AnyValue lhs, AnyValue rhs)
         {
             if (lhs.IsNumber() && rhs.IsNumber())
+            {
                 return lhs.AsFloat() < rhs.AsFloat();
+            }
 
             throw new ValueError($"Cannot compare {lhs.Value} and {rhs.Value}");
         }
@@ -524,7 +554,9 @@ namespace TmLox.Interpreter.Execution
         private static bool CheckBool(AnyValue value)
         {
             if (!value.IsBool())
+            {
                 throw new ValueError($"Cannot convert {value.Type} to bool");
+            }
 
             return value.AsBool();
         }
