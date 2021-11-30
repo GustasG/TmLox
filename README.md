@@ -1,5 +1,6 @@
 # TmLox
 
+[![Build status](https://ci.appveyor.com/api/projects/status/gb4bife35v1l7aek?svg=true)](https://ci.appveyor.com/project/GustasG/tmlox)
 [![.NET](https://github.com/GustasG/TmLox/actions/workflows/dotnet.yml/badge.svg)](https://github.com/GustasG/TmLox/actions/workflows/dotnet.yml)
 [![CodeQL](https://github.com/GustasG/TmLox/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/GustasG/TmLox/actions/workflows/codeql-analysis.yml)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FGustasG%2FTmLox.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FGustasG%2FTmLox?ref=badge_shield)
