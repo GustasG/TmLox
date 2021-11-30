@@ -1,6 +1,6 @@
 ﻿namespace TmLox.Interpreter.Ast.Expressions.Binary.Logical
 {
-    public class OrExpression : BinaryLogicalExpression
+    public class OrExpression : BinaryExpression
     {
         public OrExpression(Expression left, Expression right)
             : base(left, right)

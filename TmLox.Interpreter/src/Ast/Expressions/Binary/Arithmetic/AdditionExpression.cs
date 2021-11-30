@@ -1,6 +1,6 @@
 ﻿namespace TmLox.Interpreter.Ast.Expressions.Binary.Arithmetic
 {
-    public class AdditionExpression : BinaryArithmeticExpression
+    public class AdditionExpression : BinaryExpression
     {
         public AdditionExpression(Expression left, Expression right)
             : base(left, right)

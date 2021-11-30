@@ -1,6 +1,6 @@
 ﻿namespace TmLox.Interpreter.Ast.Expressions.Binary.Arithmetic
 {
-    public class MultiplicationExpression : BinaryArithmeticExpression
+    public class MultiplicationExpression : BinaryExpression
     {
         public MultiplicationExpression(Expression left, Expression right)
             : base(left, right)

@@ -1,6 +1,6 @@
 ﻿namespace TmLox.Interpreter.Ast.Expressions.Binary.Logical
 {
-    public class MoreEqualExpression : BinaryLogicalExpression
+    public class MoreEqualExpression : BinaryExpression
     {
         public MoreEqualExpression(Expression left, Expression right)
             : base(left, right)

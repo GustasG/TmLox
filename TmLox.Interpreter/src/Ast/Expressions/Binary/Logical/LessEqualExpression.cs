@@ -1,6 +1,6 @@
 ﻿namespace TmLox.Interpreter.Ast.Expressions.Binary.Logical
 {
-    public class LessEqualExpression : BinaryLogicalExpression
+    public class LessEqualExpression : BinaryExpression
     {
         public LessEqualExpression(Expression left, Expression right)
             : base(left, right)
