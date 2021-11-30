@@ -11,7 +11,7 @@ build:
   verbosity: minimal
 
 test_script:
-  - OpenCover.Console.exe -register:user -target:"nunit-console.exe" -targetargs:".\TmLox.Interpreter.Tests\bin\Debug\net5.0\TmLox.Interpreter.Tests.dll -noshadow" -filter:"+[*]*" -output:coverage.xml
+  - OpenCover.Console.exe -register:user -target:"nunit-console.exe" -targetargs:test -filter:"+[*]*" -output:coverage.xml
 
 after_test:
   - codecov -f "coverage.xml"
