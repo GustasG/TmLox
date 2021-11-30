@@ -16,7 +16,6 @@ Interpreter was created for transliavimo metodai (compiling methods) course at V
 - Lists
 - Ternary conditional operator
 
-
 ## License
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FGustasG%2FTmLox.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FGustasG%2FTmLox?ref=badge_large)

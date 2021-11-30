@@ -1,4 +1,4 @@
-version: 1.0.{build}
+version: "{build}"
 image: Visual Studio 2019
 
 before_build:
@@ -15,3 +15,4 @@ test_script:
 
 after_test:
   - codecov -f "coverage.xml"
+  - bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r coverage.xml
