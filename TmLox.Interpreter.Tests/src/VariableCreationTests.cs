@@ -1,5 +1,7 @@
 ﻿using NUnit.Framework;
 
+using TmLox.Interpreter.Errors;
+
 namespace TmLox.Interpreter.Tests
 {
     public class VariableCreationTests
@@ -128,6 +130,22 @@ namespace TmLox.Interpreter.Tests
 
             Assert.True(tmpVariable.IsInteger());
             Assert.AreEqual(-537, tmpVariable.AsInteger());
+        }
+
+        [Test]
+        public void Test_Variable_Creation_With_Incorectly_Formatted_Float_Literal_Should_Produce_Error_About_Invalid_Number()
+        {
+            var code = @"
+                var number = 12.45.787.72;
+            ";
+
+            var script = new Script();
+            var ex = Assert.Throws<SyntaxError>(delegate
+            {
+                script.RunString(code);
+            });
+
+            StringAssert.Contains("Invalid number", ex.Message);
         }
     }
 }

@@ -8,6 +8,7 @@ namespace TmLox.Interpreter.Execution.StackUnwinding
 
 
         public ReturnUnwind(AnyValue value)
+            : base("Return was used outside functions")
         {
             Value = value;
         }

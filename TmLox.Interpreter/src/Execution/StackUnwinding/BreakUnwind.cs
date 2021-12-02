@@ -4,9 +4,10 @@ namespace TmLox.Interpreter.Execution.StackUnwinding
 {
     internal class BreakUnwind : Exception
     {
-        public override string ToString()
+        public BreakUnwind()
+            : base("Break was used outside of the loop")
         {
-            return "Break was used outside of the loop";
+
         }
     }
 }

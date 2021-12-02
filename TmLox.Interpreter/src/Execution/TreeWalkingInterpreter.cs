@@ -271,7 +271,7 @@ namespace TmLox.Interpreter.Execution
             var lhs = Evaluate(equalExpression.Left);
             var rhs = Evaluate(equalExpression.Right);
 
-            return AnyValue.CreateBool(lhs == rhs);
+            return AnyValue.CreateBool(lhs.Equals(rhs));
         }
 
         public AnyValue Visit(LessEqualExpression lessEqualExpression)
@@ -311,7 +311,7 @@ namespace TmLox.Interpreter.Execution
             var lhs = Evaluate(notEqualExpression.Left);
             var rhs = Evaluate(notEqualExpression.Right);
 
-            return AnyValue.CreateBool(lhs != rhs);
+            return AnyValue.CreateBool(!lhs.Equals(rhs));
         }
 
         public AnyValue Visit(OrExpression orExpression)

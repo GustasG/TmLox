@@ -1,4 +1,5 @@
 using NUnit.Framework;
+
 using TmLox.Interpreter.Errors;
 
 namespace TmLox.Interpreter.Tests
@@ -70,6 +71,21 @@ namespace TmLox.Interpreter.Tests
         }
 
         [Test]
+        public void Test_Or_Condition_With_First_Argument_As_False_And_Second_As_Integer_Should_Produce_Error_That_String_Cannot_Be_Converted_To_Bool()
+        {
+            var code = @"
+                var test_variable = false or ""String"";
+            ";
+
+            var script = new Script();
+
+            Assert.Throws<ValueError>(delegate
+            {
+                script.RunString(code);
+            });
+        }
+
+        [Test]
         public void Test_And_Condition_With_Both_Arguments_As_False_Should_Produce_False_Value()
         {
             var code = @"
@@ -134,6 +150,21 @@ namespace TmLox.Interpreter.Tests
         }
 
         [Test]
+        public void Test_And_Condition_With_First_Argument_As_True_And_Second_Arument_As_String_Value_Should_Produce_Error_That_String_Cannot_Be_Converted_To_Bool()
+        {
+            var code = @"
+                var test_variable = true and ""String"";
+            ";
+
+            var script = new Script();
+
+            Assert.Throws<ValueError>(delegate
+            {
+                script.RunString(code);
+            });
+        }
+
+        [Test]
         public void Test_Negation_Condition_With_False_Argument_Should_Produce_True_Value()
         {
             var code = @"
@@ -173,12 +204,11 @@ namespace TmLox.Interpreter.Tests
             ";
 
             var script = new Script();
-            var ex = Assert.Throws<ValueError>(delegate
+
+            Assert.Throws<ValueError>(delegate
             {
                 script.RunString(code);
             });
-
-            StringAssert.Contains("Unary ! not supported", ex.Message);
         }
     }
 }

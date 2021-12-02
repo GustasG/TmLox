@@ -5,18 +5,6 @@ using TmLox.Interpreter.Execution.Functions;
 
 namespace TmLox.Interpreter
 {
-    [Flags]
-    public enum AnyValueType
-    {
-        Null = 0,
-        Bool = 1,
-        Integer = 2,
-        Float = 4,
-        String = 8,
-        Function = 16
-    }
-
-
     public struct AnyValue : IEquatable<AnyValue>
     {
         public object? Value { get; private set; }
@@ -153,34 +141,9 @@ namespace TmLox.Interpreter
             };
         }
 
-        public static bool operator== (AnyValue lhs, AnyValue rhs)
-        {
-            return Equals(lhs.Value, rhs.Value);
-        }
-
-        public static bool operator != (AnyValue lhs, AnyValue rhs)
-        {
-            return !(lhs == rhs);
-        }
-
-        public override bool Equals(object? obj)
-        {
-            return Equals(Value, obj);
-        }
-
         public bool Equals(AnyValue other)
         {
             return Equals(Value, other.Value);
-        }
-
-        public override int GetHashCode()
-        {
-            if (Value != null)
-            {
-                return Type.GetHashCode() ^ Value.GetHashCode();
-            }
-            
-            return Type.GetHashCode();
         }
     }
 }
