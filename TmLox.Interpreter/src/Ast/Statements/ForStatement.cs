@@ -4,6 +4,11 @@ namespace TmLox.Interpreter.Ast.Statements
 {
     public class ForStatement : Statement
     {
+        public override NodeType Type
+        {
+            get => NodeType.For;
+        }
+
         public Statement? Initial { get; }
 
         public Expression? Condition { get; }
@@ -29,11 +34,6 @@ namespace TmLox.Interpreter.Ast.Statements
         public override T Accept<T>(IVisitor<T> visitor)
         {
             return visitor.Visit(this);
-        }
-
-        public override NodeType Type()
-        {
-            return NodeType.For;
         }
     }
 }

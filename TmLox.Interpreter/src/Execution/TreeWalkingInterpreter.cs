@@ -18,12 +18,12 @@ namespace TmLox.Interpreter.Execution
 {
     internal class TreeWalkingInterpreter : IInterpreter, IVisitor<AnyValue>
     {
-        private Environment _currentEnvironment;
+        public Environment Environment { get; set; }
 
 
         public TreeWalkingInterpreter()
         {
-            _currentEnvironment = new Environment();
+            Environment = new Environment();
         }
 
         public void Execute(IList<Statement> statements)
@@ -44,20 +44,19 @@ namespace TmLox.Interpreter.Execution
             return statement.Accept(this);
         }
 
-        public void AddVariable(string name, AnyValue value)
+        public void Add(string name, AnyValue value)
         {
-            _currentEnvironment.Add(name, value);
+            Environment.Add(name, value);
         }
 
-        public void AddFunction(ICallable function)
+        public void Add(ICallable function)
         {
-            function.Environment = _currentEnvironment;
-            _currentEnvironment.Add(function.Name, AnyValue.CreateFunction(function));
+            Add(function.Name, AnyValue.CreateFunction(function));
         }
 
         public bool TryGet(string name, out AnyValue value)
         {
-            return _currentEnvironment.TryGet(name, out value);
+            return Environment.TryGet(name, out value);
         }
 
         public AnyValue Visit(BreakStatement breakStatement)
@@ -67,8 +66,8 @@ namespace TmLox.Interpreter.Execution
 
         public AnyValue Visit(ForStatement forStatement)
         {
-            var currentEnviroment = _currentEnvironment;
-            _currentEnvironment = new Environment(_currentEnvironment);
+            var currentEnviroment = Environment;
+            Environment = new Environment(Environment);
 
             try
             {
@@ -93,7 +92,7 @@ namespace TmLox.Interpreter.Execution
             }
             finally
             {
-                _currentEnvironment = currentEnviroment;
+                Environment = currentEnviroment;
             }
 
             return AnyValue.CreateNull();
@@ -101,7 +100,7 @@ namespace TmLox.Interpreter.Execution
 
         public AnyValue Visit(FunctionDeclarationStatement functionDeclarationStatement)
         {
-            AddFunction(new LoxFunction(functionDeclarationStatement));
+            Add(new LoxFunction(Environment, functionDeclarationStatement));
 
             return AnyValue.CreateNull();
         }
@@ -110,8 +109,8 @@ namespace TmLox.Interpreter.Execution
         {
             if (!VisitIf(ifStatement) && !VisitElif(ifStatement) && ifStatement.ElseBody != null)
             {
-                var currentEnviroment = _currentEnvironment;
-                _currentEnvironment = new Environment(_currentEnvironment);
+                var currentEnviroment = Environment;
+                Environment = new Environment(Environment);
 
                 try
                 {
@@ -119,7 +118,7 @@ namespace TmLox.Interpreter.Execution
                 }
                 finally
                 {
-                    _currentEnvironment = currentEnviroment;
+                    Environment = currentEnviroment;
                 }
             }
 
@@ -128,8 +127,8 @@ namespace TmLox.Interpreter.Execution
 
         private bool VisitIf(IfStatement ifStatement)
         {
-            var currentEnviroment = _currentEnvironment;
-            _currentEnvironment = new Environment(_currentEnvironment);
+            var currentEnviroment = Environment;
+            Environment = new Environment(Environment);
 
             try
             {
@@ -141,7 +140,7 @@ namespace TmLox.Interpreter.Execution
             }
             finally
             {
-                _currentEnvironment = currentEnviroment;
+                Environment = currentEnviroment;
             }
 
             return false;
@@ -151,8 +150,8 @@ namespace TmLox.Interpreter.Execution
         {
             foreach (var elif in elifStatement.ElseIfStatements)
             {
-                var currentEnviroment = _currentEnvironment;
-                _currentEnvironment = new Environment(_currentEnvironment);
+                var currentEnviroment = Environment;
+                Environment = new Environment(Environment);
 
                 try
                 {
@@ -164,7 +163,7 @@ namespace TmLox.Interpreter.Execution
                 }
                 finally
                 {
-                    _currentEnvironment = currentEnviroment;
+                    Environment = currentEnviroment;
                 }
             }
 
@@ -191,15 +190,15 @@ namespace TmLox.Interpreter.Execution
         public AnyValue Visit(VariableDeclarationStatement variableDeclarationStatement)
         {
             var value = variableDeclarationStatement.Value != null ? Evaluate(variableDeclarationStatement.Value) : AnyValue.CreateNull();
-            _currentEnvironment.Add(variableDeclarationStatement.Name, value);
+            Environment.Add(variableDeclarationStatement.Name, value);
 
             return value;
         }
 
         public AnyValue Visit(WhileStatement whileStatement)
         {
-            var currentEnviroment = _currentEnvironment;
-            _currentEnvironment = new Environment(_currentEnvironment);
+            var currentEnviroment = Environment;
+            Environment = new Environment(Environment);
 
             try
             {
@@ -214,7 +213,7 @@ namespace TmLox.Interpreter.Execution
             }
             finally
             {
-                _currentEnvironment = currentEnviroment;
+                Environment = currentEnviroment;
             }
 
             return AnyValue.CreateNull();
@@ -335,7 +334,7 @@ namespace TmLox.Interpreter.Execution
             {
                 AnyValueType.Integer => AnyValue.CreateInteger(-value.AsInteger()),
                 AnyValueType.Float => AnyValue.CreateFloat(-value.AsFloat()),
-                _ => throw new ValueError($"Unary - not supported for {value.Type}")
+                _ => throw new ValueError($"Unary - not supported for type {value.Type}")
             };
         }
 
@@ -355,7 +354,7 @@ namespace TmLox.Interpreter.Execution
             var variable = GetVariable(variableAdditionExpression.Variable);
             var value = Evaluate(variableAdditionExpression.Value);
 
-            _currentEnvironment.Assign(variableAdditionExpression.Variable, Add(variable, value));
+            Environment.Assign(variableAdditionExpression.Variable, Add(variable, value));
 
             return AnyValue.CreateNull();
         }
@@ -365,7 +364,7 @@ namespace TmLox.Interpreter.Execution
             GetVariable(variableAssigmentExpression.Variable);
             var value = Evaluate(variableAssigmentExpression.Value);
 
-            _currentEnvironment.Assign(variableAssigmentExpression.Variable, value);
+            Environment.Assign(variableAssigmentExpression.Variable, value);
 
             return AnyValue.CreateNull();
         }
@@ -375,7 +374,7 @@ namespace TmLox.Interpreter.Execution
             var variable = GetVariable(variableDivisionExpression.Variable);
             var value = Evaluate(variableDivisionExpression.Value);
 
-            _currentEnvironment.Assign(variableDivisionExpression.Variable, Divide(variable, value));
+            Environment.Assign(variableDivisionExpression.Variable, Divide(variable, value));
 
             return AnyValue.CreateNull();
         }
@@ -385,7 +384,7 @@ namespace TmLox.Interpreter.Execution
             var variable = GetVariable(variableModulusExpression.Variable);
             var value = Evaluate(variableModulusExpression.Value);
 
-            _currentEnvironment.Assign(variableModulusExpression.Variable, Modulus(variable, value));
+            Environment.Assign(variableModulusExpression.Variable, Modulus(variable, value));
 
             return AnyValue.CreateNull();
         }
@@ -395,7 +394,7 @@ namespace TmLox.Interpreter.Execution
             var variable = GetVariable(variableMultiplicationExpression.Variable);
             var value = Evaluate(variableMultiplicationExpression.Value);
 
-            _currentEnvironment.Assign(variableMultiplicationExpression.Variable, Multiply(variable, value));
+            Environment.Assign(variableMultiplicationExpression.Variable, Multiply(variable, value));
 
             return AnyValue.CreateNull();
         }
@@ -405,14 +404,14 @@ namespace TmLox.Interpreter.Execution
             var variable = GetVariable(variableSubtractionExpression.Variable);
             var value = Evaluate(variableSubtractionExpression.Value);
 
-            _currentEnvironment.Assign(variableSubtractionExpression.Variable, Subtract(variable, value));
+            Environment.Assign(variableSubtractionExpression.Variable, Subtract(variable, value));
 
             return AnyValue.CreateNull();
         }
 
         public AnyValue Visit(FunctionCallExpression functionCallExpression)
         {
-            var function = GetFunction(functionCallExpression.Name);
+            var function = GetCallable(functionCallExpression.Name);
 
             var arguments = functionCallExpression.Arguments.
                 Select(e => Evaluate(e))
@@ -423,17 +422,7 @@ namespace TmLox.Interpreter.Execution
                 throw new ValueError($"Function {functionCallExpression.Name} expects {function.Arity()} arguments, while {arguments.Count} arguments were provided");
             }
 
-            var currentEnviroment = _currentEnvironment;
-            _currentEnvironment = new Environment(function.Environment);
-
-            try
-            {
-                return function.Call(this, arguments);
-            }
-            finally
-            {
-                _currentEnvironment = currentEnviroment;
-            }
+            return function.Call(this, arguments);
         }
 
         public AnyValue Visit(VariableExpression variableExpression)
@@ -451,7 +440,7 @@ namespace TmLox.Interpreter.Execution
             throw new ValueError($"Variable {name} does not exist");
         }
 
-        private ICallable GetFunction(string name)
+        private ICallable GetCallable(string name)
         {
             if (TryGet(name, out var variable))
             {

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using System;
 using NUnit.Framework;
 
 using TmLox.Interpreter.Errors;
@@ -15,6 +15,8 @@ namespace TmLox.Interpreter.Tests
         public void SetUpScript()
         {
             var code = @"
+                var number = 53;
+
                 fun foo() {
                     return 42;
                 }
@@ -61,6 +63,36 @@ namespace TmLox.Interpreter.Tests
             });
 
             StringAssert.Contains("Function foo expects 0 arguments, while 3 arguments were provided", ex.Message);
+        }
+
+        [Test]
+        public void Test_Calling_Not_Existant_Function_Should_Produce_Error_Saying_That_Function_Does_Not_Exist()
+        {
+            var code = @"
+                goo();
+            ";
+
+            var ex = Assert.Throws<ValueError>(delegate
+            {
+                _script.RunString(code);
+            });
+
+            StringAssert.Contains("Function goo does not exist", ex.Message);
+        }
+
+        [Test]
+        public void Test_Calling_Number_Should_Produce_Error_Saying_That_Given_Variable_Is_Not_A_Function()
+        {
+            var code = @"
+                number();
+            ";
+
+            var ex = Assert.Throws<ValueError>(delegate
+            {
+                _script.RunString(code);
+            });
+
+            StringAssert.Contains("number is instance of Integer and not a function", ex.Message);
         }
     }
 }

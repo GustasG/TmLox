@@ -46,13 +46,28 @@ namespace TmLox.Interpreter.Tests
             ";
 
             var script = new Script();
-
             var ex = Assert.Throws<SyntaxError>(delegate
             {
                 script.RunString(code);
             });
 
             StringAssert.Contains("Invalid escape symbol", ex.Message);
+        }
+
+        [Test]
+        public void Test_Creating_String_With_Minus_Sign_Before_Literal_Should_Produce_Error_About_Unsupported_Operation()
+        {
+            var code = @"
+                var value = -""First"";
+            ";
+
+            var script = new Script();
+            var ex = Assert.Throws<ValueError>(delegate
+            {
+                script.RunString(code);
+            });
+
+            StringAssert.Contains("Unary - not supported for type String", ex.Message);
         }
     }
 }

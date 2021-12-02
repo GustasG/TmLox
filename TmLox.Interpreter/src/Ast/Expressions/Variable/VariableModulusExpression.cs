@@ -2,6 +2,12 @@
 {
     public class VariableModulusExpression : VariableModificationExpression
     {
+        public override NodeType Type
+        {
+            get => NodeType.VariableModulus;
+        }
+
+
         public VariableModulusExpression(string variable, Expression value)
             : base(variable, value)
         {
@@ -10,11 +16,6 @@
         public override T Accept<T>(IVisitor<T> visitor)
         {
             return visitor.Visit(this);
-        }
-
-        public override NodeType Type()
-        {
-            return NodeType.VariableModulus;
         }
     }
 }

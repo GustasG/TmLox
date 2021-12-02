@@ -22,7 +22,7 @@ namespace TmLox.Interpreter
 
                 throw new KeyNotFoundException($"Variable with name {name} does not exist");
             }
-            set => Interpreter.AddVariable(name, value);
+            set => Interpreter.Add(name, value);
         }
 
         public IInterpreter Interpreter { get; }
@@ -32,8 +32,8 @@ namespace TmLox.Interpreter
         {
             Interpreter = new TreeWalkingInterpreter();
 
-            Interpreter.AddFunction(new PrintFunction());
-            Interpreter.AddFunction(new ClockFunction());
+            Interpreter.Add(new PrintFunction());
+            Interpreter.Add(new ClockFunction());
         }
 
         public void RunString(string code)
@@ -57,24 +57,17 @@ namespace TmLox.Interpreter
 
             foreach (var statement in statements)
             {
-                switch (statement.Type())
+                if (statement.Type == NodeType.FunctionDeclaration)
                 {
-                    case NodeType.FunctionDeclaration:
-                        var functionDeclaration = statement as FunctionDeclarationStatement;
-                        Interpreter.AddFunction(new LoxFunction(functionDeclaration));
-                        break;
+                    Interpreter.Execute(statement);
                 }
             }
 
             foreach (var statement in statements)
             {
-                switch (statement.Type())
+                if (statement.Type == NodeType.VariableDeclaration)
                 {
-                    case NodeType.VariableDeclaration:
-                        var variableDeclaration = statement as VariableDeclarationStatement;
-                        var value = variableDeclaration.Value != null ? Interpreter.Evaluate(variableDeclaration.Value) : AnyValue.CreateNull();
-                        Interpreter.AddVariable(variableDeclaration.Name, value);
-                        break;
+                    Interpreter.Execute(statement);
                 }
             }
         }

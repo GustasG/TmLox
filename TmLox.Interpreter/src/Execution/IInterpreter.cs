@@ -7,15 +7,17 @@ namespace TmLox.Interpreter.Execution
 {
     public interface IInterpreter
     {
+        Environment Environment { get; set; }
+
         void Execute(IList<Statement> statements);
 
         void Execute(Statement statement);
 
         AnyValue Evaluate(Statement statement);
 
-        void AddVariable(string name, AnyValue value);
+        void Add(string name, AnyValue value);
 
-        void AddFunction(ICallable function);
+        void Add(ICallable function);
 
         bool TryGet(string name, out AnyValue value);
     }

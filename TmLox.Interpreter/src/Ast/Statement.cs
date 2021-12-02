@@ -2,8 +2,8 @@
 {
     public abstract class Statement
     {
-        public abstract T Accept<T>(IVisitor<T> visitor);
+        public abstract NodeType Type { get; }
 
-        public abstract NodeType Type();
+        public abstract T Accept<T>(IVisitor<T> visitor);
     }
 }

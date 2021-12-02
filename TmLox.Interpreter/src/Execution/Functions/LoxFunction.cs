@@ -10,31 +10,19 @@ namespace TmLox.Interpreter.Execution.Functions
     {
         public string Name { get; }
 
-        public Environment? Environment { set; get; }
+        private readonly Environment _enviroment;
 
         private readonly IList<string> _parameters;
 
         private readonly IList<Statement> _body;
 
 
-        public LoxFunction(string name, IList<string> parameters, IList<Statement> body)
-        {
-            Name = name;
-            _parameters = parameters;
-            _body = body;
-        }
-
         public LoxFunction(Environment environment, string name, IList<string> parameters, IList<Statement> body)
         {
             Name = name;
-            Environment = environment;
+            _enviroment = environment;
             _parameters = parameters;
             _body = body;
-        }
-
-        public LoxFunction(FunctionDeclarationStatement functionDeclarationStatement)
-            : this(functionDeclarationStatement.Name, functionDeclarationStatement.Parameters, functionDeclarationStatement.Body)
-        {
         }
 
         public LoxFunction(Environment enviroment, FunctionDeclarationStatement functionDeclarationStatement)
@@ -54,10 +42,15 @@ namespace TmLox.Interpreter.Execution.Functions
 
         public AnyValue Call(IInterpreter interpreter, IList<AnyValue> arguments)
         {
+            var enviroment = new Environment(_enviroment);
+
             for (int i = 0; i < _parameters.Count; i++)
             {
-                interpreter.AddVariable(_parameters[i], arguments[i]);
+                enviroment.Add(_parameters[i], arguments[i]);
             }
+
+            var currentEnviroment = interpreter.Environment;
+            interpreter.Environment = enviroment;
 
             try
             {
@@ -66,6 +59,10 @@ namespace TmLox.Interpreter.Execution.Functions
             catch (ReturnUnwind returnValue)
             {
                 return returnValue.Value;
+            }
+            finally
+            {
+                interpreter.Environment = currentEnviroment;
             }
             
             return AnyValue.CreateNull();

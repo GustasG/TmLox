@@ -6,8 +6,6 @@ namespace TmLox.Interpreter.Execution.Functions
     {
         public string Name { get; }
 
-        public Environment? Environment { set; get; }
-
 
         protected NativeFunction(string name)
         {

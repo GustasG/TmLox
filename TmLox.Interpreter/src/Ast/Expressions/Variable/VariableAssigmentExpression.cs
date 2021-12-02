@@ -2,6 +2,11 @@
 {
     public class VariableAssigmentExpression : VariableModificationExpression
     {
+        public override NodeType Type
+        {
+            get => NodeType.VariableAssigment;
+        }
+
         public VariableAssigmentExpression(string variable, Expression value)
             : base(variable, value)
         {
@@ -10,11 +15,6 @@
         public override T Accept<T>(IVisitor<T> visitor)
         {
             return visitor.Visit(this);
-        }
-
-        public override NodeType Type()
-        {
-            return NodeType.VariableAssigment;
         }
     }
 }

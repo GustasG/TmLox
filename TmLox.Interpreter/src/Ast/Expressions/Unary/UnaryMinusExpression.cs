@@ -2,6 +2,12 @@
 {
     public class UnaryMinusExpression : UnaryExpression
     {
+        public override NodeType Type
+        {
+            get => NodeType.UnaryMinus;
+        }
+
+
         public UnaryMinusExpression(Expression expression)
             : base(expression)
         {
@@ -10,11 +16,6 @@
         public override T Accept<T>(IVisitor<T> visitor)
         {
             return visitor.Visit(this);
-        }
-
-        public override NodeType Type()
-        {
-            return NodeType.UnaryMinus;
         }
     }
 }

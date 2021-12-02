@@ -4,6 +4,11 @@ namespace TmLox.Interpreter.Ast.Statements
 {
     public class ElseIfStatement : Statement
     {
+        public override NodeType Type
+        {
+            get => NodeType.Elif;
+        }
+
         public Expression Condition { get; }
 
         public IList<Statement> Body { get; }
@@ -19,16 +24,16 @@ namespace TmLox.Interpreter.Ast.Statements
         {
             return visitor.Visit(this);
         }
-
-        public override NodeType Type()
-        {
-            return NodeType.Elif;
-        }
     }
 
 
     public class IfStatement : Statement
     {
+        public override NodeType Type
+        {
+            get => NodeType.If;
+        }
+
         public Expression Condition { get; }
 
         public IList<Statement> Body { get; }
@@ -37,20 +42,6 @@ namespace TmLox.Interpreter.Ast.Statements
 
         public IList<Statement>? ElseBody { get; }
 
-
-        public IfStatement(Expression condition, IList<Statement> statements)
-        {
-            Condition = condition;
-            Body = statements;
-            ElseIfStatements = new List<ElseIfStatement>();
-        }
-
-        public IfStatement(Expression condition, IList<Statement> body, IList<ElseIfStatement> elseIfStatements)
-        {
-            Condition = condition;
-            Body = body;
-            ElseIfStatements = elseIfStatements;
-        }
 
         public IfStatement(Expression condition, IList<Statement> body, IList<ElseIfStatement> elseIfStatements, IList<Statement>? elseBody)
         {
@@ -63,11 +54,6 @@ namespace TmLox.Interpreter.Ast.Statements
         public override T Accept<T>(IVisitor<T> visitor)
         {
             return visitor.Visit(this);
-        }
-
-        public override NodeType Type()
-        {
-            return NodeType.If;
         }
     }
 }

@@ -4,6 +4,11 @@ namespace TmLox.Interpreter.Ast.Statements
 {
     public class FunctionDeclarationStatement : Statement
     {
+        public override NodeType Type
+        {
+            get => NodeType.FunctionDeclaration;
+        }
+
         public string Name { get; }
 
         public IList<string> Parameters { get; }
@@ -21,11 +26,6 @@ namespace TmLox.Interpreter.Ast.Statements
         public override T Accept<T>(IVisitor<T> visitor)
         {
             return visitor.Visit(this);
-        }
-
-        public override NodeType Type()
-        {
-            return NodeType.FunctionDeclaration;
         }
     }
 }

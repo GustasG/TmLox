@@ -4,6 +4,11 @@ namespace TmLox.Interpreter.Ast.Expressions
 {
     public class FunctionCallExpression : Expression
     {
+        public override NodeType Type
+        {
+            get => NodeType.FunctionCall;
+        }
+
         public string Name { get; }
 
         public IList<Expression> Arguments { get; }
@@ -18,11 +23,6 @@ namespace TmLox.Interpreter.Ast.Expressions
         public override T Accept<T>(IVisitor<T> visitor)
         {
             return visitor.Visit(this);
-        }
-
-        public override NodeType Type()
-        {
-            return NodeType.FunctionCall;
         }
     }
 }

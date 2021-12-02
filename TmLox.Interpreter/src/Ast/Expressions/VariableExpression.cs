@@ -2,6 +2,11 @@
 {
     public class VariableExpression : Expression
     {
+        public override NodeType Type
+        {
+            get => NodeType.Variable;
+        }
+
         public string Name { get; }
 
 
@@ -13,11 +18,6 @@
         public override T Accept<T>(IVisitor<T> visitor)
         {
             return visitor.Visit(this);
-        }
-
-        public override NodeType Type()
-        {
-            return NodeType.Variable;
         }
     }
 }
