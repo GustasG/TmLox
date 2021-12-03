@@ -28,6 +28,14 @@ jobs:
       run: dotnet test -p:CollectCoverage=true -p:CoverletOutputFormat=opencover -p:CoverletOutput="../coverage.xml" --no-build --verbosity normal
 
     - name: Upload coverage to codecov
-      uses: codecov/codecov-action@v2
+      uses: codecov/codecov-action@v2.1.0
       with:
+        token: ${{ secrets.CODECOV_TOKEN }}
         files: coverage.xml
+        fail_ci_if_error: true
+
+    - name: Upload coverage to codacy
+      uses: codacy/codacy-coverage-reporter-action@v1
+      with:
+        project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+        coverage-reports: coverage.xml
