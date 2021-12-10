@@ -10,8 +10,7 @@ namespace TmLox.Interpreter
         public object? Value { get; private set; }
 
         public AnyValueType Type { get; private set; }
-
-
+        
         public bool IsNull()
         {
             return Type == AnyValueType.Null;

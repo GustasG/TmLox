@@ -8,6 +8,9 @@ Visual Studio 2019Templates/
 # Visual Studio Code
 .vscode/
 
+# Backup by dotnet CLI
+*.bak
+
 # JetBrains IDE
 .idea/
 
