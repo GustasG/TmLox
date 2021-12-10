@@ -8,7 +8,6 @@ namespace TmLox.Interpreter.Execution
 
         private readonly IDictionary<string, AnyValue> _values;
 
-
         public Environment()
         {
             _enclosing = null;
@@ -33,12 +32,8 @@ namespace TmLox.Interpreter.Execution
                 _values[name] = value;
                 return true;
             }
-            else if (_enclosing != null)
-            {
-                return _enclosing.Assign(name, value);
-            }
-
-            return false;
+            
+            return _enclosing != null && _enclosing.Assign(name, value);
         }
 
         public bool TryGet(string name, out AnyValue value)
@@ -47,7 +42,7 @@ namespace TmLox.Interpreter.Execution
             {
                 return true;
             }
-            else if (_enclosing != null)
+            if (_enclosing != null)
             {
                 return _enclosing.TryGet(name, out value);
             }

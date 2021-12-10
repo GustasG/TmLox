@@ -20,7 +20,6 @@ namespace TmLox.Interpreter.Execution
     {
         public Environment Environment { get; set; }
 
-
         public TreeWalkingInterpreter()
         {
             Environment = new Environment();
@@ -66,7 +65,7 @@ namespace TmLox.Interpreter.Execution
 
         public AnyValue Visit(ForStatement forStatement)
         {
-            var currentEnviroment = Environment;
+            var currentEnvironment = Environment;
             Environment = new Environment(Environment);
 
             try
@@ -92,7 +91,7 @@ namespace TmLox.Interpreter.Execution
             }
             finally
             {
-                Environment = currentEnviroment;
+                Environment = currentEnvironment;
             }
 
             return AnyValue.CreateNull();
@@ -109,7 +108,7 @@ namespace TmLox.Interpreter.Execution
         {
             if (!VisitIf(ifStatement) && !VisitElif(ifStatement) && ifStatement.ElseBody != null)
             {
-                var currentEnviroment = Environment;
+                var currentEnvironment = Environment;
                 Environment = new Environment(Environment);
 
                 try
@@ -118,7 +117,7 @@ namespace TmLox.Interpreter.Execution
                 }
                 finally
                 {
-                    Environment = currentEnviroment;
+                    Environment = currentEnvironment;
                 }
             }
 
@@ -127,7 +126,7 @@ namespace TmLox.Interpreter.Execution
 
         private bool VisitIf(IfStatement ifStatement)
         {
-            var currentEnviroment = Environment;
+            var currentEnvironment = Environment;
             Environment = new Environment(Environment);
 
             try
@@ -140,7 +139,7 @@ namespace TmLox.Interpreter.Execution
             }
             finally
             {
-                Environment = currentEnviroment;
+                Environment = currentEnvironment;
             }
 
             return false;
@@ -150,7 +149,7 @@ namespace TmLox.Interpreter.Execution
         {
             foreach (var elif in elifStatement.ElseIfStatements)
             {
-                var currentEnviroment = Environment;
+                var currentEnvironment = Environment;
                 Environment = new Environment(Environment);
 
                 try
@@ -163,7 +162,7 @@ namespace TmLox.Interpreter.Execution
                 }
                 finally
                 {
-                    Environment = currentEnviroment;
+                    Environment = currentEnvironment;
                 }
             }
 
@@ -197,7 +196,7 @@ namespace TmLox.Interpreter.Execution
 
         public AnyValue Visit(WhileStatement whileStatement)
         {
-            var currentEnviroment = Environment;
+            var currentEnvironment = Environment;
             Environment = new Environment(Environment);
 
             try
@@ -213,7 +212,7 @@ namespace TmLox.Interpreter.Execution
             }
             finally
             {
-                Environment = currentEnviroment;
+                Environment = currentEnvironment;
             }
 
             return AnyValue.CreateNull();
@@ -414,7 +413,7 @@ namespace TmLox.Interpreter.Execution
             var function = GetCallable(functionCallExpression.Name);
 
             var arguments = functionCallExpression.Arguments.
-                Select(e => Evaluate(e))
+                Select(Evaluate)
                 .ToList();
 
             if (function.CheckArity() && function.Arity() != arguments.Count)

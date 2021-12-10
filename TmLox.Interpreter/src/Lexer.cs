@@ -10,7 +10,7 @@ namespace TmLox.Interpreter
     {
         public Token? Current { get; private set; }
 
-        private static readonly Dictionary<string, Lexeme> _keywords = new()
+        private static readonly Dictionary<string, Lexeme> Keywords = new()
         {
             { "and", Lexeme.KwAnd },
             { "break", Lexeme.KwBreak },
@@ -348,7 +348,7 @@ namespace TmLox.Interpreter
             int startingColumn = _column;
             var value = CreateIdentifier();
 
-            return _keywords.TryGetValue(value, out var lexeme)
+            return Keywords.TryGetValue(value, out var lexeme)
                 ? new Token(_line, startingColumn, lexeme)
                 : new Token(_line, startingColumn, Lexeme.Identifier, AnyValue.CreateString(value));
         }
