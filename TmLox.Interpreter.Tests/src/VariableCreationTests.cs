@@ -7,9 +7,9 @@ using Errors;
 public class VariableCreationTests
 {
     [Test]
-    public void Test_Variable_Creation_WIthout_Explicityly_Assigning_Value_Should_Produce_Null_Valued_Value()
+    public void Test_Variable_Creation_Without_Explicitly_Assigning_Value_Should_Produce_Null_Valued_Value()
     {
-        var code = @"
+        const string code = @"
                 var test_variable;
             ";
 
@@ -24,7 +24,7 @@ public class VariableCreationTests
     [Test]
     public void Test_Variable_Creation_With_Null_Literal_Should_Produce_Null_Valued_Value()
     {
-        var code = @"
+        const string code = @"
                 var test_variable = null;
             ";
 
@@ -39,7 +39,7 @@ public class VariableCreationTests
     [Test]
     public void Test_Variable_Creation_With_False_Bool_Literal_Should_Produce_Boolean_Valued_Value_With_Value_As_False()
     {
-        var code = @"
+        const string code = @"
                 var test_variable = false;
             ";
 
@@ -55,7 +55,7 @@ public class VariableCreationTests
     [Test]
     public void Test_Variable_Creation_With_True_Bool_Literal_Should_Produce_Boolean_Valued_Value_With_Value_As_True()
     {
-        var code = @"
+        const string code = @"
                 var test_variable = true;
             ";
 
@@ -71,7 +71,7 @@ public class VariableCreationTests
     [Test]
     public void Test_Variable_Creation_With_Integer_Literal_Should_Produce_Integer_Valued_Value_With_Value_As_42()
     {
-        var code = @"
+        const string code = @"
                 var test_variable = 42;
             ";
 
@@ -87,7 +87,7 @@ public class VariableCreationTests
     [Test]
     public void Test_Variable_Creation_With_Float_Literal_Should_Produce_Given_Float_Valued_Value()
     {
-        var code = @"
+        const string code = @"
                 var test_variable = -567.357;
             ";
 
@@ -103,7 +103,7 @@ public class VariableCreationTests
     [Test]
     public void Test_Variable_Creation_With_String_Literal_Should_Produce_Given_String_Valued_Value()
     {
-        var code = @"
+        const string code = @"
                 var test_variable = ""Hello world"";
             ";
 
@@ -118,9 +118,9 @@ public class VariableCreationTests
 
     [Test]
     public void
-        Test_Variable_Creation_With_Starting_Character_As_Underscode_And_Value_As_Integer_Literal_Should_Produce_Given_Integer_Value()
+        Test_Variable_Creation_With_Starting_Character_As_Underscore_And_Value_As_Integer_Literal_Should_Produce_Given_Integer_Value()
     {
-        var code = @"
+        const string code = @"
                 var _tmp = -537;
             ";
 
@@ -135,15 +135,15 @@ public class VariableCreationTests
 
     [Test]
     public void
-        Test_Variable_Creation_With_Incorectly_Formatted_Float_Literal_Should_Produce_Error_About_Invalid_Number()
+        Test_Variable_Creation_With_Incorrectly_Formatted_Float_Literal_Should_Produce_Error_About_Invalid_Number()
     {
-        var code = @"
+        const string code = @"
                 var number = 12.45.787.72;
             ";
 
         var script = new Script();
         var ex = Assert.Throws<SyntaxError>(delegate { script.RunString(code); });
 
-        StringAssert.Contains("Invalid number", ex.Message);
+        StringAssert.Contains("Invalid number", ex?.Message);
     }
 }

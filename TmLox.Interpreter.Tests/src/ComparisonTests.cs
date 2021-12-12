@@ -9,7 +9,7 @@ public class ComparisonTests
     [Test]
     public void Test_Equality_Between_Nulls_Should_Produce_True_Value()
     {
-        var code = @"
+        const string code = @"
                 var test_variable = null == null;
             ";
 
@@ -25,7 +25,7 @@ public class ComparisonTests
     [Test]
     public void Test_Equality_Between_Integers_Should_Produce_False_Value()
     {
-        var code = @"
+        const string code = @"
                 var test_variable = 5 == 6;
             ";
 
@@ -41,7 +41,7 @@ public class ComparisonTests
     [Test]
     public void Test_Inequality_Between_Integers_Should_Produce_False_Value()
     {
-        var code = @"
+        const string code = @"
                 var test_variable = 5 != 5;
             ";
 
@@ -57,7 +57,7 @@ public class ComparisonTests
     [Test]
     public void Test_Less_Comparison_Between_Two_Integers_Should_Produce_True_Value()
     {
-        var code = @"
+        const string code = @"
                 var test_variable = 5 < 6;
             ";
 
@@ -73,7 +73,7 @@ public class ComparisonTests
     [Test]
     public void Test_Less_Comparison_Between_Two_Floats_Should_Produce_True_Value()
     {
-        var code = @"
+        const string code = @"
                 var test_variable = 5.42 < 6.17;
             ";
 
@@ -87,9 +87,9 @@ public class ComparisonTests
     }
 
     [Test]
-    public void Test_Less_Comparison_Between_Number_And_String_Should_Produce_Error_Abount_Uncomparable_Types()
+    public void Test_Less_Comparison_Between_Number_And_String_Should_Produce_Error_About_Incomparable_Types()
     {
-        var code = @"
+        const string code = @"
                 var test_variable = 5.42 < ""Hello"";
             ";
 
@@ -101,7 +101,7 @@ public class ComparisonTests
     [Test]
     public void Test_Less_Equal_Expression_Between_Two_Integers_Should_Produce_True_Value()
     {
-        var code = @"
+        const string code = @"
                 var test_variable = 6 <= 6;
             ";
 
@@ -115,9 +115,9 @@ public class ComparisonTests
     }
 
     [Test]
-    public void Test_Less_Equal_Comparison_Between_Number_And_String_Should_Produce_Error_Abount_Uncomparable_Types()
+    public void Test_Less_Equal_Comparison_Between_Number_And_String_Should_Produce_Error_About_Incomparable_Types()
     {
-        var code = @"
+        const string code = @"
                 var test_variable = 5 <= ""World"";
             ";
 
@@ -129,7 +129,7 @@ public class ComparisonTests
     [Test]
     public void Test_More_Comparison_Between_Two_Numbers_Should_Produce_True_Value()
     {
-        var code = @"
+        const string code = @"
                 var test_variable = 7 > 6;
             ";
 
@@ -143,9 +143,9 @@ public class ComparisonTests
     }
 
     [Test]
-    public void Test_More_Comparison_Between_Number_And_String_Should_Produce_Error_Abount_Uncomparable_Types()
+    public void Test_More_Comparison_Between_Number_And_String_Should_Produce_Error_About_Incomparable_Types()
     {
-        var code = @"
+        const string code = @"
                 var test_variable = 5 <= ""First"";
             ";
 
@@ -157,7 +157,7 @@ public class ComparisonTests
     [Test]
     public void Test_More_Equal_Comparison_Between_Two_Numbers_Should_Produce_True_Value()
     {
-        var code = @"
+        const string code = @"
                 var test_variable = 7 >= 7;
             ";
 
@@ -171,9 +171,9 @@ public class ComparisonTests
     }
 
     [Test]
-    public void Test_More_Equal_Comparison_Between_Number_And_String_Should_Produce_Error_Abount_Uncomparable_Types()
+    public void Test_More_Equal_Comparison_Between_Number_And_String_Should_Produce_Error_About_Incomparable_Types()
     {
-        var code = @"
+        const string code = @"
                 var test_variable = 5 >= ""Second"";
             ";
 

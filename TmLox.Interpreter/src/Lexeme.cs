@@ -5,10 +5,10 @@ internal enum Lexeme
     OpComma, // ,
     OpSemicolon, // ;
 
-    OPLParen, // (
+    OplParen, // (
     OpRParen, // )
     OpLBrace, // {
-    OPRBrace, // }
+    OprBrace, // }
 
     OpPlus, // +
     OpPlusEq, // +=

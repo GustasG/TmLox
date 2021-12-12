@@ -82,25 +82,25 @@ internal class Parser
 
     private IfStatement ParseIf()
     {
-        Expect(Lexeme.OPLParen, "(");
+        Expect(Lexeme.OplParen, "(");
         var condition = ParseExpression();
         Expect(Lexeme.OpRParen, ")");
 
         Expect(Lexeme.OpLBrace, "{");
         var body = ParseBlock();
-        Expect(Lexeme.OPRBrace, "}");
+        Expect(Lexeme.OprBrace, "}");
 
         var elseIfStatements = new List<ElseIfStatement>();
 
         while (Accept(Lexeme.KwElif))
         {
-            Expect(Lexeme.OPLParen, "(");
+            Expect(Lexeme.OplParen, "(");
             var elseIfCondition = ParseExpression();
             Expect(Lexeme.OpRParen, ")");
 
             Expect(Lexeme.OpLBrace, "{");
             var elseIfBody = ParseBlock();
-            Expect(Lexeme.OPRBrace, "}");
+            Expect(Lexeme.OprBrace, "}");
 
             elseIfStatements.Add(new ElseIfStatement(elseIfCondition, elseIfBody));
         }
@@ -111,7 +111,7 @@ internal class Parser
         {
             Expect(Lexeme.OpLBrace, "{");
             elseBody = ParseBlock();
-            Expect(Lexeme.OPRBrace, "}");
+            Expect(Lexeme.OprBrace, "}");
         }
 
         return new IfStatement(condition, body, elseIfStatements, elseBody);
@@ -121,13 +121,13 @@ internal class Parser
     {
         var name = Expect(Lexeme.Identifier, "Identifier");
 
-        Expect(Lexeme.OPLParen, "(");
+        Expect(Lexeme.OplParen, "(");
         var parameters = ParseFunctionParameters();
         Expect(Lexeme.OpRParen, ")");
 
         Expect(Lexeme.OpLBrace, "{");
         var body = ParseBlock();
-        Expect(Lexeme.OPRBrace, "}");
+        Expect(Lexeme.OprBrace, "}");
 
         return new FunctionDeclarationStatement(name.Value.AsString(), parameters, body);
     }
@@ -165,19 +165,12 @@ internal class Parser
 
     private ForStatement ParseFor()
     {
-        Expect(Lexeme.OPLParen, "(");
+        Expect(Lexeme.OplParen, "(");
 
         Statement? initial = null;
         if (!Accept(Lexeme.OpSemicolon))
         {
-            if (Accept(Lexeme.KwVar))
-            {
-                initial = ParseVariableDeclaration();
-            }
-            else
-            {
-                initial = ParseExpressionStatement();
-            }
+            initial = Accept(Lexeme.KwVar) ? ParseVariableDeclaration() : ParseExpressionStatement();
         }
 
         Expression? condition = null;
@@ -197,20 +190,20 @@ internal class Parser
 
         Expect(Lexeme.OpLBrace, "{");
         var body = ParseBlock();
-        Expect(Lexeme.OPRBrace, "}");
+        Expect(Lexeme.OprBrace, "}");
 
         return new ForStatement(initial, condition, increment, body);
     }
 
     private WhileStatement ParseWhile()
     {
-        Expect(Lexeme.OPLParen, "(");
+        Expect(Lexeme.OplParen, "(");
         var condition = ParseExpression();
         Expect(Lexeme.OpRParen, ")");
 
         Expect(Lexeme.OpLBrace, "{");
         var body = ParseBlock();
-        Expect(Lexeme.OPRBrace, "}");
+        Expect(Lexeme.OprBrace, "}");
 
         return new WhileStatement(condition, body);
     }
@@ -226,7 +219,7 @@ internal class Parser
     {
         var statements = new List<Statement>();
 
-        while (!Match(Lexeme.OPRBrace))
+        while (!Match(Lexeme.OprBrace))
         {
             statements.Add(ParseStatement());
         }
@@ -373,7 +366,7 @@ internal class Parser
 
     private Expression ParsePrimaryExpression()
     {
-        if (Accept(Lexeme.OPLParen))
+        if (Accept(Lexeme.OplParen))
         {
             var expression = ParseExpression();
             Expect(Lexeme.OpRParen, ")");
@@ -433,7 +426,7 @@ internal class Parser
             {
                 expression = new VariableModulusExpression(identifierToken.Value.AsString(), ParseExpression());
             }
-            else if (Accept(Lexeme.OPLParen))
+            else if (Accept(Lexeme.OplParen))
             {
                 expression = new FunctionCallExpression(identifierToken.Value.AsString(), ParseFunctionArguments());
             }
@@ -446,11 +439,11 @@ internal class Parser
         // some errors
         if (Accept(Lexeme.KwElif))
         {
-            throw new SyntaxError(current.Line, current.Column, "\"elif\" used without coresponding \"if\"");
+            throw new SyntaxError(current.Line, current.Column, "\"elif\" used without corresponding \"if\"");
         }
         else if (Accept(Lexeme.KwElse))
         {
-            throw new SyntaxError(current.Line, current.Column, "\"else\" used without coresponding \"if\"");
+            throw new SyntaxError(current.Line, current.Column, "\"else\" used without corresponding \"if\"");
         }
 
         throw new SyntaxError(current.Line, current.Column, "Invalid expression");

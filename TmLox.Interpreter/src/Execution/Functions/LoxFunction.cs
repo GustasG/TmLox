@@ -16,7 +16,7 @@ internal class LoxFunction : ICallable
 
     private readonly IList<Statement> _body;
 
-    public LoxFunction(Environment environment, string name, IList<string> parameters, IList<Statement> body)
+    private LoxFunction(Environment environment, string name, IList<string> parameters, IList<Statement> body)
     {
         Name = name;
         _environment = environment;

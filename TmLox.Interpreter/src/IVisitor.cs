@@ -9,7 +9,6 @@ using Ast.Expressions.Binary.Arithmetic;
 
 public interface IVisitor<out T>
 {
-    // Statements
     T Visit(BreakStatement breakStatement);
 
     T Visit(ForStatement forStatement);
@@ -26,8 +25,6 @@ public interface IVisitor<out T>
 
     T Visit(WhileStatement whileStatement);
 
-
-    // Expressions
     T Visit(AdditionExpression additionExpression);
 
     T Visit(DivisionExpression divisionExpression);

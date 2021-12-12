@@ -5,7 +5,7 @@ using System;
 using Errors;
 using Execution.Functions;
 
-public struct AnyValue : IEquatable<AnyValue>
+public readonly struct AnyValue : IEquatable<AnyValue>
 {
     public object? Value { get; private init; }
 

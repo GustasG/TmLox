@@ -9,7 +9,7 @@ public class LogicalTests
     [Test]
     public void Test_Or_Condition_With_Both_Arguments_As_False_Should_Produce_False_Value()
     {
-        var code = @"
+        const string code = @"
                 var test_variable = false or false;
             ";
 
@@ -25,7 +25,7 @@ public class LogicalTests
     [Test]
     public void Test_Or_Condition_With_First_Argument_As_False_And_Second_Argument_As_True_Should_Produce_True_Value()
     {
-        var code = @"
+        const string code = @"
                 var test_variable = false or true;
             ";
 
@@ -41,7 +41,7 @@ public class LogicalTests
     [Test]
     public void Test_Or_Condition_With_First_Argument_As_True_And_Second_Argument_As_False_Should_Produce_True_Value()
     {
-        var code = @"
+        const string code = @"
                 var test_variable = true or false;
             ";
 
@@ -57,7 +57,7 @@ public class LogicalTests
     [Test]
     public void Test_Or_Condition_With_Both_Arguments_As_True_Should_Produce_True_Value()
     {
-        var code = @"
+        const string code = @"
                 var test_variable = true or true;
             ";
 
@@ -74,7 +74,7 @@ public class LogicalTests
     public void
         Test_Or_Condition_With_First_Argument_As_False_And_Second_As_Integer_Should_Produce_Error_That_String_Cannot_Be_Converted_To_Bool()
     {
-        var code = @"
+        const string code = @"
                 var test_variable = false or ""String"";
             ";
 
@@ -86,7 +86,7 @@ public class LogicalTests
     [Test]
     public void Test_And_Condition_With_Both_Arguments_As_False_Should_Produce_False_Value()
     {
-        var code = @"
+        const string code = @"
                 var test_variable = false and false;
             ";
 
@@ -102,7 +102,7 @@ public class LogicalTests
     [Test]
     public void Test_And_Condition_With_First_Argument_As_False_And_Second_Argument_As_True_Should_Produce_True_Value()
     {
-        var code = @"
+        const string code = @"
                 var test_variable = false and true;
             ";
 
@@ -118,7 +118,7 @@ public class LogicalTests
     [Test]
     public void Test_And_Condition_With_First_Argument_As_True_And_Second_Argument_As_False_Should_Produce_True_Value()
     {
-        var code = @"
+        const string code = @"
                 var test_variable = true and false;
             ";
 
@@ -134,7 +134,7 @@ public class LogicalTests
     [Test]
     public void Test_And_Condition_With_Both_Arguments_As_True_Should_Produce_True_Value()
     {
-        var code = @"
+        const string code = @"
                 var test_variable = true and true;
             ";
 
@@ -149,9 +149,9 @@ public class LogicalTests
 
     [Test]
     public void
-        Test_And_Condition_With_First_Argument_As_True_And_Second_Arument_As_String_Value_Should_Produce_Error_That_String_Cannot_Be_Converted_To_Bool()
+        Test_And_Condition_With_First_Argument_As_True_And_Second_Argument_As_String_Value_Should_Produce_Error_That_String_Cannot_Be_Converted_To_Bool()
     {
-        var code = @"
+        const string code = @"
                 var test_variable = true and ""String"";
             ";
 
@@ -163,7 +163,7 @@ public class LogicalTests
     [Test]
     public void Test_Negation_Condition_With_False_Argument_Should_Produce_True_Value()
     {
-        var code = @"
+        const string code = @"
                 var test_variable = !false;
             ";
 
@@ -179,7 +179,7 @@ public class LogicalTests
     [Test]
     public void Test_Negation_Condition_With_True_Argument_Should_Produce_False_Value()
     {
-        var code = @"
+        const string code = @"
                 var test_variable = !true;
             ";
 
@@ -193,9 +193,9 @@ public class LogicalTests
     }
 
     [Test]
-    public void Test_Negation_With_Value_That_Is_Not_Boolean_Should_Produce_Error_Abount_Unsupported_Operation()
+    public void Test_Negation_With_Value_That_Is_Not_Boolean_Should_Produce_Error_About_Unsupported_Operation()
     {
-        var code = @"
+        const string code = @"
                 var tmp = !""First"";
             ";
 

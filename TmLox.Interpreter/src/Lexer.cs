@@ -106,10 +106,10 @@ internal class Lexer : ILexer
             case ';': return new Token(_line, _column, Lexeme.OpSemicolon);
 
             // Braces
-            case '(': return new Token(_line, _column, Lexeme.OPLParen);
+            case '(': return new Token(_line, _column, Lexeme.OplParen);
             case ')': return new Token(_line, _column, Lexeme.OpRParen);
             case '{': return new Token(_line, _column, Lexeme.OpLBrace);
-            case '}': return new Token(_line, _column, Lexeme.OPRBrace);
+            case '}': return new Token(_line, _column, Lexeme.OprBrace);
 
             // Math
             case '+': return CreatePlusToken();
@@ -138,7 +138,7 @@ internal class Lexer : ILexer
                 }
                 else
                 {
-                    throw new SyntaxError(_line, _column, $"Unexpected characted: {startingChar}");
+                    throw new SyntaxError(_line, _column, $"Unexpected character: {startingChar}");
                 }
         }
     }

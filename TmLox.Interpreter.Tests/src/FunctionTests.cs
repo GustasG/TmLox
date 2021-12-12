@@ -38,7 +38,7 @@ public class FunctionTests
     [Test]
     public void Test_Calling_Lox_Function_Inside_Interpreter_Should_Produce_Valid_Returned_Integer_Value()
     {
-        var fooResultCode = @"
+        const string fooResultCode = @"
                 var foo_result = foo();
             ";
 
@@ -51,38 +51,38 @@ public class FunctionTests
 
     [Test]
     public void
-        Test_Calling_Lox_Function_With_Incorrect_Number_Of_Arguments_Should_Produce_Error_Abount_Expected_Argument_Count()
+        Test_Calling_Lox_Function_With_Incorrect_Number_Of_Arguments_Should_Produce_Error_About_Expected_Argument_Count()
     {
-        var incorrectFooResult = @"
+        const string incorrectFooResult = @"
                 var tmp = foo(1, 2, 3);
             ";
 
         var ex = Assert.Throws<ValueError>(delegate { _script.RunString(incorrectFooResult); });
 
-        StringAssert.Contains("Function foo expects 0 arguments, while 3 arguments were provided", ex.Message);
+        StringAssert.Contains("Function foo expects 0 arguments, while 3 arguments were provided", ex?.Message);
     }
 
     [Test]
-    public void Test_Calling_Not_Existant_Function_Should_Produce_Error_Saying_That_Function_Does_Not_Exist()
+    public void Test_Calling_Not_Existent_Function_Should_Produce_Error_Saying_That_Function_Does_Not_Exist()
     {
-        var code = @"
+        const string code = @"
                 goo();
             ";
 
         var ex = Assert.Throws<ValueError>(delegate { _script.RunString(code); });
 
-        StringAssert.Contains("Function goo does not exist", ex.Message);
+        StringAssert.Contains("Function goo does not exist", ex?.Message);
     }
 
     [Test]
     public void Test_Calling_Number_Should_Produce_Error_Saying_That_Given_Variable_Is_Not_A_Function()
     {
-        var code = @"
+        const string code = @"
                 number();
             ";
 
         var ex = Assert.Throws<ValueError>(delegate { _script.RunString(code); });
 
-        StringAssert.Contains("number is instance of Integer and not a function", ex.Message);
+        StringAssert.Contains("number is instance of Integer and not a function", ex?.Message);
     }
 }
