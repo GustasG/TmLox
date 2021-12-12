@@ -1,20 +1,19 @@
-﻿namespace TmLox.Interpreter.Errors
+﻿namespace TmLox.Interpreter.Errors;
+
+public class ValueError: LoxError
 {
-    public class ValueError: LoxError
+    public ValueError()
     {
-        public ValueError()
-        {
 
-        }
+    }
 
-        public ValueError(string message)
-            : base(message)
-        {
-        }
+    public ValueError(string message)
+        : base(message)
+    {
+    }
 
-        public override string ToString()
-        {
-            return $"Value Error: {Message}";
-        }
+    public override string ToString()
+    {
+        return $"Value Error: {Message}";
     }
 }

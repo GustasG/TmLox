@@ -1,59 +1,50 @@
-﻿using System.Collections.Generic;
+﻿namespace TmLox.Interpreter.Ast.Statements;
 
-namespace TmLox.Interpreter.Ast.Statements
+using System.Collections.Generic;
+
+public class ElseIfStatement : Statement
 {
-    public class ElseIfStatement : Statement
+    public override NodeType Type => NodeType.Elif;
+
+    public Expression Condition { get; }
+
+    public IList<Statement> Body { get; }
+
+    public ElseIfStatement(Expression condition, IList<Statement> body)
     {
-        public override NodeType Type
-        {
-            get => NodeType.Elif;
-        }
-
-        public Expression Condition { get; }
-
-        public IList<Statement> Body { get; }
-
-
-        public ElseIfStatement(Expression condition, IList<Statement> body)
-        {
-            Condition = condition;
-            Body = body;
-        }
-
-        public override T Accept<T>(IVisitor<T> visitor)
-        {
-            return visitor.Visit(this);
-        }
+        Condition = condition;
+        Body = body;
     }
 
-
-    public class IfStatement : Statement
+    public override T Accept<T>(IVisitor<T> visitor)
     {
-        public override NodeType Type
-        {
-            get => NodeType.If;
-        }
+        return visitor.Visit(this);
+    }
+}
 
-        public Expression Condition { get; }
+public class IfStatement : Statement
+{
+    public override NodeType Type => NodeType.If;
 
-        public IList<Statement> Body { get; }
+    public Expression Condition { get; }
 
-        public IList<ElseIfStatement> ElseIfStatements { get; }
+    public IList<Statement> Body { get; }
 
-        public IList<Statement>? ElseBody { get; }
+    public IList<ElseIfStatement> ElseIfStatements { get; }
 
+    public IList<Statement>? ElseBody { get; }
 
-        public IfStatement(Expression condition, IList<Statement> body, IList<ElseIfStatement> elseIfStatements, IList<Statement>? elseBody)
-        {
-            Condition = condition;
-            Body = body;
-            ElseIfStatements = elseIfStatements;
-            ElseBody = elseBody;
-        }
+    public IfStatement(Expression condition, IList<Statement> body, IList<ElseIfStatement> elseIfStatements,
+        IList<Statement>? elseBody)
+    {
+        Condition = condition;
+        Body = body;
+        ElseIfStatements = elseIfStatements;
+        ElseBody = elseBody;
+    }
 
-        public override T Accept<T>(IVisitor<T> visitor)
-        {
-            return visitor.Visit(this);
-        }
+    public override T Accept<T>(IVisitor<T> visitor)
+    {
+        return visitor.Visit(this);
     }
 }

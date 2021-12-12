@@ -11,7 +11,11 @@ Visual Studio 2019Templates/
 # Backup by dotnet CLI
 *.bak
 
+# project coverage
+coverage.xml
+
 # JetBrains IDE
+*.user
 .idea/
 
 # Binary directories

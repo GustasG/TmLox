@@ -1,16 +1,15 @@
-﻿using System;
+﻿namespace TmLox.Interpreter.Errors;
 
-namespace TmLox.Interpreter.Errors
+using System;
+
+public abstract class LoxError : Exception
 {
-    public abstract class LoxError : Exception
+    protected LoxError()
     {
-        protected LoxError()
-        {
-        }
+    }
 
-        protected LoxError(string message)
-            : base(message)
-        {
-        }
+    protected LoxError(string message)
+        : base(message)
+    {
     }
 }

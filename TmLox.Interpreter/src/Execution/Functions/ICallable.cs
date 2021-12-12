@@ -1,15 +1,14 @@
-﻿using System.Collections.Generic;
+﻿namespace TmLox.Interpreter.Execution.Functions;
 
-namespace TmLox.Interpreter.Execution.Functions
+using System.Collections.Generic;
+
+public interface ICallable
 {
-    public interface ICallable
-    {
-        string Name { get; }
+    string Name { get; }
 
-        bool CheckArity();
+    bool CheckArity();
 
-        int Arity();
+    int Arity();
 
-        AnyValue Call(IInterpreter interpreter, IList<AnyValue> arguments);
-    }
+    AnyValue Call(IInterpreter interpreter, IList<AnyValue> arguments);
 }

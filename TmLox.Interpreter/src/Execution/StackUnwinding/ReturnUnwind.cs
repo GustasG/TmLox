@@ -1,16 +1,14 @@
-﻿using System;
+﻿namespace TmLox.Interpreter.Execution.StackUnwinding;
 
-namespace TmLox.Interpreter.Execution.StackUnwinding
+using System;
+
+internal class ReturnUnwind : Exception
 {
-    internal class ReturnUnwind : Exception
+    public AnyValue Value { get; }
+
+    public ReturnUnwind(AnyValue value)
+        : base("Return was used outside functions")
     {
-        public AnyValue Value { get; }
-
-
-        public ReturnUnwind(AnyValue value)
-            : base("Return was used outside functions")
-        {
-            Value = value;
-        }
+        Value = value;
     }
 }

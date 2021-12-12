@@ -1,13 +1,12 @@
-namespace TmLox.Interpreter
+namespace TmLox.Interpreter;
+
+internal interface ILexer
 {
-    internal interface ILexer
-    {
-        Token? Current { get; }
+    Token? Current { get; }
 
-        Token? Next();
+    Token? Next();
 
-        void Reset();
+    void Reset();
 
-        bool Finished();
-    }
+    bool Finished();
 }

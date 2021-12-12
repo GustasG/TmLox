@@ -1,30 +1,28 @@
-﻿namespace TmLox.Interpreter
+﻿namespace TmLox.Interpreter;
+
+internal class Token
 {
-    internal class Token
+    public int Line { get; }
+
+    public int Column { get; }
+
+    public Lexeme Lexeme { get; }
+
+    public AnyValue Value { get; }
+
+    public Token(int line, int column, Lexeme lexeme)
     {
-        public int Line { get; }
+        Line = line;
+        Column = column;
+        Lexeme = lexeme;
+        Value = AnyValue.CreateNull();
+    }
 
-        public int Column { get; }
-
-        public Lexeme Lexeme { get; }
-
-        public AnyValue Value { get; }
-
-
-        public Token(int line, int column, Lexeme lexeme)
-        {
-            Line = line;
-            Column = column;
-            Lexeme = lexeme;
-            Value = AnyValue.CreateNull();
-        }
-
-        public Token(int line, int column, Lexeme lexeme, AnyValue value)
-        {
-            Line = line;
-            Column = column;
-            Lexeme = lexeme;
-            Value = value;
-        }
+    public Token(int line, int column, Lexeme lexeme, AnyValue value)
+    {
+        Line = line;
+        Column = column;
+        Lexeme = lexeme;
+        Value = value;
     }
 }

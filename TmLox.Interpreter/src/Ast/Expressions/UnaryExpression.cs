@@ -1,13 +1,11 @@
-﻿namespace TmLox.Interpreter.Ast.Expressions
+﻿namespace TmLox.Interpreter.Ast.Expressions;
+
+public abstract class UnaryExpression : Expression
 {
-    public abstract class UnaryExpression : Expression
+    public Expression Expression { get; }
+
+    protected UnaryExpression(Expression expression)
     {
-        public Expression Expression { get; }
-
-
-        protected UnaryExpression(Expression expression)
-        {
-            Expression = expression;
-        }
+        Expression = expression;
     }
 }

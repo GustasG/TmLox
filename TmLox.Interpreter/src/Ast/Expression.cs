@@ -1,6 +1,5 @@
-﻿namespace TmLox.Interpreter.Ast
+﻿namespace TmLox.Interpreter.Ast;
+
+public abstract class Expression : Statement
 {
-    public abstract class Expression : Statement
-    {
-    }
 }

@@ -1,28 +1,27 @@
-﻿using System;
+﻿namespace TmLox;
+    
+using System;
 
-using TmLox.Interpreter;
+using Interpreter;
 
-namespace TmLox
+class Lox
 {
-    class Lox
+    public static int Main(string[] args)
     {
-        public static int Main(string[] args)
+        var script = new Script();
+
+        try
         {
-            var script = new Script();
+            const string path = "Examples/sandbox.lox";
 
-            try
-            {
-                var path = "Examples/sandbox.lox";
-
-                script.RunFile(path);
-            }
-            catch (Exception e)
-            {
-                Console.Error.WriteLine(e);
-                return e.HResult;
-            }
-
-            return 0;
+            script.RunFile(path);
         }
+        catch (Exception e)
+        {
+            Console.Error.WriteLine(e);
+            return e.HResult;
+        }
+
+        return 0;
     }
 }

@@ -1,13 +1,11 @@
-﻿using System;
+﻿namespace TmLox.Interpreter.Execution.StackUnwinding;
 
-namespace TmLox.Interpreter.Execution.StackUnwinding
+using System;
+
+internal class BreakUnwind : Exception
 {
-    internal class BreakUnwind : Exception
+    public BreakUnwind()
+        : base("Break was used outside of the loop")
     {
-        public BreakUnwind()
-            : base("Break was used outside of the loop")
-        {
-
-        }
     }
 }

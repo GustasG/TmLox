@@ -1,22 +1,14 @@
-﻿namespace TmLox.Interpreter.Errors
+﻿namespace TmLox.Interpreter.Errors;
+
+public class SyntaxError : LoxError
 {
-    public class SyntaxError : LoxError
+    public SyntaxError(int line, int column, string text)
+        : base($"Syntax Error: ({line}:{column}): {text}")
     {
-        public int Line { get; }
+    }
 
-        public int Column { get; }
-
-        public string Text { get; }
-
-
-        public SyntaxError(int line, int column, string text)
-            : base($"Syntax Error: ({line}:{column}): {text}")
-        {
-        }
-
-        public override string ToString()
-        {
-            return Message;
-        }
+    public override string ToString()
+    {
+        return Message;
     }
 }

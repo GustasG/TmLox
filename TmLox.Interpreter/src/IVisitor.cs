@@ -1,79 +1,78 @@
-﻿using TmLox.Interpreter.Ast.Statements;
-using TmLox.Interpreter.Ast.Expressions;
-using TmLox.Interpreter.Ast.Expressions.Unary;
-using TmLox.Interpreter.Ast.Expressions.Variable;
-using TmLox.Interpreter.Ast.Expressions.Binary.Logical;
-using TmLox.Interpreter.Ast.Expressions.Binary.Arithmetic;
+﻿namespace TmLox.Interpreter;
 
-namespace TmLox.Interpreter
+using Ast.Statements;
+using Ast.Expressions;
+using Ast.Expressions.Unary;
+using Ast.Expressions.Variable;
+using Ast.Expressions.Binary.Logical;
+using Ast.Expressions.Binary.Arithmetic;
+
+public interface IVisitor<out T>
 {
-    public interface IVisitor<out T>
-    {
-        // Statements
-        T Visit(BreakStatement breakStatement);
+    // Statements
+    T Visit(BreakStatement breakStatement);
 
-        T Visit(ForStatement forStatement);
+    T Visit(ForStatement forStatement);
 
-        T Visit(FunctionDeclarationStatement functionDeclarationStatement);
+    T Visit(FunctionDeclarationStatement functionDeclarationStatement);
 
-        T Visit(IfStatement ifStatement);
+    T Visit(IfStatement ifStatement);
 
-        T Visit(ElseIfStatement elseIfStatement);
+    T Visit(ElseIfStatement elseIfStatement);
 
-        T Visit(ReturnStatement returnStatement);
+    T Visit(ReturnStatement returnStatement);
 
-        T Visit(VariableDeclarationStatement variableDeclarationStatement);
+    T Visit(VariableDeclarationStatement variableDeclarationStatement);
 
-        T Visit(WhileStatement whileStatement);
+    T Visit(WhileStatement whileStatement);
 
 
-        // Expressions
-        T Visit(AdditionExpression additionExpression);
+    // Expressions
+    T Visit(AdditionExpression additionExpression);
 
-        T Visit(DivisionExpression divisionExpression);
+    T Visit(DivisionExpression divisionExpression);
 
-        T Visit(ModulusExpression modulusExpression);
+    T Visit(ModulusExpression modulusExpression);
 
-        T Visit(MultiplicationExpression multiplicationExpression);
+    T Visit(MultiplicationExpression multiplicationExpression);
 
-        T Visit(SubtractionExpression subtractionExpression);
+    T Visit(SubtractionExpression subtractionExpression);
 
-        T Visit(AndExpression andExpression);
+    T Visit(AndExpression andExpression);
 
-        T Visit(EqualExpression equalExpression);
+    T Visit(EqualExpression equalExpression);
 
-        T Visit(LessEqualExpression lessEqualExpression);
+    T Visit(LessEqualExpression lessEqualExpression);
 
-        T Visit(LessExpression lessExpression);
+    T Visit(LessExpression lessExpression);
 
-        T Visit(MoreEqualExpression moreEqualExpression);
+    T Visit(MoreEqualExpression moreEqualExpression);
 
-        T Visit(MoreExpression moreExpression);
+    T Visit(MoreExpression moreExpression);
 
-        T Visit(NotEqualExpression notEqualExpression);
+    T Visit(NotEqualExpression notEqualExpression);
 
-        T Visit(OrExpression orExpression);
+    T Visit(OrExpression orExpression);
 
-        T Visit(LiteralExpression literalExpression);
+    T Visit(LiteralExpression literalExpression);
 
-        T Visit(UnaryMinusExpression unaryMinusExpression);
+    T Visit(UnaryMinusExpression unaryMinusExpression);
 
-        T Visit(UnaryNotExpression unaryNotExpression);
+    T Visit(UnaryNotExpression unaryNotExpression);
 
-        T Visit(VariableAdditionExpression variableAdditionExpression);
+    T Visit(VariableAdditionExpression variableAdditionExpression);
 
-        T Visit(VariableAssigmentExpression variableAssigmentExpression);
+    T Visit(VariableAssigmentExpression variableAssigmentExpression);
 
-        T Visit(VariableDivisionExpression variableDivisionExpression);
+    T Visit(VariableDivisionExpression variableDivisionExpression);
 
-        T Visit(VariableModulusExpression variableModulusExpression);
+    T Visit(VariableModulusExpression variableModulusExpression);
 
-        T Visit(VariableMultiplicationExpression variableMultiplicationExpression);
+    T Visit(VariableMultiplicationExpression variableMultiplicationExpression);
 
-        T Visit(VariableSubtractionExpression variableSubtractionExpression);
+    T Visit(VariableSubtractionExpression variableSubtractionExpression);
 
-        T Visit(FunctionCallExpression functionCallExpression);
+    T Visit(FunctionCallExpression functionCallExpression);
 
-        T Visit(VariableExpression variableExpression);
-    }
+    T Visit(VariableExpression variableExpression);
 }

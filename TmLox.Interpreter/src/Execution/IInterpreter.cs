@@ -1,24 +1,23 @@
-﻿using System.Collections.Generic;
+﻿namespace TmLox.Interpreter.Execution;
 
-using TmLox.Interpreter.Ast;
-using TmLox.Interpreter.Execution.Functions;
+using System.Collections.Generic;
 
-namespace TmLox.Interpreter.Execution
+using Ast;
+using Functions;
+
+public interface IInterpreter
 {
-    public interface IInterpreter
-    {
-        Environment Environment { get; set; }
+    Environment Environment { get; set; }
 
-        void Execute(IList<Statement> statements);
+    void Execute(IList<Statement> statements);
 
-        void Execute(Statement statement);
+    void Execute(Statement statement);
 
-        AnyValue Evaluate(Statement statement);
+    AnyValue Evaluate(Statement statement);
 
-        void Add(string name, AnyValue value);
+    void Add(string name, AnyValue value);
 
-        void Add(ICallable function);
+    void Add(ICallable function);
 
-        bool TryGet(string name, out AnyValue value);
-    }
+    bool TryGet(string name, out AnyValue value);
 }

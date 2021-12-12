@@ -1,13 +1,13 @@
-﻿using NUnit.Framework;
+﻿namespace TmLox.Interpreter.Tests;
 
-namespace TmLox.Interpreter.Tests
+using NUnit.Framework;
+
+public class IfTests
 {
-    public class IfTests
+    [Test]
+    public void Test_Simple_If_Condition_It_Should_Modify_Given_Variable()
     {
-        [Test]
-        public void Test_Simple_If_Condition_It_Should_Modify_Given_Variable()
-        {
-            var code = @"
+        var code = @"
                 var starting = 0;
 
                 if (true) {
@@ -15,19 +15,19 @@ namespace TmLox.Interpreter.Tests
                 }
             ";
 
-            var script = new Script();
-            script.RunString(code);
+        var script = new Script();
+        script.RunString(code);
 
-            var startingValue = script["starting"];
+        var startingValue = script["starting"];
 
-            Assert.True(startingValue.IsInteger());
-            Assert.AreEqual(5, startingValue.AsInteger());
-        }
+        Assert.True(startingValue.IsInteger());
+        Assert.AreEqual(5, startingValue.AsInteger());
+    }
 
-        [Test]
-        public void Test_Else_If_Execution_From_After_If_Condition_Should_Execute_Given_Else_If_Block()
-        {
-            var code = @"
+    [Test]
+    public void Test_Else_If_Execution_From_After_If_Condition_Should_Execute_Given_Else_If_Block()
+    {
+        var code = @"
                 var starting = 0;
 
                 if (false) {
@@ -37,19 +37,19 @@ namespace TmLox.Interpreter.Tests
                 }
             ";
 
-            var script = new Script();
-            script.RunString(code);
+        var script = new Script();
+        script.RunString(code);
 
-            var startingValue = script["starting"];
+        var startingValue = script["starting"];
 
-            Assert.True(startingValue.IsInteger());
-            Assert.AreEqual(10, startingValue.AsInteger());
-        }
+        Assert.True(startingValue.IsInteger());
+        Assert.AreEqual(10, startingValue.AsInteger());
+    }
 
-        [Test]
-        public void Test_Else_Execution_After_If_Condition_Should_Execute_Given_Else_Block()
-        {
-            var code = @"
+    [Test]
+    public void Test_Else_Execution_After_If_Condition_Should_Execute_Given_Else_Block()
+    {
+        var code = @"
                 var starting = 0;
 
                 if (false) {
@@ -59,19 +59,19 @@ namespace TmLox.Interpreter.Tests
                 }
             ";
 
-            var script = new Script();
-            script.RunString(code);
+        var script = new Script();
+        script.RunString(code);
 
-            var startingValue = script["starting"];
+        var startingValue = script["starting"];
 
-            Assert.True(startingValue.IsInteger());
-            Assert.AreEqual(10, startingValue.AsInteger());
-        }
+        Assert.True(startingValue.IsInteger());
+        Assert.AreEqual(10, startingValue.AsInteger());
+    }
 
-        [Test]
-        public void Test_Else_Execution_After_If_Condition_And_Multiple_Else_If_Conditions_Should_Execute_Given_Else_Block()
-        {
-            var code = @"
+    [Test]
+    public void Test_Else_Execution_After_If_Condition_And_Multiple_Else_If_Conditions_Should_Execute_Given_Else_Block()
+    {
+        var code = @"
                 var starting = 0;
 
                 if (false) {
@@ -85,13 +85,12 @@ namespace TmLox.Interpreter.Tests
                 }
             ";
 
-            var script = new Script();
-            script.RunString(code);
+        var script = new Script();
+        script.RunString(code);
 
-            var startingValue = script["starting"];
+        var startingValue = script["starting"];
 
-            Assert.True(startingValue.IsInteger());
-            Assert.AreEqual(20, startingValue.AsInteger());
-        }
+        Assert.True(startingValue.IsInteger());
+        Assert.AreEqual(20, startingValue.AsInteger());
     }
 }

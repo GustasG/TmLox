@@ -1,51 +1,50 @@
-﻿namespace TmLox.Interpreter.Ast
+﻿namespace TmLox.Interpreter.Ast;
+
+public enum NodeType
 {
-    public enum NodeType
-    {
-        // Arithmetic expressions
-        Addition,
-        Division,
-        Modulus,
-        Multiplication,
-        Subtraction,
+    // Arithmetic expressions
+    Addition,
+    Division,
+    Modulus,
+    Multiplication,
+    Subtraction,
 
-        // Logical expressions
-        And,
-        Equal,
-        LessEqual,
-        Less,
-        MoreEqual,
-        More,
-        NotEqual,
-        Or,
+    // Logical expressions
+    And,
+    Equal,
+    LessEqual,
+    Less,
+    MoreEqual,
+    More,
+    NotEqual,
+    Or,
 
-        // Literal expression
-        Literal,
+    // Literal expression
+    Literal,
 
-        // Unary expressions
-        UnaryMinus,
-        UnaryNot,
+    // Unary expressions
+    UnaryMinus,
+    UnaryNot,
 
-        // Variable expressions
-        VariableAddition,
-        VariableAssigment,
-        VariableDivision,
-        VariableModulus,
-        VariableMultiplication,
-        VariableSubtraction,
+    // Variable expressions
+    VariableAddition,
+    VariableAssigment,
+    VariableDivision,
+    VariableModulus,
+    VariableMultiplication,
+    VariableSubtraction,
 
-        // Other expressions
-        FunctionCall,
-        Variable,
+    // Other expressions
+    FunctionCall,
+    Variable,
 
-        // Statements
-        Break,
-        For,
-        FunctionDeclaration,
-        If,
-        Elif,
-        Return,
-        VariableDeclaration,
-        While
-    }
+    // Statements
+    Break,
+    For,
+    FunctionDeclaration,
+    If,
+    Elif,
+    Return,
+    VariableDeclaration,
+    While
 }

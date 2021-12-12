@@ -1,21 +1,16 @@
-﻿namespace TmLox.Interpreter.Ast.Expressions.Binary.Arithmetic
+﻿namespace TmLox.Interpreter.Ast.Expressions.Binary.Arithmetic;
+
+public class MultiplicationExpression : BinaryExpression
 {
-    public class MultiplicationExpression : BinaryExpression
+    public override NodeType Type => NodeType.Multiplication;
+
+    public MultiplicationExpression(Expression left, Expression right)
+        : base(left, right)
     {
-        public override NodeType Type
-        {
-            get => NodeType.Multiplication;
-        }
+    }
 
-
-        public MultiplicationExpression(Expression left, Expression right)
-            : base(left, right)
-        {
-        }
-
-        public override T Accept<T>(IVisitor<T> visitor)
-        {
-            return visitor.Visit(this);
-        }
+    public override T Accept<T>(IVisitor<T> visitor)
+    {
+        return visitor.Visit(this);
     }
 }

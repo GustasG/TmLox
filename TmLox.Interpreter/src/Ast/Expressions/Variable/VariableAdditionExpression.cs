@@ -1,21 +1,16 @@
-﻿namespace TmLox.Interpreter.Ast.Expressions.Variable
+﻿namespace TmLox.Interpreter.Ast.Expressions.Variable;
+
+public class VariableAdditionExpression : VariableModificationExpression
 {
-    public class VariableAdditionExpression : VariableModificationExpression
+    public override NodeType Type => NodeType.VariableAddition;
+
+    public VariableAdditionExpression(string variable, Expression value)
+        : base(variable, value)
     {
-        public override NodeType Type
-        {
-            get => NodeType.VariableAddition;
-        }
+    }
 
-
-        public VariableAdditionExpression(string variable, Expression value) 
-            : base(variable, value)
-        {
-        }
-
-        public override T Accept<T>(IVisitor<T> visitor)
-        {
-            return visitor.Visit(this);
-        }
+    public override T Accept<T>(IVisitor<T> visitor)
+    {
+        return visitor.Visit(this);
     }
 }
