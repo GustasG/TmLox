@@ -42,3 +42,4 @@ print("Recursize fib:", fib(5));
 var num1 = first(5);
 var final_num = num1(7);
 print(final_num);
+print(print);
